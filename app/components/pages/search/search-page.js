@@ -2,7 +2,7 @@ import React from "react";
 
 import "./search-page.scss";
 
-import ArticlesHttpService from "../../../services/api/article";
+import ArticleHttpService from "../../../services/api/article";
 import ArticleBox from "../../common/article-box/article-box";
 import LoadingIndicator from "../../common/loading-indicator/loading-indicator";
 
@@ -64,7 +64,7 @@ class SearchPage extends React.Component {
 		
 		this.setState({loading: true});
 		
-		ArticlesHttpService.getArticles(this.state.section, this.state.searchTerm, this.state.limit, this.state.offset).then(function (articles){
+		ArticleHttpService.getArticles(this.state.section, this.state.searchTerm, this.state.limit, this.state.offset).then(function (articles){
 			self.setState({
 				articles: articles,
 				loading: false
