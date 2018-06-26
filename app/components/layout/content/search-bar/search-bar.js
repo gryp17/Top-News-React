@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import {withRouter, matchPath} from "react-router-dom";
 
@@ -18,31 +17,52 @@ class SearchBar extends React.Component {
 			"technology",
 			"sports"
 		];
+        
+        this.defaultState = {
+            selectedSection: this.sections[0],
+			searchTerm: ""
+        };
 		
-		//default values
-		var selectedSection = this.sections[0];
-		var searchTerm = "";
-		
-		//check if there are any search parameters in the URL and use them in the search bar
-		var match = matchPath(window.location.pathname, {
-			path: "/search/:section/:searchTerm?"
-		});
-		
-		if(match){
-			selectedSection = decodeURIComponent(match.params.section);
-			searchTerm = decodeURIComponent(match.params.searchTerm || "");
-		}
-		
-		this.state = {
-			selectedSection: selectedSection,
-			searchTerm: searchTerm
-		};
+		this.state = this.defaultState;
 		
 		this.handleChange = this.handleChange.bind(this);
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.changeSection = this.changeSection.bind(this);
 		this.search = this.search.bind(this);
 	}
+    
+    componentDidMount(){
+        var self = this;
+        
+        //get the initial search params when the component first loads
+        this.getSearchParamsFromURL(window.location.pathname);
+        
+        //listen for location changes and update/reset the search params
+        this.props.history.listen(function (location, action){
+            self.getSearchParamsFromURL(location.pathname);
+        });
+    }
+    
+    /**
+     * Check if there are any search parameters in the URL and use them in the search bar
+     * Otherwise reset the search bar to it's default values
+     * @param {String} url
+     */
+    getSearchParamsFromURL(url){
+
+		var match = matchPath(url, {
+			path: "/search/:section/:searchTerm?"
+		});
+		
+		if(match){
+            this.setState({
+                selectedSection: decodeURIComponent(match.params.section),
+                searchTerm: decodeURIComponent(match.params.searchTerm || "")
+            });
+		}else{
+            this.setState(this.defaultState);
+        }
+    }
 		
 	/**
 	 * Called when the input text changes
