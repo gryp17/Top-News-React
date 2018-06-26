@@ -1,0 +1,25 @@
+//misc
+$background: url(/img/bg.jpg) no-repeat fixed;
+$background-size: cover;
+$hamburger-breakpoint: 1000px;
+$hamburger-inline-fix-breakpoint: 1001px;
+
+//typography
+$font-family: "Open Sans", sans-serif;
+
+//colors
+$body-color: #333333;
+$links-color: #2196F3;
+$links-color-active: #0069d9;
+
+$content-background-color: rgba(255, 255, 255, 0.95);
+
+$sections-colors: (
+	politics: #78909C,
+	economy: #2586E5,
+	world: #03937A,
+	technology: #366778,
+	sports: #0097A5
+);
+
+$article-title-color: #00579A;

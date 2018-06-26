@@ -1,0 +1,12 @@
+#top-news{
+	margin: auto;
+	width: 1000px;
+	
+	@media (max-width: 1000px){
+		width: 100%;
+	}
+	
+	.content{
+		background-color: beige;
+	}
+}
