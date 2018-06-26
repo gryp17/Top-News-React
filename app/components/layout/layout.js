@@ -13,18 +13,18 @@ class Layout extends React.Component {
 				
 		return (
 			<div id="top-news">
-                <MainMenu/>
-                
-                <div id="content-wrapper">
-                    <div className="row no-gutters">
-                        <div className="col-md-4 order-md-8 col-sm-push-8">
-                            <Aside/>
-                        </div>
-                        <div className="col-md-8 order-md-4 col-sm-pull-4">
-                            <Content/>
-                        </div>
-                    </div>
-                </div>
+				<MainMenu/>
+				
+				<div id="content-wrapper">
+					<div className="row no-gutters">
+						<div className="col-md-4 order-md-8 col-sm-push-8">
+							<Aside/>
+						</div>
+						<div className="col-md-8 order-md-4 col-sm-pull-4">
+							<Content/>
+						</div>
+					</div>
+				</div>
 
 				<Footer/>
 			</div>

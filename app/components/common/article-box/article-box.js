@@ -9,6 +9,10 @@ import "./article-box.scss";
 
 class ArticleBox extends React.Component {
 	
+	static propTypes = {
+		article: PropTypes.object.isRequired
+	};
+	
 	constructor(props){
 		super(props);
 		
@@ -51,10 +55,6 @@ class ArticleBox extends React.Component {
 			</div>
 		);
 	}
-};
-
-ArticleBox.propTypes = {
-	article: PropTypes.object.isRequired
 };
 
 export default ArticleBox;

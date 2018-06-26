@@ -1,0 +1,26 @@
+.article{
+	padding: 0px 15px;
+
+	.title{
+		margin-top: 15px;
+		font-size: 22px;
+		font-weight: bold;
+		text-align: center;
+		color: #0069d9;
+	}
+
+	.image{
+		display: block;
+		margin: auto;
+		margin-top: 15px;
+	}
+
+	.info{
+		margin-top: 15px;
+	}
+
+	.content{
+		margin-top: 15px;
+		text-align: justify;
+	}
+}
