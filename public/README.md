@@ -1,1 +1,1 @@
-Uploads go in here
+Public directory
