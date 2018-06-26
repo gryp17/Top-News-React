@@ -6,10 +6,10 @@ import "./content.scss";
 import CurrencyExchangeBar from "./currency-exchange-bar/currency-exchange-bar";
 import SearchBar from "./search-bar/search-bar";
 
-import HomePage from "../../../pages/home/home-page";
-import ArticlePage from "../../../pages/article/article-page";
-import SearchPage from "../../../pages/search/search-page";
-import SignUpPage from "../../../pages/sign-up/sign-up-page";
+import HomePage from "../../pages/home/home-page";
+import ArticlePage from "../../pages/article/article-page";
+import SearchPage from "../../pages/search/search-page";
+import SignUpPage from "../../pages/sign-up/sign-up-page";
 
 class Content extends React.Component {
 	render() {
