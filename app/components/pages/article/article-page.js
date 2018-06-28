@@ -13,8 +13,6 @@ class ArticlePage extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.imagesDir = "/uploads/articles/";
-
 		this.state = {
 			loading: true,
 			article: null

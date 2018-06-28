@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 import moment from "moment";
 
+import Config from "../../../config/config";
 import Utils from "../../../services/utils";
 import FadeIn from "../animations/fade-in/fade-in";
 
@@ -17,7 +18,7 @@ class ArticleBox extends React.Component {
 	constructor(props){
 		super(props);
 		
-		this.imagesDir = "/uploads/articles/";
+		this.articlesDir = Config.articlesDir;
 	}
 		
 	render() {
@@ -34,7 +35,7 @@ class ArticleBox extends React.Component {
 								{moment(this.props.article.date).format("YYYY-MM-DD")}
 							</span>
 						</div>
-						<img className="img-fluid" src={this.imagesDir+this.props.article.image}/>
+						<img className="img-fluid" src={this.articlesDir+this.props.article.image}/>
 					</Link>
 
 					<div className="content-wrapper">

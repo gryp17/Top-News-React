@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import Config from "../../../../config/config";
 import FadeIn from "../../../common/animations/fade-in/fade-in";
 
 import "./article.scss";
@@ -14,7 +15,7 @@ class Article extends React.Component {
 	constructor(props) {
 		super(props);
 		
-		this.imagesDir = "/uploads/articles/";
+		this.articlesDir = Config.articlesDir;
 	}
 
 	render() {
@@ -25,7 +26,7 @@ class Article extends React.Component {
 			<FadeIn>
 				<div className="article">
 					<div className="title">{this.props.article.title}</div>
-					<img className="img-fluid image" src={this.imagesDir + this.props.article.image}/>
+					<img className="img-fluid image" src={this.articlesDir + this.props.article.image}/>
 					<div className="info">
 						{this.props.article.date}
 						---
