@@ -37,11 +37,7 @@ class HomePage extends React.Component {
 			});
 		});
 	}
-	
-	search(text) {
-		console.log("TEXT FROM THE SEARCH BAR "+text);
-	}
-	
+		
 	render() {
 		
 		var content;

@@ -44,7 +44,7 @@ class ArticlePage extends React.Component {
 				{this.state.loading && <LoadingIndicator/>}
 				{!this.state.loading && !this.state.article && <NotFound/>}
 				{this.state.article && <Article article={this.state.article}/>}
-						
+
 				<ScrollToTop/>
 			</div>
 		);

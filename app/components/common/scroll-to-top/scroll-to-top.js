@@ -1,5 +1,7 @@
 import React from "react";
 
+import FadeIn from "../animations/fade-in/fade-in";
+
 import "./scroll-to-top.scss";
 
 class ScrollToTop extends React.Component {
@@ -42,16 +44,17 @@ class ScrollToTop extends React.Component {
 		$("html, body").animate({scrollTop: 0}, 1000);
 	}
 	
-	render() {		
-		var content = null;
+	render() {	
 		
-		if(this.state.visible){
-			content = (
-				<img className="scroll-to-top" title="Scroll to top" src="/img/scroll-to-top-icon.png" onClick={this.scrollToTop}/>
-			);
-		}
+		var content = (
+			<FadeIn>
+				<div className="scroll-to-top" onClick={this.scrollToTop}>
+					<img title="Scroll to top" src="/img/scroll-to-top-icon.png"/>
+				</div>
+			</FadeIn>
+		);
 		
-		return content;
+		return this.state.visible && content;
 	}
 };
 

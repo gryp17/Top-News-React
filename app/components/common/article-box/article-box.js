@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
-import {CSSTransition} from "react-transition-group";
 import moment from "moment";
 
 import Utils from "../../../services/utils";
+import FadeIn from "../animations/fade-in/fade-in";
 
 import "./article-box.scss";
 
@@ -23,7 +23,7 @@ class ArticleBox extends React.Component {
 	render() {
 				
 		return (
-			<CSSTransition in appear={true} timeout={300} classNames="fade">
+			<FadeIn>
 				<div className="article-box">
 					<Link to={"/article/"+this.props.article.id} className="image-wrapper">
 						<div className="section-bar">
@@ -54,7 +54,7 @@ class ArticleBox extends React.Component {
 						<div className="clearfix"></div>
 					</div>
 				</div>
-			</CSSTransition>
+			</FadeIn>
 		);
 	}
 };
