@@ -13,16 +13,26 @@ class SearchPage extends React.Component {
 
 		this.state = {
 			loading: false,
+			lazyLoading: false,
 			section: props.match.params.section,
 			searchTerm: decodeURIComponent(props.match.params.searchTerm || "*"),
 			limit: 6,
 			offset: 0,
+			hasMore: false,
 			articles: []
 		};
+		
+		this.lazyLoading = this.lazyLoading.bind(this);
 	}
 	
 	componentDidMount(){
 		this.getArticles();
+		
+		$(window).on("scroll", this.lazyLoading);
+	}
+	
+	componentWillUnmount() {
+		$(window).off("scroll");
 	}
 	
 	static getDerivedStateFromProps(nextProps, prevState){
@@ -59,17 +69,46 @@ class SearchPage extends React.Component {
 		}
 	}
 	
-	getArticles(){
+	/**
+	 * Gets all articles that match the state parameters (section, searchTerm, limit, offset...)
+	 * @param {Boolean} lazyLoading
+	 */
+	getArticles(lazyLoading = false){
 		var self = this;
+		var loadingIndicator = "loading";
 		
-		this.setState({loading: true});
+		if(lazyLoading){
+			loadingIndicator = "lazyLoading";
+		}
+		
+		//set the correct loading state to true
+		this.setState({[loadingIndicator]: true});
 		
 		ArticleHttpService.getArticles(this.state.section, this.state.searchTerm, this.state.limit, this.state.offset).then(function (articles){
 			self.setState({
-				articles: articles,
-				loading: false
+				[loadingIndicator]: false,
+				hasMore: articles.length === self.state.limit,
+				articles: self.state.articles.concat(articles)
 			});
 		});
+	}
+	
+	/**
+	 * Lazy loading function that is called whenever the user scrolls the page
+	 */
+	lazyLoading(){
+		
+		var scrollTop = $(window).scrollTop();
+		var bodyHeight = $("body").height() - 1000;
+
+		//if there is no other lazy loading in progress and there are more articles to be loaded
+		if (!this.state.lazyLoading && this.state.hasMore && scrollTop > bodyHeight) {
+			this.setState({
+				offset: this.state.offset + this.state.limit
+			}, function (){
+				this.getArticles(true);
+			});
+		}
 	}
 	
 	render() {
