@@ -5,6 +5,7 @@ import "./search-page.scss";
 import ArticleHttpService from "../../../services/api/article";
 import ArticleBox from "../../common/article-box/article-box";
 import LoadingIndicator from "../../common/loading-indicator/loading-indicator";
+import ScrollToTop from "../../common/scroll-to-top/scroll-to-top";
 
 class SearchPage extends React.Component {
 	
@@ -132,6 +133,8 @@ class SearchPage extends React.Component {
 		return (
 			<div id="search-page">
 				{content}
+						
+				<ScrollToTop/>
 			</div>
 		);
 	}

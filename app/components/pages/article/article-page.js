@@ -4,6 +4,7 @@ import "./article-page.scss";
 
 import ArticleHttpService from "../../../services/api/article";
 import LoadingIndicator from "../../common/loading-indicator/loading-indicator";
+import ScrollToTop from "../../common/scroll-to-top/scroll-to-top";
 import Article from "./article/article";
 import NotFound from "./not-found/not-found";
 
@@ -43,6 +44,8 @@ class ArticlePage extends React.Component {
 				{this.state.loading && <LoadingIndicator/>}
 				{!this.state.loading && !this.state.article && <NotFound/>}
 				{this.state.article && <Article article={this.state.article}/>}
+						
+				<ScrollToTop/>
 			</div>
 		);
 	}
