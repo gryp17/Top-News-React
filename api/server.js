@@ -1,6 +1,7 @@
 var express = require("express");
 var session = require("express-session");
 var MySQLStore = require("express-mysql-session")(session);
+var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var favicon = require("serve-favicon");
 var path = require("path");
@@ -39,6 +40,7 @@ app.use(session({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 var publicDir = path.join(__dirname, "../public");
 
@@ -47,7 +49,7 @@ app.use(express.static(publicDir));
 app.use(favicon(path.join(publicDir, "/img", "favicon.ico")));
 
 //routes
-app.use("/api", require("./routes/api"));
+app.use("/api", require("./routes"));
 
 //redirect all other GET requests to the index.html file (all routing is handled by the react router)
 app.get("*", function (req, res){

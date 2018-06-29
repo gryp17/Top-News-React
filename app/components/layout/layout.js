@@ -8,7 +8,28 @@ import Footer from "./footer/footer";
 import Content from "./content/content";
 import Aside from "./aside/aside";
 
+import UserHttpService from "../../services/api/user";
+
 class Layout extends React.Component {
+	
+	constructor(props){
+		super(props);
+		
+		this.state = {
+			userSession: null
+		};
+	}
+	
+	componentDidMount(){
+		var self = this;;
+
+		UserHttpService.getSession().then(function (response) {
+			if (response.data.user) {
+				self.setState({userSession: response.data.user});
+			}
+		});		
+	}
+	
 	render() {
 				
 		return (
@@ -18,10 +39,10 @@ class Layout extends React.Component {
 				<div id="content-wrapper">
 					<div className="row no-gutters">
 						<div className="col-md-4 order-md-8 col-sm-push-8">
-							<Aside/>
+							<Aside userSession={this.state.userSession}/>
 						</div>
 						<div className="col-md-8 order-md-4 col-sm-pull-4">
-							<Content/>
+							<Content userSession={this.state.userSession}/>
 						</div>
 					</div>
 				</div>

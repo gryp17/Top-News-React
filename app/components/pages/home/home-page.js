@@ -30,9 +30,9 @@ class HomePage extends React.Component {
 		
 		this.setState({loading: true});
 		
-		ArticlesHttpService.getArticles(this.state.section, this.state.searchTerm, this.state.limit, this.state.offset).then(function (articles){
+		ArticlesHttpService.getArticles(this.state.section, this.state.searchTerm, this.state.limit, this.state.offset).then(function (response){
 			self.setState({
-				articles: articles,
+				articles: response.data,
 				loading: false
 			});
 		});

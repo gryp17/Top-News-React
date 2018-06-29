@@ -1,13 +1,11 @@
-import Utils from "../utils";
+import axios from "axios";
 
 export default {
 	getArticles(category, searchTerm, limit, offset) {
-		return fetch("/api/article/" + category + "/" + encodeURIComponent(searchTerm) + "/" + limit + "/" + offset)
-		.then(Utils.handleResponse);
+		return axios.get("/api/article/" + category + "/" + encodeURIComponent(searchTerm) + "/" + limit + "/" + offset);
 	},
 	getArticleById(id) {
-		return fetch("/api/article/" + id)
-		.then(Utils.handleResponse);
+		return axios.get("/api/article/" + id);
 	}
 }
 

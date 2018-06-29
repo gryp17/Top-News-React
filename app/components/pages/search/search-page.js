@@ -85,7 +85,9 @@ class SearchPage extends React.Component {
 		//set the correct loading state to true
 		this.setState({[loadingIndicator]: true});
 		
-		ArticleHttpService.getArticles(this.state.section, this.state.searchTerm, this.state.limit, this.state.offset).then(function (articles){
+		ArticleHttpService.getArticles(this.state.section, this.state.searchTerm, this.state.limit, this.state.offset).then(function (response){
+			var articles = response.data;
+			
 			self.setState({
 				[loadingIndicator]: false,
 				hasMore: articles.length === self.state.limit,

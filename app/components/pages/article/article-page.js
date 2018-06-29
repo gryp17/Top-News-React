@@ -28,10 +28,10 @@ class ArticlePage extends React.Component {
 
 		this.setState({loading: true});
 
-		ArticleHttpService.getArticleById(id).then(function (article) {
+		ArticleHttpService.getArticleById(id).then(function (response) {
 			self.setState({
 				loading: false,
-				article: article
+				article: response.data
 			});
 		});
 	}
