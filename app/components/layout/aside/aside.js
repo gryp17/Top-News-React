@@ -4,20 +4,37 @@ import {Link} from "react-router-dom";
 
 import "./aside.scss";
 
+import Login from "./login/login";
+
 class Aside extends React.Component {
 	
 	static propTypes = {
-		userSession: PropTypes.object
+		userSession: PropTypes.object,
+		logout: PropTypes.func.isRequired,
+		updateSession: PropTypes.func.isRequired
 	};
 	
 	render() {
+		
+		var loginStatus;
+		
+		if(this.props.userSession){
+			loginStatus = (
+				<div>
+					{this.props.userSession.username}
+					<button onClick={this.props.logout}>Logout</button>
+				</div>
+			);
+		}else{
+			loginStatus = <Login updateSession={this.props.updateSession}/>;
+		}
+		
 		return (
 			<div id="aside">
 
 				<div className="row user-panel">
 					<div className="col">
-						{!this.props.userSession && <Link to="/">Login</Link>}
-						{this.props.userSession && this.props.userSession.username}
+						{loginStatus}
 					</div>
 					<div className="col">
 						<Link to="/sign-up">Sign Up</Link>

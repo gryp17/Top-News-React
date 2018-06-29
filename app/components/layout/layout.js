@@ -18,16 +18,45 @@ class Layout extends React.Component {
 		this.state = {
 			userSession: null
 		};
+		
+		this.updateSession = this.updateSession.bind(this);
+		this.logout = this.logout.bind(this);
 	}
 	
 	componentDidMount(){
-		var self = this;;
+		this.getSession();	
+	}
+	
+	/**
+	 * Retrieves the current session status
+	 */
+	getSession(){
+		var self = this;
 
 		UserHttpService.getSession().then(function (response) {
 			if (response.data.user) {
 				self.setState({userSession: response.data.user});
 			}
-		});		
+		});	
+	}
+	
+	/**
+	 * Callback function that is called when the user logs in (the login process is handled in another component)
+	 * @param {Object} userSession
+	 */
+	updateSession(userSession){
+		this.setState({userSession: userSession});
+	}
+	
+	/**
+	 * Callback function that is called when the logout button is pressed
+	 */
+	logout(){
+		var self = this;
+		
+		UserHttpService.logout().then(function () {
+			self.setState({userSession: null});
+		});	
 	}
 	
 	render() {
@@ -39,7 +68,7 @@ class Layout extends React.Component {
 				<div id="content-wrapper">
 					<div className="row no-gutters">
 						<div className="col-md-4 order-md-8 col-sm-push-8">
-							<Aside userSession={this.state.userSession}/>
+							<Aside userSession={this.state.userSession} updateSession={this.updateSession} logout={this.logout}/>
 						</div>
 						<div className="col-md-8 order-md-4 col-sm-pull-4">
 							<Content userSession={this.state.userSession}/>
