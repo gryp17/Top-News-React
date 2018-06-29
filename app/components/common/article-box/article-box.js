@@ -41,7 +41,7 @@ class ArticleBox extends React.Component {
 					<div className="content-wrapper">
 						<div className="title">
 							<Link to={"/article/"+this.props.article.id}>
-								{this.props.article.title}
+								{Utils.limitTo(this.props.article.title, 55)}
 							</Link>
 						</div>
 						<div className="summary">
@@ -51,8 +51,6 @@ class ArticleBox extends React.Component {
 						<Link to={"/article/"+this.props.article.id} className="btn btn-primary-light">
 							Read more
 						</Link>
-
-						<div className="clearfix"></div>
 					</div>
 				</div>
 			</FadeIn>
