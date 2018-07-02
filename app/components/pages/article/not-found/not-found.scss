@@ -1,9 +1,11 @@
+@import "../../../../css/_variables.scss";
+
 .not-found{
 	margin-top: 35px;
 	text-align: center;
 	
 	.title{
-		color: #ae1616;
+		color: $red;
 		font-size: 25px;
 	}
 }

@@ -2,10 +2,19 @@ var express = require("express");
 var router = express.Router();
 var md5 = require("md5");
 
+var Validator = require("../middleware/validator");
+
 var UserModel = require("../models/user");
 
+var rules = {
+	login: {
+		username: "required",
+		password: "required"
+	}
+};
+
 ///login
-router.post("/login", function (req, res, next) {
+router.post("/login", Validator.validate(rules.login), function (req, res, next) {
 	UserModel.getByUsername(req.body.username, function (err, result) {
 		if (err) {
 			return next(err);
@@ -14,16 +23,24 @@ router.post("/login", function (req, res, next) {
 		if (result) {
 
 			if (result.password !== md5(req.body.password)) {
-				res.send("Wrong username or password");
+				res.json({
+					errors: {
+						password: "Wrong username or password"
+					}
+				});
 			} else {
 				delete result.password;
 				req.session.user = result;
-				
+
 				res.send({user: result});
 			}
 
 		} else {
-			res.send("Wrong username or password");
+			res.json({
+				errors: {
+					password: "Wrong username or password"
+				}
+			});
 		}
 	});
 });

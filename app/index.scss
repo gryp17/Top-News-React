@@ -21,7 +21,7 @@ body{
 		}
 	}
 	
-	a{
+	a, .btn-link{
 		color: $links-color;
 		
 		&:hover, &:focus, &:active{
@@ -34,6 +34,17 @@ body{
 		&.btn-primary-light{
 			@extend .btn-primary;
 			background-color: $links-color;
+		}
+	}
+	
+	.form-group{
+		position: relative;
+		
+		.form-error{
+			position: absolute;
+			right: 0px;
+			font-size: 10px;
+			color: $red;
 		}
 	}
 }

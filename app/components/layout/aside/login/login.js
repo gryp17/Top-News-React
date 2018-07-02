@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import classnames from "classnames";
 
 import "./login.scss";
 
@@ -14,9 +15,14 @@ class Login extends React.Component {
 	constructor(props){
 		super(props);
 	
+		this.state = {
+			errors: {}
+		};
+	
 		this.openModal = this.openModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 		this.handleKeyPress = this.handleKeyPress.bind(this);
+		this.clearErrors = this.clearErrors.bind(this);
 		this.login = this.login.bind(this);
 	}
 	
@@ -36,12 +42,30 @@ class Login extends React.Component {
 	
 	/**
 	 * Checks if the "Enter" key was pressed and calls the login function
+	 * Also clears the form errors
 	 * @param {Object} e
 	 */
 	handleKeyPress(e) {
 		if (e.key === "Enter") {
 			this.login();
+		}else{
+			this.clearErrors(e);
 		}
+	}
+	
+	/**
+	 * Clears the form errors related to this input
+	 * @param {Object} e
+	 */
+	clearErrors(e) {
+		var field = e.target.name;
+
+		var errors = this.state.errors;
+		delete errors[field];
+		
+		this.setState({
+			errors: errors
+		});
 	}
 	
 	/**
@@ -54,6 +78,10 @@ class Login extends React.Component {
 			if (response.data.user) {
 				self.closeModal();
 				self.props.updateSession(response.data.user);
+			}else{				
+				self.setState({
+					errors: response.data.errors
+				});
 			}
 		});	
 	}
@@ -71,22 +99,43 @@ class Login extends React.Component {
 							</div>
 							<div className="modal-body">
 								
-								<div className="input-group username">
-									<div className="input-group-prepend">
-										<span className="input-group-text">
-											<img src="/img/user-icon.png"/>
-										</span>
+								<div className="form-group">
+									<div className="input-group username">
+										<div className="input-group-prepend">
+											<span className="input-group-text">
+												<img src="/img/user-icon.png"/>
+											</span>
+										</div>
+										<input ref="username" name="username" type="text" 
+												className={classnames("form-control", {"is-invalid": this.state.errors.username})} 
+												placeholder="Username" 
+												onFocus={this.clearErrors} 
+												onKeyPress={this.handleKeyPress}/>
 									</div>
-									<input ref="username" type="text" className="form-control" placeholder="Username" onKeyPress={this.handleKeyPress}/>
+
+									<div className="form-error">
+										{this.state.errors.username}
+									</div>
 								</div>
 								
-								<div className="input-group password">
-									<div className="input-group-prepend">
-										<span className="input-group-text">
-											<img src="/img/password-icon.png"/>
-										</span>
+							
+								<div className="form-group">
+									<div className="input-group password">
+										<div className="input-group-prepend">
+											<span className="input-group-text">
+												<img src="/img/password-icon.png"/>
+											</span>
+										</div>
+										<input ref="password" name="password" type="password" 
+												className={classnames("form-control", {"is-invalid": this.state.errors.password})} 
+												placeholder="Password" 
+												onFocus={this.clearErrors} 
+												onKeyPress={this.handleKeyPress}/>
 									</div>
-									<input ref="password" type="password" className="form-control" placeholder="Password" onKeyPress={this.handleKeyPress}/>
+
+									<div className="form-error">
+										{this.state.errors.password}
+									</div>
 								</div>
 								
 								<button type="button" className="btn btn-primary-light" onClick={this.login}>LOGIN</button>
