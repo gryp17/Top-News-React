@@ -22,7 +22,7 @@ class Aside extends React.Component {
 			loginStatus = (
 				<div>
 					{this.props.userSession.username}
-					<button onClick={this.props.logout}>Logout</button>
+					<button className="btn btn-link" onClick={this.props.logout}>Logout</button>
 				</div>
 			);
 		}else{

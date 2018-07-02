@@ -15,6 +15,8 @@ class Login extends React.Component {
 		super(props);
 	
 		this.openModal = this.openModal.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.login = this.login.bind(this);
 	}
 	
@@ -26,13 +28,31 @@ class Login extends React.Component {
 	}
 	
 	/**
+	 * Closes the bootstrap modal
+	 */
+	closeModal(){
+		$(this.refs.modal).modal("hide");
+	}
+	
+	/**
+	 * Checks if the "Enter" key was pressed and calls the login function
+	 * @param {Object} e
+	 */
+	handleKeyPress(e) {
+		if (e.key === "Enter") {
+			this.login();
+		}
+	}
+	
+	/**
 	 * Tries to authenticate the user with the provided credentials
 	 */
 	login(){
 		var self = this;
 		
-		UserHttpService.login("admin", 1234).then(function (response) {
+		UserHttpService.login(this.refs.username.value, this.refs.password.value).then(function (response) {
 			if (response.data.user) {
+				self.closeModal();
 				self.props.updateSession(response.data.user);
 			}
 		});	
@@ -41,22 +61,35 @@ class Login extends React.Component {
 	render() {
 		return (
 			<div id="login">
-				<button onClick={this.openModal}>Login</button>
+				<button className="btn btn-link" onClick={this.openModal}>Login</button>
 
-				<div ref="modal" className="modal fade" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div ref="modal" className="modal fade" tabIndex="-1" role="dialog" aria-hidden="true">
 					<div className="modal-dialog" role="document">
 						<div className="modal-content">
 							<div className="modal-header">
-								<h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
-								<button type="button" className="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
+								<h5 className="modal-title">Login</h5>
 							</div>
 							<div className="modal-body">
-								body
-							</div>
-							<div className="modal-footer">
-								<button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.login}>LOGIN</button>
+								
+								<div className="input-group username">
+									<div className="input-group-prepend">
+										<span className="input-group-text">
+											<img src="/img/user-icon.png"/>
+										</span>
+									</div>
+									<input ref="username" type="text" className="form-control" placeholder="Username" onKeyPress={this.handleKeyPress}/>
+								</div>
+								
+								<div className="input-group password">
+									<div className="input-group-prepend">
+										<span className="input-group-text">
+											<img src="/img/password-icon.png"/>
+										</span>
+									</div>
+									<input ref="password" type="password" className="form-control" placeholder="Password" onKeyPress={this.handleKeyPress}/>
+								</div>
+								
+								<button type="button" className="btn btn-primary-light" onClick={this.login}>LOGIN</button>
 							</div>
 						</div>
 					</div>

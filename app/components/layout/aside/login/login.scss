@@ -1,7 +1,34 @@
 #login{
 	
 	.modal{
-		
+		.modal-dialog{
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 385px;
+			
+			.modal-body{
+				.input-group{
+					margin-bottom: 20px;
+					
+					&.username{
+						img{
+							width: 20px;
+						}
+					}
+					
+					&.password{
+						img{
+							margin: 0px 3px;
+							width: 15px;
+						}
+					}
+					
+				}
+				
+				button{
+					float: right;
+				}
+			}
+		}
 	}
-	
 }
