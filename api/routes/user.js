@@ -9,7 +9,8 @@ var UserModel = require("../models/user");
 var rules = {
 	login: {
 		username: "required",
-		password: "required"
+		password: "required",
+		rememberMe: ["optional", "boolean"]
 	}
 };
 
@@ -30,9 +31,17 @@ router.post("/login", Validator.validate(rules.login), function (req, res, next)
 				});
 			} else {
 				delete result.password;
+				
+				//set the cookie maxAge to one month if the rememberMe flag is set
+				if(req.body.rememberMe){
+					req.session.cookie.maxAge = 3600 * 24 * 30 * 1000; //one month
+				}
+				
 				req.session.user = result;
 
-				res.send({user: result});
+				res.json({
+					user: result
+				});
 			}
 
 		} else {
@@ -47,7 +56,9 @@ router.post("/login", Validator.validate(rules.login), function (req, res, next)
 
 //get user session/status
 router.get("/session", function (req, res, next){	
-	res.json({user: req.session.user});
+	res.json({
+		user: req.session.user
+	});
 });
 
 //logout

@@ -74,7 +74,7 @@ class Login extends React.Component {
 	login(){
 		var self = this;
 		
-		UserHttpService.login(this.refs.username.value, this.refs.password.value).then(function (response) {
+		UserHttpService.login(this.refs.username.value, this.refs.password.value, this.refs.rememberMe.checked).then(function (response) {
 			if (response.data.user) {
 				self.closeModal();
 				self.props.updateSession(response.data.user);
@@ -138,7 +138,17 @@ class Login extends React.Component {
 									</div>
 								</div>
 								
-								<button type="button" className="btn btn-primary-light" onClick={this.login}>LOGIN</button>
+								<div className="form-group">
+									<input ref="rememberMe" type="checkbox" id="remember-me-checkbox"/>
+									<label htmlFor="remember-me-checkbox">
+										Remember me?
+									</label>
+									
+									<button type="button" className="btn btn-primary-light" onClick={this.login}>
+										Login
+									</button>
+								</div>
+								
 							</div>
 						</div>
 					</div>

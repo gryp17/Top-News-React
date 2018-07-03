@@ -12,6 +12,13 @@
 			max-width: 385px;
 			
 			.modal-body{
+				
+				.form-group{
+					&:last-child{
+						margin-bottom: 0px;
+					}
+				}
+				
 				.input-group{
 					
 					&.username{
@@ -29,9 +36,17 @@
 					
 				}
 				
+				#remember-me-checkbox{
+					margin-top: 8px;
+					margin-right: 5px;
+				}
+				
+				label{
+					cursor: pointer;
+				}
+				
 				button{
 					float: right;
-					margin-top: 5px;
 				}
 			}
 		}
