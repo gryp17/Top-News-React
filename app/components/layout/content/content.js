@@ -9,7 +9,6 @@ import SearchBar from "./search-bar/search-bar";
 import HomePage from "../../pages/home/home-page";
 import ArticlePage from "../../pages/article/article-page";
 import SearchPage from "../../pages/search/search-page";
-import SignUpPage from "../../pages/sign-up/sign-up-page";
 
 class Content extends React.Component {
 	render() {
@@ -25,7 +24,6 @@ class Content extends React.Component {
 						<Route exact path="/" component={HomePage}/>
 						<Route exact path="/search/:section/:searchTerm?" component={SearchPage}/>
 						<Route exact path="/article/:id" component={ArticlePage}/>
-						<Route exact path="/sign-up" component={SignUpPage}/>
 					</Switch>
 				</div>
 				

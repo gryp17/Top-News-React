@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import "./aside.scss";
 
 import Login from "./login/login";
+import SignUp from "./sign-up/sign-up";
 
 class Aside extends React.Component {
 	
@@ -15,30 +16,28 @@ class Aside extends React.Component {
 	};
 	
 	render() {
-		
-		var loginStatus;
-		
-		if(this.props.userSession){
-			loginStatus = (
-				<div>
-					{this.props.userSession.username}
-					<button className="btn btn-link" onClick={this.props.logout}>Logout</button>
-				</div>
-			);
-		}else{
-			loginStatus = <Login updateSession={this.props.updateSession}/>;
-		}
-		
 		return (
 			<div id="aside">
 
 				<div className="row user-panel">
-					<div className="col">
-						{loginStatus}
-					</div>
-					<div className="col">
-						<Link to="/sign-up">Sign Up</Link>
-					</div>
+					{this.props.userSession &&
+						<div className="col">
+							{this.props.userSession.username}
+							<button className="btn btn-link" onClick={this.props.logout}>Logout</button>
+						</div>
+					}
+					
+					{!this.props.userSession && 
+						<div className="col">
+							<Login updateSession={this.props.updateSession}/>
+						</div>
+					}
+							
+					{!this.props.userSession &&
+						<div className="col">
+							<SignUp/>
+						</div>
+					}
 				</div>
 
 				<div className="box d-none d-md-block"></div>
