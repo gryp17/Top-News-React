@@ -1,7 +1,7 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
 
-import classnames from "classnames";
+import classNames from "classnames";
 
 import "./main-menu.scss";
 
@@ -50,7 +50,7 @@ class MainMenu extends React.Component {
 		//generate the section options
 		var sectionOptions = sections.map(function (section){
 			return (
-				<NavLink exact to={"/search/"+section} className={classnames("option", section)} key={section} onClick={self.hideMenu} activeClassName="active">
+				<NavLink exact to={"/search/"+section} className={classNames("option", section)} key={section} onClick={self.hideMenu} activeClassName="active">
 					<img src={"/img/sections/"+section+".png"} alt={section}/>
 					{section}
 				</NavLink>

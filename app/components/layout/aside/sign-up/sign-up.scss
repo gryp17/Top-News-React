@@ -1,6 +1,6 @@
 #sign-up{
 	
-	button{
+	.sign-up-btn{
 		display: block;
 		margin: auto;
 	}
@@ -9,6 +9,33 @@
 		.modal-dialog{
 			.modal-body{
 				
+				.avatar-wrapper{
+
+					.avatar-preview{
+						display: block;
+						margin: auto;
+						margin-top: 15px;
+						width: 70px;
+						height: 70px;
+						border-radius: 100%;
+						cursor: pointer;
+					}
+					
+					.browse-btn{
+						display: block;
+						
+						img{
+							width: 20px;
+							margin-right: 7px;
+							margin-top: -5px;
+						}
+					}
+
+					.avatar{
+						display: none;
+					}
+
+				}
 			}
 		}
 	}

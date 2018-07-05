@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import classnames from "classnames";
+import classNames from "classnames";
 
 import "./login.scss";
 
@@ -107,7 +107,7 @@ class Login extends React.Component {
 											</span>
 										</div>
 										<input ref="username" name="username" type="text" 
-												className={classnames("form-control", {"is-invalid": this.state.errors.username})} 
+												className={classNames("form-control", {"is-invalid": this.state.errors.username})} 
 												placeholder="Username" 
 												onFocus={this.clearErrors} 
 												onKeyPress={this.handleKeyPress}/>
@@ -127,7 +127,7 @@ class Login extends React.Component {
 											</span>
 										</div>
 										<input ref="password" name="password" type="password" 
-												className={classnames("form-control", {"is-invalid": this.state.errors.password})} 
+												className={classNames("form-control", {"is-invalid": this.state.errors.password})} 
 												placeholder="Password" 
 												onFocus={this.clearErrors} 
 												onKeyPress={this.handleKeyPress}/>
