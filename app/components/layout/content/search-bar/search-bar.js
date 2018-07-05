@@ -135,7 +135,7 @@ class SearchBar extends React.Component {
 
 					<div className="input-group-append">
 						<button className="btn btn-primary-light btn-search" onClick={this.search}>
-							<img src="/img/search-icon-white.png"/>
+							<img src="/img/icons/search-icon-white.png"/>
 						</button>
 					</div>
 				</div>

@@ -51,7 +51,7 @@ class MainMenu extends React.Component {
 		var sectionOptions = sections.map(function (section){
 			return (
 				<NavLink exact to={"/search/"+section} className={classNames("option", section)} key={section} onClick={self.hideMenu} activeClassName="active">
-					<img src={"/img/sections/"+section+".png"} alt={section}/>
+					<img src={"/img/icons/sections/"+section+".png"} alt={section}/>
 					{section}
 				</NavLink>
 			);
@@ -64,7 +64,7 @@ class MainMenu extends React.Component {
 				</NavLink>
 				
 				<button className="btn btn-light btn-hamburger" ref="hamburger" onClick={this.toggleMenu}>
-					<img src="/img/hamburger-icon.png"/>
+					<img src="/img/icons/hamburger-icon.png"/>
 				</button>
 				
 				<div className="sections" ref="sections">

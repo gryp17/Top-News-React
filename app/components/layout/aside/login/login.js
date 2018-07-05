@@ -103,7 +103,7 @@ class Login extends React.Component {
 									<div className="input-group username">
 										<div className="input-group-prepend">
 											<span className="input-group-text">
-												<img src="/img/user-icon.png"/>
+												<img src="/img/icons/user-icon.png"/>
 											</span>
 										</div>
 										<input ref="username" name="username" type="text" 
@@ -123,7 +123,7 @@ class Login extends React.Component {
 									<div className="input-group password">
 										<div className="input-group-prepend">
 											<span className="input-group-text">
-												<img src="/img/password-icon.png"/>
+												<img src="/img/icons/password-icon.png"/>
 											</span>
 										</div>
 										<input ref="password" name="password" type="password" 

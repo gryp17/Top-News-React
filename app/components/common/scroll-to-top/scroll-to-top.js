@@ -49,7 +49,7 @@ class ScrollToTop extends React.Component {
 		var content = (
 			<FadeIn>
 				<div className="scroll-to-top" onClick={this.scrollToTop}>
-					<img title="Scroll to top" src="/img/scroll-to-top-icon.png"/>
+					<img title="Scroll to top" src="/img/icons/scroll-to-top-icon.png"/>
 				</div>
 			</FadeIn>
 		);

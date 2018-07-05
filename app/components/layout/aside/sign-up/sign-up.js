@@ -112,7 +112,7 @@ class SignUp extends React.Component {
 											<label>Avatar (optional)</label>
 											
 											<button type="button" className="btn btn-secondary browse-btn" onClick={this.openFileBrowser}>
-												<img src="/img/upload-icon.png"/>
+												<img src="/img/icons/upload-icon.png"/>
 												Choose a file
 											</button>
 
