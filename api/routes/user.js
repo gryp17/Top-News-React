@@ -7,12 +7,23 @@ var Validator = require("../middleware/validator");
 var UserModel = require("../models/user");
 
 var rules = {
+	signUp: {
+		username: ["required", "min-3", "max-40", "unique"],
+		email: ["required", "max-100", "email", "unique"]
+	},
 	login: {
 		username: "required",
 		password: "required",
 		rememberMe: ["optional", "boolean"]
 	}
 };
+
+//sign up
+router.post("/", Validator.validate(rules.signUp), function (req, res, next){
+	res.json({
+		user: {}
+	});
+});
 
 ///login
 router.post("/login", Validator.validate(rules.login), function (req, res, next) {

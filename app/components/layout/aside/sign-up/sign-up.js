@@ -18,6 +18,8 @@ class SignUp extends React.Component {
 		this.closeModal = this.closeModal.bind(this);
 		this.openFileBrowser = this.openFileBrowser.bind(this);
 		this.showPreview = this.showPreview.bind(this);
+		this.clearErrors = this.clearErrors.bind(this);
+		this.signUp = this.signUp.bind(this);
 	}
 	
 	/**
@@ -47,6 +49,39 @@ class SignUp extends React.Component {
 	 */
 	showPreview(e){
 		$(this.refs.preview).attr("src", URL.createObjectURL(e.target.files[0]));
+	}
+	
+	/**
+	 * Clears the form errors related to this input
+	 * @param {Object} e
+	 */
+	clearErrors(e) {
+		var field = e.target.name;
+
+		var errors = this.state.errors;
+		delete errors[field];
+		
+		this.setState({
+			errors: errors
+		});
+	}
+	
+	/**
+	 * Sign up (and login) the user
+	 */
+	signUp(){
+		var self = this;
+		
+		UserHttpService.signUp(this.refs.username.value, this.refs.email.value, this.refs.password.value, this.refs.repeatPassword.value).then(function (response) {
+			if (response.data.user) {
+				self.closeModal();
+				self.props.updateSession(response.data.user);
+			}else{				
+				self.setState({
+					errors: response.data.errors
+				});
+			}
+		});	
 	}
 		
 	render() {
@@ -124,7 +159,7 @@ class SignUp extends React.Component {
 									</div>
 								</div>
 								
-								<button className="btn btn-primary-light sign-up-btn">
+								<button className="btn btn-primary-light sign-up-btn" onClick={this.signUp}>
 									Sign Up
 								</button>
 								

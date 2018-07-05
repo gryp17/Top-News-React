@@ -70,7 +70,6 @@ class MainMenu extends React.Component {
 				<div className="sections" ref="sections">
 					{sectionOptions}
 				</div>
-				
 			</div>
 		);
 	}

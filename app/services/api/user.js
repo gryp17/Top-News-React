@@ -16,6 +16,22 @@ export default {
 		});
 	},
 	/**
+	 * Signs up and logs in the user
+	 * @param {String} username
+	 * @param {String} email
+	 * @param {String} password
+	 * @param {String} repeatPassword
+	 * @returns {Promise}
+	 */
+	signUp(username, email, password, repeatPassword) {
+		return axios.post("/api/user", {
+			username: username,
+			email: email,
+			password: password,
+			repeatPassword: repeatPassword
+		});
+	},
+	/**
 	 * Returns the current user session
 	 * @returns {Promise}
 	 */

@@ -1,3 +1,8 @@
+var async = require("async");
+var _ = require("lodash");
+
+var UserModel = require("../models/user");
+
 module.exports = {
 	/**
 	 * Validates all request parameters using the provided rules
@@ -9,18 +14,22 @@ module.exports = {
 		
 		return function (req, res, next){
 			var data = req.body;
+			var asyncRules = ["unique"]; //list of async rules
+			var asyncValidations = {};
+			var asyncTasks = [];
 			var errors = {};
 			
 			//for each field
 			fieldLoop:
-			for(var field in rules){				
+			for(var field in rules){
 				var fieldRules = rules[field];
+				var fieldValue = data[field];
 				
 				//convert the string into array if it's not an array already
 				if(fieldRules.constructor !== Array){
 					fieldRules = fieldRules.split(",");
 				}
-				
+								
 				//for each rule
 				for(var i = 0; i < fieldRules.length; i++){
 					var rule = fieldRules[i].trim();
@@ -43,26 +52,154 @@ module.exports = {
 					
 					//"boolean" rule
 					if(rule === "boolean"){
-						if(!self.isBoolean(data[field])){
+						if(!self.isBoolean(fieldValue)){
 							errors[field] = "Invalid boolean value";
 							continue fieldLoop;
 						}
 					}
 					
+					//"email" rule
+					if(rule === "email"){
+						if(!self.isEmail(fieldValue)){
+							errors[field] = "Invalid email";
+							continue fieldLoop;
+						}
+					}
+					
+					//min-\d+ rule
+					//examples: min-5, min-10, min-50
+					var matches = rule.match(/min-(\d+)/);
+					if(matches && matches[1]){
+						var limit = matches[1];
+						
+						if(fieldValue.trim().length < limit){
+							errors[field] = "Must be at least "+limit+" chracters";
+							continue fieldLoop;
+						}
+					}
+					
+					//max-\d+ rule
+					//examples: max-5, max-10, max-50
+					var matches = rule.match(/max-(\d+)/);
+					if(matches && matches[1]){
+						var limit = matches[1];
+						
+						if(fieldValue.trim().length > limit){
+							errors[field] = "Must not exceed "+limit+" chracters";
+							continue fieldLoop;
+						}
+					}
+					
 					//TODO:
-					//more rules
+					//more rules here
 					//..........
-				}				
+					
+					//async rules
+					//since those rules are async we add them to a queue that is executed only if all sync validations have passed
+					if(asyncRules.indexOf(rule) !== -1){
+						if(!asyncValidations[field]){
+							asyncValidations[field] = [];
+						}
+						
+						asyncValidations[field].push({
+							rule: rule,
+							field: field,
+							fieldValue: fieldValue
+						});
+					}
+					
+				}
 			}
 			
-			if(Object.keys(errors).length > 0){
-				res.json({
-					errors: errors
-				});
-			}else{
-				next();
+			//do the async validations only if there are no other errors
+			if(Object.keys(errors).length === 0){
+				asyncTasks = self.generateAsyncTasks(asyncValidations);
 			}
+		
+			//run all async tasks (if there are any)
+			async.parallel(asyncTasks, function (err, validationErrors){
+				if(err){
+					return next(err);
+				}
+				
+				//check if there are any async validation errors
+				validationErrors.forEach(function (validationError){
+					if(validationError){
+						errors[validationError.field] = validationError.error;
+					}
+				});
+								
+				if(Object.keys(errors).length > 0){
+					res.json({
+						errors: errors
+					});
+				}else{
+					next();
+				}
+				
+			});
+			
 		};
+	},
+	/**
+	 * Generates the async validation tasks
+	 * @param {Object} asyncValidations
+	 * @returns {Array}
+	 */
+	generateAsyncTasks: function (asyncValidations) {
+		var asyncTasks = [];
+		
+		_.forOwn(asyncValidations, function (validations, field) {
+
+			validations.forEach(function (validation) {
+				
+				//"unique" rule
+				if(validation.rule === "unique"){
+					
+					//unique username
+					if (validation.field === "username") {
+						asyncTasks.push(function (done) {
+							UserModel.getByUsername(validation.fieldValue.trim(), function (err, user) {
+								if (err) {
+									return done(err);
+								}
+
+								if (user) {
+									done(null, {
+										field: field,
+										error: field.charAt(0).toUpperCase() + field.slice(1) + " already in use"
+									});
+								}else{
+									done(null);
+								}
+							});
+						});
+					} 
+					
+					//unique email
+					if (validation.field === "email") {
+						asyncTasks.push(function (done) {
+							UserModel.getByEmail(validation.fieldValue.trim(), function (err, user) {
+								if (err) {
+									return done(err);
+								}
+
+								if (user) {
+									done(null, {
+										field: field,
+										error: field.charAt(0).toUpperCase() + field.slice(1) + " already in use"
+									});
+								}else{
+									done(null);
+								}
+							});
+						});
+					}
+				}
+			});
+		});
+		
+		return asyncTasks;
 	},
 	/**
 	 * Helper function that checks if the provided field is set
@@ -94,5 +231,14 @@ module.exports = {
 	 */
 	isBoolean: function (value){
 		return typeof value === "boolean";
+	},
+	/**
+	 * Helper function that checks if the provided field is a valid email
+	 * @param {String} value
+	 * @returns {Boolean}
+	 */
+	isEmail: function (value){
+		var pattern = /^(("[\w-+\s]+")|([\w-+]+(?:\.[\w-+]+)*)|("[\w-+\s]+")([\w-+]+(?:\.[\w-+]+)*))(@((?:[\w-+]+\.)*\w[\w-+]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][\d]\.|1[\d]{2}\.|[\d]{1,2}\.))((25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\.){2}(25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\]?$)/i;
+		return pattern.test(value);
 	}
 };
