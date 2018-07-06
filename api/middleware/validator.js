@@ -16,7 +16,6 @@ module.exports = {
 			var data = req.body;
 			var asyncRules = ["unique"]; //list of async rules
 			var asyncValidations = {};
-			var asyncTasks = [];
 			var errors = {};
 			
 			//for each field
@@ -95,7 +94,7 @@ module.exports = {
 					//..........
 					
 					//async rules
-					//since those rules are async we add them to a queue that is executed only if all sync validations have passed
+					//since those rules are async we add them to a queue that is executed only if all sync validations for this field have passed
 					if(asyncRules.indexOf(rule) !== -1){
 						if(!asyncValidations[field]){
 							asyncValidations[field] = [];
@@ -110,14 +109,9 @@ module.exports = {
 					
 				}
 			}
-			
-			//do the async validations only if there are no other errors
-			if(Object.keys(errors).length === 0){
-				asyncTasks = self.generateAsyncTasks(asyncValidations);
-			}
-		
+					
 			//run all async tasks (if there are any)
-			async.parallel(asyncTasks, function (err, validationErrors){
+			async.parallel(self.generateAsyncTasks(asyncValidations), function (err, validationErrors){
 				if(err){
 					return next(err);
 				}
