@@ -3,6 +3,8 @@ var _ = require("lodash");
 
 var UserModel = require("../models/user");
 
+var MIN_PASSWORD_LENGTH = 6;
+
 module.exports = {
 	/**
 	 * Validates all request parameters using the provided rules
@@ -89,9 +91,25 @@ module.exports = {
 						}
 					}
 					
-					//TODO:
-					//more rules here
-					//..........
+					//"strong-password" rule
+					if(rule === "strong-password"){
+						if(!self.isStrongPassword(fieldValue)){
+							errors[field] = "Must contain at least "+MIN_PASSWORD_LENGTH+" characters, a digit and a letter";
+							continue fieldLoop;
+						}
+					}
+					
+					//matches(...) rule
+					//examples: matches(password)
+					var matches = rule.match(/matches\((.+?)\)/);
+					if(matches && matches[1]){
+						var matchField = matches[1];
+						
+						if(fieldValue !== data[matchField]){
+							errors[field] = "The fields don't match";
+							continue fieldLoop;
+						}
+					}
 					
 					//async rules
 					//since those rules are async we add them to a queue that is executed only if all sync validations for this field have passed
@@ -234,5 +252,13 @@ module.exports = {
 	isEmail: function (value){
 		var pattern = /^(("[\w-+\s]+")|([\w-+]+(?:\.[\w-+]+)*)|("[\w-+\s]+")([\w-+]+(?:\.[\w-+]+)*))(@((?:[\w-+]+\.)*\w[\w-+]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][\d]\.|1[\d]{2}\.|[\d]{1,2}\.))((25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\.){2}(25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\]?$)/i;
 		return pattern.test(value);
+	},
+	/**
+	 * Helper function that checks if the provided field is a valid/strong password
+	 * @param {String} value
+	 * @returns {Boolean}
+	 */
+	isStrongPassword: function (value){
+		return value.length >= MIN_PASSWORD_LENGTH && /\d+/.test(value) && /[a-z]+/i.test(value);
 	}
 };
