@@ -12,7 +12,8 @@ var rules = {
 		username: ["required", "min-3", "max-40", "unique"],
 		email: ["required", "max-100", "email", "unique"],
 		password: ["required", "strong-password", "max-40"],
-		repeatPassword: ["required", "matches(password)"]
+		repeatPassword: ["required", "matches(password)"],
+		avatar: ["optional", "valid-avatar"]
 	},
 	login: {
 		username: "required",

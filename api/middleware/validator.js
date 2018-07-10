@@ -1,5 +1,8 @@
+var path = require("path");
 var async = require("async");
 var _ = require("lodash");
+
+var app = require("../server");
 
 var UserModel = require("../models/user");
 
@@ -15,7 +18,9 @@ module.exports = {
 		var self = this;
 		
 		return function (req, res, next){
+			var config = app.get("config");
 			var data = req.body;
+			var files = req.files;
 			var asyncRules = ["unique"]; //list of async rules
 			var asyncValidations = {};
 			var errors = {};
@@ -38,14 +43,14 @@ module.exports = {
 					//"optional" rule (used together with other rules. if the field is not set all other rules will be skipped. however if the field is set the rest of the validations will be run)
 					//example: ["optional", "boolean"]
 					if(rule === "optional"){
-						if(!self.isSet(data, field)){
+						if(!self.isSet(data, files, field)){
 							continue fieldLoop;
 						}
 					}
 					
 					//"required" rule
 					if(rule === "required"){
-						if(!self.isSet(data, field)){
+						if(!self.isSet(data, files, field)){
 							errors[field] = "This field is required";
 							continue fieldLoop;
 						}
@@ -63,6 +68,34 @@ module.exports = {
 					if(rule === "email"){
 						if(!self.isEmail(fieldValue)){
 							errors[field] = "Invalid email";
+							continue fieldLoop;
+						}
+					}
+					
+					//"strong-password" rule
+					if(rule === "strong-password"){
+						if(!self.isStrongPassword(fieldValue)){
+							errors[field] = "Must contain at least "+MIN_PASSWORD_LENGTH+" characters, a digit and a letter";
+							continue fieldLoop;
+						}
+					}
+					
+					//"valid-avatar" rule
+					if(rule === "valid-avatar"){
+						var file = files[field];
+						var extension = path.extname(file.originalFilename).replace(".", "").toLowerCase();
+						var maxSize = config.uploads.avatars.maxSize;
+						var validExtensions = config.uploads.avatars.validExtensions;
+						
+						//max file size
+						if (file.size > maxSize) {
+							errors[field] = "The avatar is bigger than "+(maxSize / 1000000)+"MB";
+							continue fieldLoop;
+						}
+
+						//valid extensions
+						if (validExtensions.indexOf(extension) === -1) {
+							errors[field] = "Invalid file. (Valid extensions: "+validExtensions.join(", ")+")";
 							continue fieldLoop;
 						}
 					}
@@ -90,15 +123,7 @@ module.exports = {
 							continue fieldLoop;
 						}
 					}
-					
-					//"strong-password" rule
-					if(rule === "strong-password"){
-						if(!self.isStrongPassword(fieldValue)){
-							errors[field] = "Must contain at least "+MIN_PASSWORD_LENGTH+" characters, a digit and a letter";
-							continue fieldLoop;
-						}
-					}
-					
+										
 					//matches(...) rule
 					//examples: matches(password)
 					var matches = rule.match(/matches\((.+?)\)/);
@@ -110,7 +135,7 @@ module.exports = {
 							continue fieldLoop;
 						}
 					}
-					
+										
 					//async rules
 					//since those rules are async we add them to a queue that is executed only if all sync validations for this field have passed
 					if(asyncRules.indexOf(rule) !== -1){
@@ -216,16 +241,22 @@ module.exports = {
 	/**
 	 * Helper function that checks if the provided field is set
 	 * @param {Object} data
+	 * @param {Array} files
 	 * @param {String} field
 	 * @returns {Boolean}
 	 */
-	isSet: function (data, field){
+	isSet: function (data, files, field){
 		var value = data[field];
+		var file = files[field];
 		
 		if(this.isString(value)){
 			return value.trim().length > 0;
 		}else{
-			return typeof value !== "undefined";
+			if(file){
+				return file.originalFilename.length !== 0;
+			}else{
+				return typeof value !== "undefined";
+			}
 		}
 	},
 	/**

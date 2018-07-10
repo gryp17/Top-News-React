@@ -155,7 +155,13 @@ class SignUp extends React.Component {
 													Choose a file
 												</button>
 
-												<input ref="avatar" type="file" className="avatar" name="avatar" onChange={this.showPreview} />
+												<input ref="avatar" type="file" className="avatar" name="avatar"
+													onChange={this.showPreview} 
+													onClick={this.clearErrors}/>
+												
+												<div className="form-error">
+													{this.state.errors.avatar}
+												</div>
 											</div>
 											<div className="col">
 												<img ref="preview" className="avatar-preview"/>

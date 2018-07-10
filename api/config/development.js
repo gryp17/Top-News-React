@@ -12,9 +12,16 @@ module.exports = {
 		password: "1234"
 	},
 	uploads: {
-		avatarsDirectory: "../public/img/avatars/",
-		maxAvatarSize: 1000000,
-		validAvatarExtensions: ["png", "jpg", "jpeg"],
-		defaultAvatar: "default.png"
+		avatars: {
+			directory: "../public/uploads/avatars/",
+			maxSize: 1000000,
+			validExtensions: ["png", "jpg", "jpeg"],
+			defaultAvatar: "default.png"
+		},
+		articles: {
+			directory: "../public/uploads/articles/",
+			maxSize: 10000000,
+			validExtensions: ["png", "jpg", "jpeg"]
+		}
 	}
 };

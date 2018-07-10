@@ -27,12 +27,18 @@
 					
 					.browse-btn{
 						display: block;
+						width: 100%;
 						
 						img{
 							width: 20px;
 							margin-right: 7px;
 							margin-top: -5px;
 						}
+					}
+					
+					.form-error{
+						position: relative;
+						text-align: right;
 					}
 
 					.avatar{
