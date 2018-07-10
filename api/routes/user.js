@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var md5 = require("md5");
+var multipart = require("connect-multiparty");
 
 var Validator = require("../middleware/validator");
 
@@ -21,7 +22,7 @@ var rules = {
 };
 
 //sign up
-router.post("/", Validator.validate(rules.signUp), function (req, res, next){
+router.post("/", multipart(), Validator.validate(rules.signUp), function (req, res, next){
 	res.json({
 		user: {}
 	});

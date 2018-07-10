@@ -71,8 +71,10 @@ class SignUp extends React.Component {
 	 */
 	signUp(){
 		var self = this;
-		
-		UserHttpService.signUp(this.refs.username.value, this.refs.email.value, this.refs.password.value, this.refs.repeatPassword.value).then(function (response) {
+				
+		var formData = new FormData(this.refs.signUpForm);
+				
+		UserHttpService.signUp(formData).then(function (response) {
 			if (response.data.user) {
 				self.closeModal();
 				self.props.updateSession(response.data.user);
@@ -97,71 +99,75 @@ class SignUp extends React.Component {
 							</div>
 							<div className="modal-body">
 								
-								<div className="form-group">
-									<input ref="username" name="username" type="text" 
-											className={classNames("form-control", {"is-invalid": this.state.errors.username})} 
-											placeholder="Username" 
-											onFocus={this.clearErrors}/>
-
-									<div className="form-error">
-										{this.state.errors.username}
-									</div>
-								</div>
+								<form ref="signUpForm">
 								
-								<div className="form-group">
-									<input ref="email" name="email" type="text" 
-											className={classNames("form-control", {"is-invalid": this.state.errors.email})} 
-											placeholder="Email" 
-											onFocus={this.clearErrors}/>
+									<div className="form-group">
+										<input name="username" type="text" 
+												className={classNames("form-control", {"is-invalid": this.state.errors.username})} 
+												placeholder="Username" 
+												onFocus={this.clearErrors}/>
 
-									<div className="form-error">
-										{this.state.errors.email}
-									</div>
-								</div>
-								
-								<div className="form-group">
-									<input ref="password" name="password" type="password" 
-											className={classNames("form-control", {"is-invalid": this.state.errors.password})} 
-											placeholder="Password" 
-											onFocus={this.clearErrors}/>
-
-									<div className="form-error">
-										{this.state.errors.password}
-									</div>
-								</div>
-								
-								<div className="form-group">
-									<input ref="repeatPassword" name="repeatPassword" type="password" 
-											className={classNames("form-control", {"is-invalid": this.state.errors.repeatPassword})} 
-											placeholder="Repeat Password" 
-											onFocus={this.clearErrors}/>
-
-									<div className="form-error">
-										{this.state.errors.repeatPassword}
-									</div>
-								</div>
-								
-								<div className="form-group">
-									<div className="avatar-wrapper row">
-										<div className="col">
-											<label>Avatar (optional)</label>
-											
-											<button type="button" className="btn btn-secondary browse-btn" onClick={this.openFileBrowser}>
-												<img src="/img/icons/upload-icon.png"/>
-												Choose a file
-											</button>
-
-											<input ref="avatar" type="file" className="avatar" name="avatar" onChange={this.showPreview} />
-										</div>
-										<div className="col">
-											<img ref="preview" className="avatar-preview"/>
+										<div className="form-error">
+											{this.state.errors.username}
 										</div>
 									</div>
-								</div>
-								
-								<button className="btn btn-primary-light sign-up-btn" onClick={this.signUp}>
-									Sign Up
-								</button>
+
+									<div className="form-group">
+										<input name="email" type="text" 
+												className={classNames("form-control", {"is-invalid": this.state.errors.email})} 
+												placeholder="Email" 
+												onFocus={this.clearErrors}/>
+
+										<div className="form-error">
+											{this.state.errors.email}
+										</div>
+									</div>
+
+									<div className="form-group">
+										<input name="password" type="password" 
+												className={classNames("form-control", {"is-invalid": this.state.errors.password})} 
+												placeholder="Password" 
+												onFocus={this.clearErrors}/>
+
+										<div className="form-error">
+											{this.state.errors.password}
+										</div>
+									</div>
+
+									<div className="form-group">
+										<input name="repeatPassword" type="password" 
+												className={classNames("form-control", {"is-invalid": this.state.errors.repeatPassword})} 
+												placeholder="Repeat Password" 
+												onFocus={this.clearErrors}/>
+
+										<div className="form-error">
+											{this.state.errors.repeatPassword}
+										</div>
+									</div>
+
+									<div className="form-group">
+										<div className="avatar-wrapper row">
+											<div className="col">
+												<label>Avatar (optional)</label>
+
+												<button type="button" className="btn btn-secondary browse-btn" onClick={this.openFileBrowser}>
+													<img src="/img/icons/upload-icon.png"/>
+													Choose a file
+												</button>
+
+												<input ref="avatar" type="file" className="avatar" name="avatar" onChange={this.showPreview} />
+											</div>
+											<div className="col">
+												<img ref="preview" className="avatar-preview"/>
+											</div>
+										</div>
+									</div>
+
+									<button type="button" className="btn btn-primary-light sign-up-btn" onClick={this.signUp}>
+										Sign Up
+									</button>
+
+								</form>
 								
 							</div>
 						</div>
