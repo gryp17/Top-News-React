@@ -4,7 +4,7 @@ var md5 = require("md5");
 var multipart = require("connect-multiparty");
 
 var Validator = require("../middleware/validator");
-
+var Files = require("../middleware/files");
 var UserModel = require("../models/user");
 
 var rules = {
@@ -23,9 +23,20 @@ var rules = {
 };
 
 //sign up
-router.post("/", multipart(), Validator.validate(rules.signUp), function (req, res, next){
-	res.json({
-		user: {}
+router.post("/", multipart(), Validator.validate(rules.signUp), Files.uploadAvatar, function (req, res, next){
+	
+	var data = req.body;
+
+	//create the new user
+	UserModel.create(data.username.trim(), data.email.trim(), data.password.trim(), req.files.avatar.uploadedTo, "user", function (err, userInstance) {
+		if (err) {
+			return next(err);
+		}
+
+		//log in the newly created user
+		delete userInstance.password;
+		req.session.user = userInstance;
+		res.json({user: userInstance});
 	});
 });
 

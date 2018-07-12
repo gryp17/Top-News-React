@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import classNames from "classnames";
 
 import "./sign-up.scss";
@@ -6,6 +7,10 @@ import "./sign-up.scss";
 import UserHttpService from "../../../../services/api/user";
 
 class SignUp extends React.Component {
+	
+	static propTypes = {
+		updateSession: PropTypes.func.isRequired
+	};
 	
 	constructor(props){
 		super(props);

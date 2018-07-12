@@ -35,7 +35,7 @@ class Aside extends React.Component {
 							
 					{!this.props.userSession &&
 						<div className="col">
-							<SignUp/>
+							<SignUp updateSession={this.props.updateSession}/>
 						</div>
 					}
 				</div>
