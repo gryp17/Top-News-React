@@ -247,12 +247,12 @@ module.exports = {
 	 */
 	isSet: function (data, files, field){
 		var value = data[field];
-		var file = files[field];
 		
 		if(this.isString(value)){
 			return value.trim().length > 0;
 		}else{
-			if(file){
+			if(files && files[field]){
+				var file = files[field];
 				return file.originalFilename.length !== 0;
 			}else{
 				return typeof value !== "undefined";
