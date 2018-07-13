@@ -14,11 +14,15 @@ router.get("/:category/:searchTerm/:limit/:offset", function (req, res, next) {
 	});
 });
 
-//get the article that matches the specified id
+//get the article that matches the specified id and increments the views counter
 router.get("/:id", function (req, res, next) {
 	ArticleModel.getById(parseInt(req.params.id), function (err, result) {
 		if (err) {
 			return next(err);
+		}
+		
+		if(result){
+			ArticleModel.addArticleView(req.params.id);
 		}
 
 		res.json(result);

@@ -4,6 +4,14 @@ var app = require("../server");
 var connection = mysql.createConnection(app.get("config").db);
 
 module.exports = {
+	/**
+	 * Returns all articles that match the specified criterias
+	 * @param {String} category
+	 * @param {String} searchTerm
+	 * @param {Number} limit
+	 * @param {Number} offset
+	 * @param {Function} done
+	 */
 	search: function (category, searchTerm, limit, offset, done) {
 		var whereClauses = [];
 		var whereParams = [];
@@ -29,6 +37,11 @@ module.exports = {
 
 		connection.query(query, params, done);
 	},
+	/**
+	 * Returns the article that matches the specified article id
+	 * @param {Number} id
+	 * @param {Function} done
+	 */
 	getById: function (id, done) {
 		var query = "SELECT article.id, authorId, title, summary, content, image, date, views, category.name as categoryName, user.username as authorName, user.avatar as authorAvatar FROM article, category, user WHERE article.categoryId = category.id AND user.id = article.authorId AND article.id = ?";
 		connection.query(query, id, function (err, rows) {
@@ -36,7 +49,24 @@ module.exports = {
 				return done(err);
 			}
 
-			done(null, rows[0] || null);
+			var article = rows[0];
+			
+			if(article){
+				//if there is no avatar use the default one
+				if(!article.authorAvatar){
+					article.authorAvatar = app.get("config").uploads.avatars.defaultAvatar;
+				}
+			}
+
+			done(null, article || null);
 		});
+	},
+	/**
+	 * Increments the article views by one
+	 * @param {Number} id
+	 * @param {Function} done
+	 */
+	addArticleView: function (id, done){
+		connection.query("UPDATE article SET views = views + 1 WHERE id = ?", id, done);
 	}
 }; 
