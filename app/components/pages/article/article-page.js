@@ -7,6 +7,7 @@ import LoadingIndicator from "../../common/loading-indicator/loading-indicator";
 import ScrollToTop from "../../common/scroll-to-top/scroll-to-top";
 import Article from "./article/article";
 import NotFound from "./not-found/not-found";
+import ArticlesSlider from "./articles-slider/articles-slider";
 
 class ArticlePage extends React.Component {
 
@@ -15,7 +16,8 @@ class ArticlePage extends React.Component {
 
 		this.state = {
 			loading: true,
-			article: null
+			article: null,
+			sliderArticles: []
 		};
 	}
 
@@ -23,6 +25,10 @@ class ArticlePage extends React.Component {
 		this.getArticle(this.props.match.params.id);
 	}
 
+	/**
+	 * Get the article that matches the specified id
+	 * @param {Number} id
+	 */
 	getArticle(id) {
 		var self = this;
 
@@ -33,6 +39,25 @@ class ArticlePage extends React.Component {
 				loading: false,
 				article: response.data
 			});
+			
+			//get the latest articles by the same author
+			if(response.data.authorId){
+				self.getAuthorArticles(response.data.authorId);
+			}
+		});
+	}
+	
+	/**
+	 * Get all articles by the specified author id
+	 * @param {Number} authorId
+	 */
+	getAuthorArticles(authorId){
+		var self = this;
+		
+		ArticleHttpService.getArticlesByAuthor(authorId, 10, 0).then(function (response) {
+			self.setState({
+				sliderArticles: response.data
+			});
 		});
 	}
 
@@ -42,6 +67,7 @@ class ArticlePage extends React.Component {
 				{this.state.loading && <LoadingIndicator/>}
 				{!this.state.loading && !this.state.article && <NotFound/>}
 				{this.state.article && <Article article={this.state.article}/>}
+				{this.state.sliderArticles && <ArticlesSlider articles={this.state.sliderArticles}></ArticlesSlider>}
 
 				<ScrollToTop/>
 			</div>

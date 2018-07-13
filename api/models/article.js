@@ -62,6 +62,18 @@ module.exports = {
 		});
 	},
 	/**
+	 * Returns all articles by the specified author id
+	 * @param {Number} authorId
+	 * @param {Number} limit
+	 * @param {Number} offset
+	 * @param {Function} done
+	 */
+	getByAuthor: function (authorId, limit, offset, done){
+		var query = "SELECT article.id, authorId, title, summary, content, image, date, views, category.name as categoryName, user.username as authorName FROM article, category, user WHERE article.categoryId = category.id AND user.id = article.authorId AND authorId = ? ORDER BY date DESC LIMIT ? OFFSET ?";
+		var params = [authorId, limit, offset];
+		connection.query(query, params, done);
+	},
+	/**
 	 * Increments the article views by one
 	 * @param {Number} id
 	 * @param {Function} done
