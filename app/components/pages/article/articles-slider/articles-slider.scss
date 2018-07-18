@@ -2,15 +2,11 @@
 	overflow: hidden;
 
 	.slider{
+		height: 185px;
 		margin-left: 0px;
-		height: 250px;
 		
 		.slide{
-			display: inline-block;
-			vertical-align: top;
-			width: 220px;
 			padding: 10px;
 		}
 	}
-
 }
