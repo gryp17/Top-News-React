@@ -19,9 +19,7 @@ class ArticlesSlider extends React.Component {
 		this.articlesDir = Config.articlesDir;
 		this.maxVisibleSlides = 3;
 		
-		this.state = {
-			margin: 0
-		};
+		this.sliderMargin = 0;
 		
 		this.getDimensions = this.getDimensions.bind(this);
 		this.setSliderWidth = this.setSliderWidth.bind(this);
@@ -81,7 +79,7 @@ class ArticlesSlider extends React.Component {
 		var dimensions = this.getDimensions();
 		var maxMargin = 0;
 		
-		var newMargin = this.state.margin + dimensions.slideWidth;
+		var newMargin = this.sliderMargin + dimensions.slideWidth;
 		
 		if(newMargin > maxMargin){
 			return;
@@ -97,7 +95,7 @@ class ArticlesSlider extends React.Component {
 		var dimensions = this.getDimensions();
 		var minMargin = (dimensions.sliderWidth - dimensions.wrapperWidth + 10) * -1;
 		
-		var newMargin = this.state.margin - dimensions.slideWidth;
+		var newMargin = this.sliderMargin - dimensions.slideWidth;
 
 		if(newMargin < minMargin){
 			return;
@@ -111,11 +109,9 @@ class ArticlesSlider extends React.Component {
 	 * @param {Number} margin
 	 */
 	slide(margin){
-		this.setState({
-			margin: margin
-		});
+		this.sliderMargin = margin;
 		
-		$(this.refs.slider).stop().animate({marginLeft: this.state.margin}, 500);
+		$(this.refs.slider).stop().animate({marginLeft: this.sliderMargin}, 500);
 	}
 	
 	render() {
