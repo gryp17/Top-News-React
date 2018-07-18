@@ -51,11 +51,15 @@ class ArticlesSlider extends React.Component {
 	}
 	
 	/**
-	 * Sets the slider width based on the articles count
+	 * Sets the slider width based on the articles count.
+	 * Also resets the slider position in order to avoid weird behaviour.
 	 */
 	setSliderWidth(){
 		var dimensions = this.getDimensions();
 		$(this.refs.slider).width(this.props.articles.length * dimensions.slideWidth);
+		
+		//reset the slider position
+		this.slide(0);
 	}
 	
 	/**
