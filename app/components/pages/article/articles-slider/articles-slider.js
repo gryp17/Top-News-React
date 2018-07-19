@@ -126,10 +126,12 @@ class ArticlesSlider extends React.Component {
 		var articles = this.props.articles.map(function (article){
 			return (
 				<div className="slide col" key={article.id}>
-					<img className="img-fluid image" src={self.articlesDir + article.image}/>
-					<div className="title">
-						{article.title}
-					</div>
+					<Link to={"/article/"+article.id} title={article.title}>
+						<img className="img-fluid image" src={self.articlesDir + article.image}/>
+						<div className="title">
+							{article.title}
+						</div>
+					</Link>
 				</div>
 			);
 		});

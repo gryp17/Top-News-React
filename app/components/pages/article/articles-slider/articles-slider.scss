@@ -2,11 +2,18 @@
 	overflow: hidden;
 
 	.slider{
-		height: 185px;
+		min-height: 185px;
 		margin-left: 0px;
 		
 		.slide{
 			padding: 10px;
+			
+			.title{
+				margin-top: 5px;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				max-height: 75px;
+			}
 		}
 	}
 }
