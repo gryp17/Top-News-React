@@ -138,9 +138,13 @@ class ArticlesSlider extends React.Component {
 		
 		return (
 			<div className="articles-slider" ref="wrapper">
+				<img className="arrow left" src="/img/icons/arrow-icon.png" onClick={this.slideLeft}/>
+				
 				<div className="slider row" ref="slider">
 					{articles}
 				</div>
+				
+				<img className="arrow right" src="/img/icons/arrow-icon.png" onClick={this.slideRight}/>
 			</div>
 		);
 	};
