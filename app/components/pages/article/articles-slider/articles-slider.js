@@ -32,13 +32,15 @@ class ArticlesSlider extends React.Component {
 	componentDidMount(){
 		$(window).on("resize", this.setSliderWidth);
 		$(this.refs.wrapper).on("mousewheel DOMMouseScroll", this.handleWheelScroll);
+		
+		this.setSliderWidth();
 	}
 	
 	componentWillUnmount(){
 		$(window).off("resize", this.setSliderWidth);
 		$(this.refs.wrapper).off("mousewheel DOMMouseScroll", this.handleWheelScroll);
 	}
-	
+		
 	/**
 	 * Returns the most needed component dimmensions (wrapper, slider and slide width)
 	 */
@@ -57,7 +59,7 @@ class ArticlesSlider extends React.Component {
 	setSliderWidth(){
 		var dimensions = this.getDimensions();
 		$(this.refs.slider).width(this.props.articles.length * dimensions.slideWidth);
-		
+
 		//reset the slider position
 		this.slide(0);
 	}
@@ -120,9 +122,7 @@ class ArticlesSlider extends React.Component {
 	
 	render() {
 		var self = this;
-		
-		this.setSliderWidth();
-				
+			
 		var articles = this.props.articles.map(function (article){
 			return (
 				<div className="slide col" key={article.id}>
@@ -138,13 +138,13 @@ class ArticlesSlider extends React.Component {
 		
 		return (
 			<div className="articles-slider" ref="wrapper">
-				<img className="arrow left" src="/img/icons/arrow-icon.png" onClick={this.slideLeft}/>
+				{articles.length > this.maxVisibleSlides  && <img className="arrow left" src="/img/icons/arrow-icon.png" onClick={this.slideLeft}/>}
 				
 				<div className="slider row" ref="slider">
 					{articles}
 				</div>
 				
-				<img className="arrow right" src="/img/icons/arrow-icon.png" onClick={this.slideRight}/>
+				{articles.length > this.maxVisibleSlides && <img className="arrow right" src="/img/icons/arrow-icon.png" onClick={this.slideRight}/>}
 			</div>
 		);
 	};
