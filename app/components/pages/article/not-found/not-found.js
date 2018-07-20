@@ -13,6 +13,9 @@ class NotFound extends React.Component {
 					<div className="title">
 						Article not found
 					</div>
+					
+					<img src="/img/icons/warning-icon.png"/>
+					
 					<div className="home-link">
 						Go back to the <Link to="/">home page</Link>
 					</div>
