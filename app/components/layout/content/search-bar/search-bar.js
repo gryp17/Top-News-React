@@ -30,7 +30,7 @@ class SearchBar extends React.Component {
 		this.autocompleteTimeout = null;
 
 		this.handleChange = this.handleChange.bind(this);
-		this.handleKeyPress = this.handleKeyPress.bind(this);
+		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.changeSection = this.changeSection.bind(this);
 		this.search = this.search.bind(this);
 		this.autocomplete = this.autocomplete.bind(this);
@@ -88,9 +88,14 @@ class SearchBar extends React.Component {
 	 * Checks if the "Enter" key was pressed and calls the search function
 	 * @param {Object} e
 	 */
-	handleKeyPress(e) {
+	handleKeyDown(e) {
 		if (e.key === "Enter") {
 			this.search();
+		}
+		
+		//TODO: make the first autocomplete item selected (if there are any)
+		if (e.key === "ArrowDown"){
+			console.log("down");
 		}
 	}
 
@@ -174,7 +179,7 @@ class SearchBar extends React.Component {
 				<div className="input-group">
 
 					<div className="input-wrapper">
-						<input type="text" className="form-control" value={this.state.searchTerm} placeholder={placeholder} onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
+						<input type="text" className="form-control" value={this.state.searchTerm} placeholder={placeholder} onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
 						{autocompleteOptions.length > 0 && <div className="autocomplete-results">{autocompleteOptions}</div>}
 					</div>
 					
