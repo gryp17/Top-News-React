@@ -22,13 +22,22 @@ export default {
 	},
 	/**
 	 * Returns all articles that match the specified criterias
-	 * @param {type} authorId
-	 * @param {type} limit
-	 * @param {type} offset
+	 * @param {Number} authorId
+	 * @param {Number} limit
+	 * @param {Number} offset
 	 * @returns {unresolved}
 	 */
 	getArticlesByAuthor(authorId, limit, offset) {
 		return axios.get("/api/article/author/" + authorId + "/" + limit + "/" + offset);
+	},
+	/**
+	 * Returns a list of autocomplete suggestions based on the category and search term
+	 * @param {String} category
+	 * @param {String} searchTerm
+	 * @param {Number} limit
+	 */
+	getAutocompleteSuggestions(category, searchTerm, limit){
+		return axios.get("/api/article/autocomplete/" + category + "/" + encodeURIComponent(searchTerm) + "/" + limit);
 	}
 }
 

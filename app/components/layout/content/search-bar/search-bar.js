@@ -4,6 +4,8 @@ import {withRouter, matchPath} from "react-router-dom";
 
 import "./search-bar.scss";
 
+import ArticleHttpService from "../../../../services/api/article";
+
 class SearchBar extends React.Component {
 
 	constructor(props){
@@ -29,6 +31,7 @@ class SearchBar extends React.Component {
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.changeSection = this.changeSection.bind(this);
 		this.search = this.search.bind(this);
+		this.autocomplete = this.autocomplete.bind(this);
 	}
 
 	componentDidMount(){
@@ -71,9 +74,10 @@ class SearchBar extends React.Component {
 	handleChange(e) {
 		var text = e.target.value;
 
+		//update the search term state and call the autocomplete function
 		this.setState({
 			searchTerm: text
-		});
+		}, this.autocomplete);
 	}
 
 	/**
@@ -105,6 +109,24 @@ class SearchBar extends React.Component {
 	 */
 	search(){
 		this.props.history.push("/search/"+this.state.selectedSection+"/"+encodeURIComponent(this.state.searchTerm));
+	}
+		
+	/**
+	 * Shows/updates the autocomplete suggestions based on the user search
+	 */
+	autocomplete(){
+		
+		if(!this.state.searchTerm || this.state.searchTerm.length < 3){
+			return;
+		}
+		
+		//TODO:
+		//add timeout
+		
+		ArticleHttpService.getAutocompleteSuggestions(this.state.selectedSection, this.state.searchTerm, 5).then(function (response){
+			var suggestions = response.data;
+			console.log(suggestions);
+		});
 	}
 
 	render() {
