@@ -22,16 +22,19 @@ class SearchBar extends React.Component {
 
 		this.defaultState = {
 			selectedSection: this.sections[0],
-			searchTerm: ""
+			searchTerm: "",
+			autocompleteSuggestions: []
 		};
 
 		this.state = this.defaultState;
+		this.autocompleteTimeout = null;
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.changeSection = this.changeSection.bind(this);
 		this.search = this.search.bind(this);
 		this.autocomplete = this.autocomplete.bind(this);
+		this.selectAutocompleteSuggestion = this.selectAutocompleteSuggestion.bind(this);
 	}
 
 	componentDidMount(){
@@ -60,7 +63,8 @@ class SearchBar extends React.Component {
 		if(match){
 			this.setState({
 				selectedSection: decodeURIComponent(match.params.section),
-				searchTerm: decodeURIComponent(match.params.searchTerm || "")
+				searchTerm: decodeURIComponent(match.params.searchTerm || ""),
+				autocompleteSuggestions: []
 			});
 		}else{
 			this.setState(this.defaultState);
@@ -115,17 +119,36 @@ class SearchBar extends React.Component {
 	 * Shows/updates the autocomplete suggestions based on the user search
 	 */
 	autocomplete(){
+		var self = this;
+		
+		clearTimeout(this.autocompleteTimeout);
 		
 		if(!this.state.searchTerm || this.state.searchTerm.length < 3){
+			this.setState({
+				autocompleteSuggestions: []
+			});
+			
 			return;
 		}
 		
-		//TODO:
-		//add timeout
+		this.autocompleteTimeout = setTimeout(function (){
+			ArticleHttpService.getAutocompleteSuggestions(self.state.selectedSection, self.state.searchTerm, 5).then(function (response){
+				self.setState({
+					autocompleteSuggestions: response.data
+				});
+			});
+		}, 500);
 		
-		ArticleHttpService.getAutocompleteSuggestions(this.state.selectedSection, this.state.searchTerm, 5).then(function (response){
-			var suggestions = response.data;
-			console.log(suggestions);
+	}
+	
+	/**
+	 * Sets the search term and resets the autocompleteSuggestions in order to hide the list
+	 * @param {String} text
+	 */
+	selectAutocompleteSuggestion(text){
+		this.setState({
+			searchTerm: text,
+			autocompleteSuggestions: []
 		});
 	}
 
@@ -138,14 +161,23 @@ class SearchBar extends React.Component {
 				<a key={section} data-section={section} className="dropdown-item" onClick={self.changeSection}>{section}</a>
 			);
 		});
+		
+		var autocompleteOptions = this.state.autocompleteSuggestions.map(function (suggestion, index){
+			return (
+				<div className="item" key={index} onClick={self.selectAutocompleteSuggestion.bind(null, suggestion)}>{suggestion}</div>
+			);
+		});
 
 		return (
 			<div className="search-bar">
 
 				<div className="input-group">
 
-					<input type="text" className="form-control" value={this.state.searchTerm} placeholder={placeholder} onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
-
+					<div className="input-wrapper">
+						<input type="text" className="form-control" value={this.state.searchTerm} placeholder={placeholder} onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
+						{autocompleteOptions.length > 0 && <div className="autocomplete-results">{autocompleteOptions}</div>}
+					</div>
+					
 					<div className="input-group-append">
 						<button className="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							{this.state.selectedSection}

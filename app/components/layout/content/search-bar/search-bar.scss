@@ -1,6 +1,37 @@
 .search-bar{
-	input{
-		font-size: 14px;
+	
+	.input-wrapper{
+		flex: auto;
+		position: relative;
+		width: 1%;
+		z-index: 3;
+		
+		input{
+			height: 100%;
+			font-size: 14px;
+			border-top-right-radius: 0px;
+			border-bottom-right-radius: 0px;
+		}
+		
+		.autocomplete-results{
+			position: absolute;
+			width: 100%;
+			padding: 3px;
+			background-color: #ffffff;
+			border: 1px solid #ced4da;
+			border-radius: 5px;
+			z-index: 1;
+			
+			.item{
+				padding: 5px 10px;
+				border-radius: 5px;
+				cursor: pointer;
+				
+				&:hover{
+					background-color: #f4f4f4;
+				}
+			}
+		}
 	}
 	
 	.dropdown-menu{
