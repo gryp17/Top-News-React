@@ -10,24 +10,41 @@ class PopularArticlesWidget extends React.Component {
 		
 		this.state = {
 			periods: [
-				"all time",
+				"today",
 				"this week",
-				"today"
+				"all time"
 			],
-			selectedPeriod: "all time"
+			selectedPeriod: "today"
 		};
+		
+		this.changePeriod = this.changePeriod.bind(this);
+	}
+	
+	/**
+	 * Changes the selected period and loads the new articles data
+	 * @param {String} period
+	 */
+	changePeriod(period){
+		this.setState({
+			selectedPeriod: period
+		});
 	}
 
 	render() {
 		var self = this;
 		
-		var periods = this.state.periods.map(function (period){
-			return <button type="button" className={classNames("btn btn-light col-4", {"active": self.state.selectedPeriod === period})}>{period}</button>;
+		var periods = this.state.periods.map(function (period, index){
+			return (
+				<button type="button" key={index} className={classNames("btn btn-light col-4", {"active": self.state.selectedPeriod === period})} 
+						onClick={self.changePeriod.bind(null, period)}>
+					{period}
+				</button>
+			);
 		});
 		
 		return (
 			<div className="popular-articles-widget">				
-				<div class="btn-group btn-group-sm row no-gutters" role="group">
+				<div className="btn-group btn-group-sm row no-gutters" role="group">
 					{periods}
 				</div>
 				
