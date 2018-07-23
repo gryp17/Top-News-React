@@ -130,7 +130,11 @@ class SearchPage extends React.Component {
 
 				{this.state.loading && <LoadingIndicator/>}
 				{!this.state.loading && articles.length === 0 && <NoResults/>}
-				{!this.state.loading && articles.length > 0 && <div className="row no-gutters articles-wrapper">{articles}</div>}
+				{!this.state.loading && articles.length > 0 && 
+					<div className="row no-gutters articles-wrapper">
+						{articles}
+					</div>
+				}
 	
 				<ScrollToTop/>
 			</div>

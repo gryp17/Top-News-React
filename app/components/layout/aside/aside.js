@@ -6,6 +6,7 @@ import "./aside.scss";
 
 import Login from "./login/login";
 import SignUp from "./sign-up/sign-up";
+import WeatherWidget from "./weather-widget/weather-widget";
 
 class Aside extends React.Component {
 	
@@ -14,7 +15,7 @@ class Aside extends React.Component {
 		logout: PropTypes.func.isRequired,
 		updateSession: PropTypes.func.isRequired
 	};
-	
+		
 	render() {
 		return (
 			<div id="aside">
@@ -42,7 +43,9 @@ class Aside extends React.Component {
 
 				<div className="box d-none d-md-block"></div>
 				<div className="box d-none d-md-block"></div>
-				<div className="box d-none d-md-block"></div>
+				<div className="box d-none d-md-block">
+					<WeatherWidget/>
+				</div>
 				
 			</div>
 		);
