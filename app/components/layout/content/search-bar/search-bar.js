@@ -35,6 +35,7 @@ class SearchBar extends React.Component {
 		this.search = this.search.bind(this);
 		this.autocomplete = this.autocomplete.bind(this);
 		this.selectAutocompleteSuggestion = this.selectAutocompleteSuggestion.bind(this);
+		this.hideAutocompleteSuggestions = this.hideAutocompleteSuggestions.bind(this);
 	}
 
 	componentDidMount(){
@@ -47,6 +48,12 @@ class SearchBar extends React.Component {
 		this.props.history.listen(function (location, action){
 			self.getSearchParamsFromURL(location.pathname);
 		});
+		
+		$(window).click(this.hideAutocompleteSuggestions);
+	}
+	
+	componentWillUnmount(){
+		$(window).off("click", this.hideAutocompleteSuggestions);
 	}
 
 	/**
@@ -155,6 +162,18 @@ class SearchBar extends React.Component {
 			searchTerm: text,
 			autocompleteSuggestions: []
 		});
+	}
+	
+	/**
+	 * Hides the autocomplete suggestions if the user has clicked anywhere outside of the search bar
+	 * @param {Object} e
+	 */
+	hideAutocompleteSuggestions(e){
+		if (!$(e.target).is(".search-bar, .search-bar *")) {
+			this.setState({
+				autocompleteSuggestions: []
+			});
+		}
 	}
 
 	render() {
