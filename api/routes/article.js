@@ -50,7 +50,7 @@ router.get("/autocomplete/:category/:searchTerm/:limit", function (req, res, nex
 			}
 
 			//remove any HTML tags and dots that might appear at the end of the string
-			result = result.replace(/<\w+.+/ig, "");
+			result = result.replace(/<\/?\w+.+/ig, "");
 			result = result.replace(/\.$/, "");
 
 			return result;

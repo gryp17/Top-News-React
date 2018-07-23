@@ -1,5 +1,5 @@
 import React from "react";
-
+import classNames from "classnames";
 import {withRouter, matchPath} from "react-router-dom";
 
 import "./search-bar.scss";
@@ -23,7 +23,8 @@ class SearchBar extends React.Component {
 		this.defaultState = {
 			selectedSection: this.sections[0],
 			searchTerm: "",
-			autocompleteSuggestions: []
+			autocompleteSuggestions: [],
+			highlightedSuggestion: -1
 		};
 
 		this.state = this.defaultState;
@@ -35,6 +36,7 @@ class SearchBar extends React.Component {
 		this.search = this.search.bind(this);
 		this.autocomplete = this.autocomplete.bind(this);
 		this.selectAutocompleteSuggestion = this.selectAutocompleteSuggestion.bind(this);
+		this.highlightAutocompleteSuggestion = this.highlightAutocompleteSuggestion.bind(this);
 		this.hideAutocompleteSuggestions = this.hideAutocompleteSuggestions.bind(this);
 	}
 
@@ -71,7 +73,8 @@ class SearchBar extends React.Component {
 			this.setState({
 				selectedSection: decodeURIComponent(match.params.section),
 				searchTerm: decodeURIComponent(match.params.searchTerm || ""),
-				autocompleteSuggestions: []
+				autocompleteSuggestions: [],
+				highlightedSuggestion: -1
 			});
 		}else{
 			this.setState(this.defaultState);
@@ -92,7 +95,7 @@ class SearchBar extends React.Component {
 	}
 
 	/**
-	 * Checks if the "Enter" key was pressed and calls the search function
+	 * Handles all key events on the input field
 	 * @param {Object} e
 	 */
 	handleKeyDown(e) {
@@ -100,9 +103,12 @@ class SearchBar extends React.Component {
 			this.search();
 		}
 		
-		//TODO: make the first autocomplete item selected (if there are any)
 		if (e.key === "ArrowDown"){
-			console.log("down");
+			this.highlightAutocompleteSuggestion(1);
+		}
+		
+		if (e.key === "ArrowUp"){
+			this.highlightAutocompleteSuggestion(-1);
 		}
 	}
 
@@ -146,10 +152,11 @@ class SearchBar extends React.Component {
 		this.autocompleteTimeout = setTimeout(function (){
 			ArticleHttpService.getAutocompleteSuggestions(self.state.selectedSection, self.state.searchTerm, 5).then(function (response){
 				self.setState({
+					highlightedSuggestion: -1,
 					autocompleteSuggestions: response.data
 				});
 			});
-		}, 500);
+		}, 400);
 		
 	}
 	
@@ -161,6 +168,38 @@ class SearchBar extends React.Component {
 		this.setState({
 			searchTerm: text,
 			autocompleteSuggestions: []
+		});
+	}
+	
+	/**
+	 * Highlights the next/previous autocomplete suggestion depending on the passed value
+	 * @param {Number} value
+	 */
+	highlightAutocompleteSuggestion(value){
+		
+		if(this.state.autocompleteSuggestions.length === 0){
+			return;
+		}
+		
+		var index = 0;
+		var maxLength = this.state.autocompleteSuggestions.length - 1;
+
+		if(this.state.highlightedSuggestion > -1){
+			index = this.state.highlightedSuggestion + value;
+
+			if(index > maxLength){
+				index = 0;
+			}
+			
+			if(index < 0){
+				index = maxLength;
+			}
+		}
+
+		//update the highlighted index and also set the searchTerm
+		this.setState({
+			highlightedSuggestion: index,
+			searchTerm: this.state.autocompleteSuggestions[index] 
 		});
 	}
 	
@@ -188,7 +227,8 @@ class SearchBar extends React.Component {
 		
 		var autocompleteOptions = this.state.autocompleteSuggestions.map(function (suggestion, index){
 			return (
-				<div className="item" key={index} onClick={self.selectAutocompleteSuggestion.bind(null, suggestion)}>{suggestion}</div>
+				<div className={classNames("item", {"selected": index === self.state.highlightedSuggestion})} key={index} 
+					onClick={self.selectAutocompleteSuggestion.bind(null, suggestion)}>{suggestion}</div>
 			);
 		});
 
