@@ -6,6 +6,7 @@ import "./aside.scss";
 
 import Login from "./login/login";
 import SignUp from "./sign-up/sign-up";
+import PopularArticlesWidget from "./popular-articles-widget/popular-articles-widget";
 import WeatherWidget from "./weather-widget/weather-widget";
 
 class Aside extends React.Component {
@@ -41,8 +42,10 @@ class Aside extends React.Component {
 					}
 				</div>
 
-				<div className="box d-none d-md-block"></div>
-				<div className="box d-none d-md-block"></div>
+				<div className="box d-none d-md-block">
+					<PopularArticlesWidget/>
+				</div>
+
 				<div className="box d-none d-md-block">
 					<WeatherWidget/>
 				</div>
