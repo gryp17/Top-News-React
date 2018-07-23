@@ -24,6 +24,9 @@
 			z-index: 1;
 			
 			.item{
+				white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
 				padding: 5px 10px;
 				border-radius: 5px;
 				cursor: pointer;
