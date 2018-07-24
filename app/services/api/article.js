@@ -25,7 +25,7 @@ export default {
 	 * @param {Number} authorId
 	 * @param {Number} limit
 	 * @param {Number} offset
-	 * @returns {unresolved}
+	 * @returns {Promise}
 	 */
 	getArticlesByAuthor(authorId, limit, offset) {
 		return axios.get("/api/article/author/" + authorId + "/" + limit + "/" + offset);
@@ -38,6 +38,15 @@ export default {
 	 */
 	getAutocompleteSuggestions(category, searchTerm, limit){
 		return axios.get("/api/article/autocomplete/" + category + "/" + encodeURIComponent(searchTerm) + "/" + limit);
+	},
+	/**
+	 * Returns the most popular articles for the specified period
+	 * @param {String} period ("today", "this week", "all time")
+	 * @param {Number} limit
+	 * @returns {Promise}
+	 */
+	getMostPopular(period, limit){
+		return axios.get("/api/article/popular/" + period + "/" + limit);
 	}
 }
 

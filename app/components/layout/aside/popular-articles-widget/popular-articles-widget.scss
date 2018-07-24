@@ -1,4 +1,8 @@
+@import "../../../../css/_variables.scss";
+
 .popular-articles-widget{
+	padding: 5px;
+	
 	.btn-group{
 		width: 100%;
 		
@@ -9,5 +13,26 @@
 	
 	.title{
 		text-align: center;
+		margin-bottom: 10px;
+		font-weight: bold;
+	}
+	
+	.articles-wrapper{
+		margin-top: 10px;
+		
+		.item{
+			margin-bottom: 10px;
+			font-size: 15px;
+			
+			.position{
+				display: inline-block;
+				width: 20px;
+				height: 20px;
+				background-color: $links-color;
+				color: #ffffff;
+				border-radius: 100%;
+				text-align: center;
+			}
+		}
 	}
 }
