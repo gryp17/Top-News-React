@@ -38,7 +38,7 @@ class LatestArticlesWidget extends React.Component {
 			loading: true
 		});
 		
-		ArticleHttpService.getMostPopular(this.state.selectedPeriod, 5).then(function (response){
+		ArticleHttpService.getArticles("all news", "*", 5, 0).then(function (response){
 			self.setState({
 				loading: false,
 				articles: response.data

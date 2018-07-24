@@ -44,11 +44,11 @@ class Aside extends React.Component {
 				</div>
 
 				<div className="box d-none d-md-block">
-					<PopularArticlesWidget/>
-				</div>
-				
-				<div className="box d-none d-md-block">
 					<LatestArticlesWidget/>
+				</div>
+
+				<div className="box d-none d-md-block">
+					<PopularArticlesWidget/>
 				</div>
 
 				<div className="box d-none d-md-block">
