@@ -1,4 +1,5 @@
 var mysql = require("mysql");
+var moment = require("moment");
 var app = require("../server");
 
 var connection = mysql.createConnection(app.get("config").db);
@@ -75,5 +76,26 @@ module.exports = {
 		var query = "SELECT article.id, authorId, title, summary, content, image, date, category.name as categoryName, user.username as authorName FROM article, category, user WHERE article.categoryId = category.id AND user.id = article.authorId AND authorId = ? ORDER BY date DESC LIMIT ? OFFSET ?";
 		var params = [authorId, limit, offset];
 		connection.query(query, params, done);
+	},
+	/**
+	 * Returns the articles with the most views in the specified period
+	 * @param {String} periodType ("today", "this week", "all time")
+	 * @param {Number} limit
+	 * @param {Function} done
+	 */
+	getMostPopular: function (periodType, limit, done){
+		var dateCondition = "";
+		
+		if(periodType === "today"){
+			dateCondition = "WHERE article_view.date > '"+moment().startOf("day").format()+"'";
+		}else if(periodType === "this week"){
+			dateCondition = "WHERE article_view.date > '"+moment().startOf("week").format()+"'";
+		}
+		
+		var query = "SELECT article.id, title, article.date, image, views FROM "
+		+"(SELECT id, articleId, COUNT(id) AS views FROM article_view "+dateCondition+" GROUP BY articleId) article_view "
+		+"RIGHT OUTER JOIN article ON article.id = article_view.articleId "
+		+"GROUP BY article.id ORDER BY views DESC, article.date DESC LIMIT ?";		
+		connection.query(query, limit, done);
 	}
 }; 

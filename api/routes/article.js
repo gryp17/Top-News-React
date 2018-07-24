@@ -61,6 +61,17 @@ router.get("/autocomplete/:category/:searchTerm/:limit", function (req, res, nex
 	});
 });
 
+//get the most popular articles for the specified period
+router.get("/popular/:period/:limit", function (req, res, next){
+	ArticleModel.getMostPopular(req.params.period, parseInt(req.params.limit), function (err, results){
+		if (err) {
+			return next(err);
+		}
+		
+		res.json(results);
+	});
+});
+
 //get the article that matches the specified id and increments the views counter
 router.get("/:id", function (req, res, next) {
 	var articleId = parseInt(req.params.id);
@@ -74,7 +85,7 @@ router.get("/:id", function (req, res, next) {
 			var userId = req.session.user ? req.session.user.id : null;
 			ArticleViewModel.addArticleView(articleId, userId);
 		}
-
+		
 		res.json(result);
 	});
 });
