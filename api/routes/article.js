@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 var ArticleModel = require("../models/article");
+var ArticleViewModel = require("../models/article-view");
 
 //get the latest articles from the specified author/user id
 router.get("/author/:id/:limit/:offset", function (req, res, next){	
@@ -62,13 +63,16 @@ router.get("/autocomplete/:category/:searchTerm/:limit", function (req, res, nex
 
 //get the article that matches the specified id and increments the views counter
 router.get("/:id", function (req, res, next) {
-	ArticleModel.getById(parseInt(req.params.id), function (err, result) {
+	var articleId = parseInt(req.params.id);
+	
+	ArticleModel.getById(articleId, function (err, result) {
 		if (err) {
 			return next(err);
 		}
 		
 		if(result){
-			ArticleModel.addArticleView(req.params.id);
+			var userId = req.session.user ? req.session.user.id : null;
+			ArticleViewModel.addArticleView(articleId, userId);
 		}
 
 		res.json(result);

@@ -43,7 +43,10 @@ module.exports = {
 	 * @param {Function} done
 	 */
 	getById: function (id, done) {
-		var query = "SELECT article.id, authorId, title, summary, content, image, date, views, category.name as categoryName, user.username as authorName, user.avatar as authorAvatar FROM article, category, user WHERE article.categoryId = category.id AND user.id = article.authorId AND article.id = ?";
+		var query = "SELECT article.id, authorId, title, summary, content, image, article.date, category.name as categoryName, user.username as authorName, user.avatar as authorAvatar, count(article_view.id) as views "
+		+"FROM article, category, user, article_view "
+		+"WHERE article.categoryId = category.id AND user.id = article.authorId AND article.id = article_view.articleId AND article.id = ?";
+		
 		connection.query(query, id, function (err, rows) {
 			if (err) {
 				return done(err);
@@ -69,16 +72,8 @@ module.exports = {
 	 * @param {Function} done
 	 */
 	getByAuthor: function (authorId, limit, offset, done){
-		var query = "SELECT article.id, authorId, title, summary, content, image, date, views, category.name as categoryName, user.username as authorName FROM article, category, user WHERE article.categoryId = category.id AND user.id = article.authorId AND authorId = ? ORDER BY date DESC LIMIT ? OFFSET ?";
+		var query = "SELECT article.id, authorId, title, summary, content, image, date, category.name as categoryName, user.username as authorName FROM article, category, user WHERE article.categoryId = category.id AND user.id = article.authorId AND authorId = ? ORDER BY date DESC LIMIT ? OFFSET ?";
 		var params = [authorId, limit, offset];
 		connection.query(query, params, done);
-	},
-	/**
-	 * Increments the article views by one
-	 * @param {Number} id
-	 * @param {Function} done
-	 */
-	addArticleView: function (id, done){
-		connection.query("UPDATE article SET views = views + 1 WHERE id = ?", id, done);
 	}
 }; 
