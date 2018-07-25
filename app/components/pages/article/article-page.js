@@ -8,6 +8,7 @@ import ScrollToTop from "../../common/scroll-to-top/scroll-to-top";
 import Article from "./article/article";
 import NotFound from "./not-found/not-found";
 import ArticlesSlider from "./articles-slider/articles-slider";
+import ArticleComments from "./article-comments/article-comments";
 
 class ArticlePage extends React.Component {
 
@@ -77,6 +78,8 @@ class ArticlePage extends React.Component {
 				{this.state.article && <Article article={this.state.article}/>}
 				{this.state.sliderArticles.length > 0 && <ArticlesSlider articles={this.state.sliderArticles}></ArticlesSlider>}
 
+				<ArticleComments comments={[]}/>
+						
 				<ScrollToTop/>
 			</div>
 		);
