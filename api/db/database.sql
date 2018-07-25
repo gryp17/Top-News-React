@@ -38,13 +38,13 @@ create table article_view(
 	constraint fk_article_view_user foreign key(userId) references user (id)
 );
 
-create table comment(
+create table article_comment(
     id int AUTO_INCREMENT primary key,
     authorId int,
     articleId int,
     content varchar(500),
     date datetime,
-    constraint fk_comment_author foreign key(authorId) references user (id),
+    constraint fk_article_comment_author foreign key(authorId) references user (id),
     constraint fk_commect_article foreign key(articleId) references article (id)
 );
 
