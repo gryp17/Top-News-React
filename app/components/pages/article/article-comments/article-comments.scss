@@ -1,4 +1,26 @@
+@import "../../../../css/_variables.scss";
+
 .article-comments{
+	
+	.not-logged-in{
+		text-align: center;
+		font-weight: bold;
+		
+		img{
+			display: block;
+			margin: auto;
+			width: 75px;
+		}
+		
+		span{
+			color: $links-color;
+			cursor: pointer;
+			
+			&:hover{
+				color: $links-color-active;
+			}
+		}
+	}
 	
 	textarea{
 		resize: none;

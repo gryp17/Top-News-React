@@ -57,32 +57,42 @@ class ArticleComments extends React.Component {
 			});
 		});
 	}
+	
+	/**
+	 * Scrolls the screen back to the top and opens the login modal
+	 */
+	openLoginModal(){
+		$("html, body").animate({scrollTop: 0}, 500, function (){
+			$("#login > button").click();
+		});
+	}
 
-	render() {
-		
-		var noComments = (
-			<div className="no-comments">
-				There are no comments yet.
-			</div>
-		);
-		
+	render() {		
 		return (
 			<div className="article-comments">
 				<hr/>
-								
-				<div className="input-group">
-					<textarea className="form-control" placeholder="Leave your comment"></textarea>
-					<div className="input-group-append">
-						<button className="btn btn-success">Submit</button>
+				
+				{!this.props.userSession && 
+					<div className="not-logged-in">
+						<img src="/img/icons/warning-icon.png"/>
+						You need to be <span onClick={this.openLoginModal}>logged in</span> before you can comment on this article.
 					</div>
-				</div>
+				}
 				
-				User session:
-				{JSON.stringify(this.props.userSession)}
+				{this.props.userSession && 
+					<div className="input-group">
+						<textarea className="form-control" placeholder="Leave your comment"></textarea>
+						<div className="input-group-append">
+							<button className="btn btn-success">Submit</button>
+						</div>
+					</div>
+				}
 				
-				<br/>
-				
-				{this.state.total === 0 && noComments}
+				{this.state.total === 0 && 
+					<div className="no-comments">
+						There are no comments yet.
+					</div>
+				}
 
 				{JSON.stringify(this.state.comments)}
 			</div>
