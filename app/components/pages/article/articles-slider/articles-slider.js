@@ -7,19 +7,27 @@ import Config from "../../../../config/config";
 
 import "./articles-slider.scss";
 
+import ArticleHttpService from "../../../../services/api/article";
+
 class ArticlesSlider extends React.Component {
 	
 	static propTypes = {
-		articles: PropTypes.array.isRequired
+		authorId: PropTypes.number.isRequired
 	};
 
 	constructor(props) {
 		super(props);
 		
 		this.articlesDir = Config.articlesDir;
+		
+		this.maxSlides = 10;
 		this.maxVisibleSlides = 3;
 		
 		this.sliderMargin = 0;
+		
+		this.state = {
+			articles: []
+		};
 		
 		this.getDimensions = this.getDimensions.bind(this);
 		this.setSliderWidth = this.setSliderWidth.bind(this);
@@ -33,14 +41,32 @@ class ArticlesSlider extends React.Component {
 		$(window).on("resize", this.setSliderWidth);
 		$(this.refs.wrapper).on("mousewheel DOMMouseScroll", this.handleWheelScroll);
 		
-		this.setSliderWidth();
+		this.getAuthorArticles(this.props.authorId, this.maxSlides, 0);
 	}
 	
 	componentWillUnmount(){
 		$(window).off("resize", this.setSliderWidth);
 		$(this.refs.wrapper).off("mousewheel DOMMouseScroll", this.handleWheelScroll);
 	}
+	
+	/**
+	 * Gets the latest author articles
+	 * @param {Number} authorId
+	 * @param {Number} limit
+	 * @param {Number} offset
+	 */
+	getAuthorArticles(authorId, limit, offset){
+		var self = this;
 		
+		ArticleHttpService.getArticlesByAuthor(authorId, limit, offset).then(function (response) {
+			self.setState({
+				articles: response.data
+			}, function (){
+				self.setSliderWidth();
+			});
+		});
+	}
+	
 	/**
 	 * Returns the most needed component dimmensions (wrapper, slider and slide width)
 	 */
@@ -58,7 +84,7 @@ class ArticlesSlider extends React.Component {
 	 */
 	setSliderWidth(){
 		var dimensions = this.getDimensions();
-		$(this.refs.slider).width(this.props.articles.length * dimensions.slideWidth);
+		$(this.refs.slider).width(this.state.articles.length * dimensions.slideWidth);
 
 		//reset the slider position
 		this.slide(0);
@@ -123,7 +149,7 @@ class ArticlesSlider extends React.Component {
 	render() {
 		var self = this;
 			
-		var articles = this.props.articles.map(function (article){
+		var articles = this.state.articles.map(function (article){
 			return (
 				<div className="slide col" key={article.id}>
 					<Link to={"/article/"+article.id} title={article.title}>

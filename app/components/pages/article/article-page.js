@@ -17,8 +17,7 @@ class ArticlePage extends React.Component {
 
 		this.state = {
 			loading: true,
-			article: null,
-			sliderArticles: []
+			article: null
 		};
 	}
 
@@ -48,37 +47,19 @@ class ArticlePage extends React.Component {
 				loading: false,
 				article: response.data
 			});
-			
-			//get the latest articles by the same author
-			if(response.data.authorId){
-				self.getAuthorArticles(response.data.authorId);
-			}
 		});
 	}
 	
-	/**
-	 * Get all articles by the specified author id
-	 * @param {Number} authorId
-	 */
-	getAuthorArticles(authorId){
-		var self = this;
-		
-		ArticleHttpService.getArticlesByAuthor(authorId, 10, 0).then(function (response) {
-			self.setState({
-				sliderArticles: response.data
-			});
-		});
-	}
-
 	render() {
 		return (
 			<div id="article-page">
 				{this.state.loading && <LoadingIndicator/>}
 				{!this.state.loading && !this.state.article && <NotFound/>}
 				{this.state.article && <Article article={this.state.article}/>}
-				{this.state.sliderArticles.length > 0 && <ArticlesSlider articles={this.state.sliderArticles}></ArticlesSlider>}
+				
+				{this.state.article && <ArticlesSlider authorId={this.state.article.authorId}></ArticlesSlider>}
 
-				<ArticleComments comments={[]}/>
+				<ArticleComments articleId={parseInt(this.props.match.params.id)}/>
 						
 				<ScrollToTop/>
 			</div>

@@ -20,7 +20,7 @@ module.exports = {
 			}
 			
 			if (!rows.length) {
-				done(null);
+				done(null, []);
 			} else {
 				
 				rows.forEach(function (comment){
