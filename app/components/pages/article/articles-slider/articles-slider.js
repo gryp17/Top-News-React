@@ -49,6 +49,13 @@ class ArticlesSlider extends React.Component {
 		$(this.refs.wrapper).off("mousewheel DOMMouseScroll", this.handleWheelScroll);
 	}
 	
+	componentDidUpdate(prevProps, prevState) {
+		//if the author id has changed - load the new articles data
+		if((this.props.authorId !== prevProps.authorId)){
+			this.getAuthorArticles(this.props.authorId, this.maxSlides, 0);
+		}
+	}
+	
 	/**
 	 * Gets the latest author articles
 	 * @param {Number} authorId

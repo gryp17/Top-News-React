@@ -55,12 +55,13 @@ class ArticlePage extends React.Component {
 			<div id="article-page">
 				{this.state.loading && <LoadingIndicator/>}
 				{!this.state.loading && !this.state.article && <NotFound/>}
+				
 				{this.state.article && <Article article={this.state.article}/>}
 				
-				{this.state.article && <ArticlesSlider authorId={this.state.article.authorId}></ArticlesSlider>}
+				{this.state.article && <ArticlesSlider authorId={this.state.article.authorId} />}
 
 				<ArticleComments articleId={parseInt(this.props.match.params.id)}/>
-						
+				
 				<ScrollToTop/>
 			</div>
 		);

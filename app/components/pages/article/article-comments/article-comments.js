@@ -28,6 +28,13 @@ class ArticleComments extends React.Component {
 		this.getComments(this.props.articleId, this.commentsPerPage, this.offset);
 	}
 	
+	componentDidUpdate(prevProps, prevState) {
+		//if the article id has changed - load the new comments data
+		if((this.props.articleId !== prevProps.articleId)){
+			this.getComments(this.props.articleId, this.commentsPerPage, this.offset);
+		}
+	}
+	
 	/**
 	 * Returns all article comments
 	 * @param {Number} articleId
@@ -54,6 +61,13 @@ class ArticleComments extends React.Component {
 		return (
 			<div className="article-comments">
 				<hr/>
+								
+				<div className="input-group">
+					<textarea className="form-control" placeholder="Leave your comment"></textarea>
+					<div className="input-group-append">
+						<button className="btn btn-success">Submit</button>
+					</div>
+				</div>
 				
 				article commments go here {this.props.articleId}
 						
