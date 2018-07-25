@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {Switch, Route, NavLink} from "react-router-dom";
 
 import "./content.scss";
@@ -11,7 +12,23 @@ import ArticlePage from "../../pages/article/article-page";
 import SearchPage from "../../pages/search/search-page";
 
 class Content extends React.Component {
+	
+	static propTypes = {
+		userSession: PropTypes.object
+	};
+	
 	render() {
+		
+		var self = this;
+		
+		/**
+		 * An "elegant" way to pass props to a route?
+		 * @param {Object} props
+		 */
+		var ArticlePageRender = function (props){
+			return <ArticlePage {...props} userSession={self.props.userSession}/>;
+		};
+		
 		return (
 			<div id="content">
 				
@@ -23,7 +40,7 @@ class Content extends React.Component {
 					<Switch>
 						<Route exact path="/" component={HomePage}/>
 						<Route exact path="/search/:section/:searchTerm?" component={SearchPage}/>
-						<Route exact path="/article/:id" component={ArticlePage}/>
+						<Route exact path="/article/:id" render={ArticlePageRender}/>
 					</Switch>
 				</div>
 				

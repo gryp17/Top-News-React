@@ -8,7 +8,8 @@ import ArticleCommentHttpService from "../../../../services/api/article-comment"
 class ArticleComments extends React.Component {
 	
 	static propTypes = {
-		articleId: PropTypes.number.isRequired
+		articleId: PropTypes.number.isRequired,
+		userSession: PropTypes.object
 	};
 
 	constructor(props) {
@@ -57,7 +58,14 @@ class ArticleComments extends React.Component {
 		});
 	}
 
-	render() {			
+	render() {
+		
+		var noComments = (
+			<div className="no-comments">
+				There are no comments yet.
+			</div>
+		);
+		
 		return (
 			<div className="article-comments">
 				<hr/>
@@ -69,8 +77,13 @@ class ArticleComments extends React.Component {
 					</div>
 				</div>
 				
-				article commments go here {this.props.articleId}
-						
+				User session:
+				{JSON.stringify(this.props.userSession)}
+				
+				<br/>
+				
+				{this.state.total === 0 && noComments}
+
 				{JSON.stringify(this.state.comments)}
 			</div>
 		);

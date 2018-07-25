@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import "./article-page.scss";
 
@@ -11,6 +12,10 @@ import ArticlesSlider from "./articles-slider/articles-slider";
 import ArticleComments from "./article-comments/article-comments";
 
 class ArticlePage extends React.Component {
+
+	static propTypes = {
+		userSession: PropTypes.object
+	};
 
 	constructor(props) {
 		super(props);
@@ -60,7 +65,7 @@ class ArticlePage extends React.Component {
 				
 				{this.state.article && <ArticlesSlider authorId={this.state.article.authorId} />}
 
-				<ArticleComments articleId={parseInt(this.props.match.params.id)}/>
+				<ArticleComments articleId={parseInt(this.props.match.params.id)} userSession={this.props.userSession}/>
 				
 				<ScrollToTop/>
 			</div>
