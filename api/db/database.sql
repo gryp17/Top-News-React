@@ -21,7 +21,6 @@ create table article(
     summary varchar(500),
     content MEDIUMTEXT,
     image varchar(500),
-    views int,
     date datetime,
     authorId int,
     categoryId int,
@@ -56,7 +55,7 @@ insert into category (name, description) values("economy", "none");
 insert into category (name, description) values("sports", "none");
 
 
-insert into user (id, email, username, password, avatar, type, registered, active) values (2, "skate_mania2abv.bg" ,"admin", "1234", "none", "admin", now(), 1);
+insert into user (id, email, username, password, avatar, type, registered, active) values (2, "skate_mania2abv.bg" ,"admin", "81dc9bdb52d04dc20036dbd8313ed055", null, "admin", now(), 1);
 
 
 INSERT INTO `article` (`id`, `title`, `summary`, `content`, `image`, `date`, `authorId`, `categoryId`) VALUES(276, 'Donald Trump changed political parties at least five times: report', 'Republican presidential candidate Donald Trump switched political party affiliations at least five times since the late \'80s, according to voting records obtained byThe Smoking Gun.', '<div><div><p>Republican presidential candidate Donald Trump switched political party affiliations at least five times since the late \'80s, according to voting records obtained byThe Smoking Gun.<p>Mr. Trump, who after years of teasing the idea announced on Tuesday his GOP bid for the White House, may soon have to answer for why he left the party as recently as 2011.<p>Mr. Trump registered for the first time in New York as a Republican in July 1987, only to dump the GOP more than a decade later for the Independence Party in October 1999, according to the New York City Board of Elections.<hr /><p> SEE ALSO: Donald Trump makes 2016 White House bid official, vows to save U.S. <hr /><p>In August 2001, the billionaire enrolled as a Democrat. Eight years later, he returned to the Republican Party, The Smoking Gun reported.<p>After only two years as a registered Republican, Mr. Trump left the party again, and in December 2011 marked a box that indicated, \"I do not wish to enroll in a party.\"<p>Mr. Trump returned to the GOP in April 2012, The Smoking Gun reported.</div></div>', '127.jpeg', '2015-06-16 00:00:00', 2, 1);
