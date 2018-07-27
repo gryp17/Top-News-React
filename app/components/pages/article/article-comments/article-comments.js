@@ -19,7 +19,6 @@ class ArticleComments extends React.Component {
 	constructor(props) {
 		super(props);
 		
-		this.maxVisiblePages = 3;
 		this.commentsPerPage = 5;
 		
 		this.state = {
@@ -172,33 +171,47 @@ class ArticleComments extends React.Component {
 	generatePagination(){
 		var pages = [];
 		
-		for(var i = 0; i < this.state.totalPages; i++){
-			pages.push(
-				(
-					<button className={classNames("btn btn-secondary", {"active": this.state.currentPage === i})} key={i} 
-							onClick={this.goToPage.bind(null, i)}>{i + 1}</button>
-				)
-			);
+		var start = 0;
+		var end = 0;
+
+		if(this.state.currentPage === 0){
+			start = this.state.currentPage;
+			end = Math.min(this.state.currentPage + 2, this.state.totalPages - 1);
+		}else if (this.state.currentPage === this.state.totalPages - 1){
+			start = Math.max(this.state.currentPage - 2, 0);
+			end = this.state.currentPage;
+		}else{
+			start = this.state.currentPage - 1;
+			end = this.state.currentPage + 1;
 		}
 		
+		for(var i = start; i <= end; i++){
+			 pages.push(
+				 (
+					 <button className={classNames("btn btn-secondary", {"active": this.state.currentPage === i})} key={i}
+							 onClick={this.goToPage.bind(null, i)}>{i + 1}</button>
+				 )
+			 );
+		}
+	   
 		return (
 			<div className="pagination">
-				<button className="btn btn-secondary" disabled={this.state.currentPage === 0} onClick={this.goToFirstPage}>
-					First
+				<button className="btn btn-secondary" disabled={this.state.currentPage === 0} onClick={this.goToFirstPage} title="First Page">
+					&lt;&lt;
 				</button>
 
-				<button className="btn btn-secondary" disabled={this.state.currentPage === 0} onClick={this.goToPreviousPage}>
-					Prev
+				<button className="btn btn-secondary" disabled={this.state.currentPage === 0} onClick={this.goToPreviousPage} title="Previous Page">
+					&lt;
 				</button>
 
 				{pages}
 
-				<button className="btn btn-secondary" disabled={this.state.currentPage === this.state.totalPages - 1} onClick={this.goToNextPage}>
-					Next
+				<button className="btn btn-secondary" disabled={this.state.currentPage === this.state.totalPages - 1} onClick={this.goToNextPage} title="Next Page">
+					&gt;
 				</button>
 
-				<button className="btn btn-secondary" disabled={this.state.currentPage === this.state.totalPages - 1} onClick={this.goToLastPage}>
-					Last
+				<button className="btn btn-secondary" disabled={this.state.currentPage === this.state.totalPages - 1} onClick={this.goToLastPage} title="Last Page">
+					&gt;&gt;
 				</button>
 			</div>
 		);
