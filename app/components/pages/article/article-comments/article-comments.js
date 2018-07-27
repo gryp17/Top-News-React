@@ -217,10 +217,7 @@ class ArticleComments extends React.Component {
 		);
 	}
 
-	render() {		
-		var comments = this.generateComments();
-		var pagination = this.generatePagination();
-		
+	render() {				
 		return (
 			<div className="article-comments">
 				<hr/>
@@ -247,9 +244,9 @@ class ArticleComments extends React.Component {
 					</div>
 				}
 
-				{comments}
+				{this.generateComments()}
 						
-				{pagination}
+				{this.state.totalComments > 0 && this.generatePagination()}
 			</div>
 		);
 	};
