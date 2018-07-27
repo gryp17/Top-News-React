@@ -18,43 +18,54 @@ class ArticleComments extends React.Component {
 	constructor(props) {
 		super(props);
 		
+		this.maxVisiblePages = 3;
 		this.commentsPerPage = 5;
 		this.offset = 0;
 		
 		this.state = {
 			comments: [],
 			total: 0,
+			currentPage: 0,
 			loading: false
 		};
 		
 		this.avatarsDir = Config.avatarsDir;
+		
+		this.generatePagination = this.generatePagination.bind(this);
 	}
 	
 	componentDidMount(){
-		this.getComments(this.props.articleId, this.commentsPerPage, this.offset);
+		this.getComments(this.state.currentPage);
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
 		//if the article id has changed - load the new comments data
 		if((this.props.articleId !== prevProps.articleId)){
-			this.getComments(this.props.articleId, this.commentsPerPage, this.offset);
+			
+			//reset the current page
+			this.setState({
+				currentPage: 0
+			}, function (){
+				this.getComments(this.state.currentPage);
+			});
+			
 		}
 	}
 	
 	/**
 	 * Returns all article comments
-	 * @param {Number} articleId
-	 * @param {Number} limit
-	 * @param {Number} offset
+	 * @param {Number} page
 	 */
-	getComments(articleId, limit, offset){
+	getComments(page){
 		var self = this;
 		
 		this.setState({
 			loading: true
 		});
 		
-		ArticleCommentHttpService.getComments(articleId, limit, offset).then(function (response){
+		var offset = page * this.commentsPerPage;
+		
+		ArticleCommentHttpService.getComments(this.props.articleId, this.commentsPerPage, offset).then(function (response){
 			self.setState({
 				comments: response.data.comments,
 				total: response.data.total,
@@ -70,6 +81,25 @@ class ArticleComments extends React.Component {
 		$("html, body").animate({scrollTop: 0}, 500, function (){
 			$("#login > button").click();
 		});
+	}
+	
+	//TODO: finish this
+	generatePagination(totalComments){
+		var pagesCount = Math.floor(totalComments / this.commentsPerPage) + 1;
+		
+		var pages = [];
+		
+		for(var i = 0; i < pagesCount; i++){
+			pages.push(
+				(
+					<button key={i}>{i + 1}</button>
+				)
+			);
+		}
+		
+		console.log(pagesCount);
+		
+		return pages;
 	}
 
 	render() {
@@ -97,6 +127,7 @@ class ArticleComments extends React.Component {
 			);
 		});
 		
+		var pages = this.generatePagination(this.state.total);
 		
 		return (
 			<div className="article-comments">
@@ -125,6 +156,26 @@ class ArticleComments extends React.Component {
 				}
 
 				{comments}
+						
+				{this.state.total > this.commentsPerPage &&
+					<div className="pagination">
+						<button>
+							First
+						</button>
+						<button>
+							Prev
+						</button>
+						
+						{pages}
+						
+						<button>
+							Next
+						</button>
+						<button>
+							Last
+						</button>
+					</div>
+				}
 			</div>
 		);
 	};
