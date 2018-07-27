@@ -1,8 +1,11 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
+import moment from "moment";
 
 import "./article-comments.scss";
 
+import Config from "../../../../config/config";
 import ArticleCommentHttpService from "../../../../services/api/article-comment";
 
 class ArticleComments extends React.Component {
@@ -23,6 +26,8 @@ class ArticleComments extends React.Component {
 			total: 0,
 			loading: false
 		};
+		
+		this.avatarsDir = Config.avatarsDir;
 	}
 	
 	componentDidMount(){
@@ -67,7 +72,32 @@ class ArticleComments extends React.Component {
 		});
 	}
 
-	render() {		
+	render() {
+		var self = this;
+		
+		var comments = this.state.comments.map(function (comment){			
+			return (
+				<div className="comment" key={comment.id}>
+					<div className="header">
+						<Link to={"/user/"+comment.authorId}>
+							<img src={self.avatarsDir+comment.avatar}/>
+							<div className="author">
+								{comment.username}
+							</div>
+						</Link>
+						<div className="date" title={moment(comment.date).format("YYYY-MM-DD HH:mm:ss")}>
+							{moment(comment.date).fromNow()}
+						</div>
+					</div>
+					<div className="clearfix"></div>
+					<div className="content">
+						{comment.content}
+					</div>
+				</div>
+			);
+		});
+		
+		
 		return (
 			<div className="article-comments">
 				<hr/>
@@ -94,7 +124,7 @@ class ArticleComments extends React.Component {
 					</div>
 				}
 
-				{JSON.stringify(this.state.comments)}
+				{comments}
 			</div>
 		);
 	};

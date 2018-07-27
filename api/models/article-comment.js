@@ -12,7 +12,8 @@ module.exports = {
 	 * @param {Function} done
 	 */
 	getComments: function (articleId, limit, offset, done) {
-		var query = "SELECT article_comment.id, article_comment.content, article_comment.date, user.id, user.username, user.avatar FROM article_comment, user WHERE article_comment.authorId = user.id AND article_comment.articleId = ? LIMIT ? OFFSET ?";
+		var query = "SELECT article_comment.id, article_comment.content, article_comment.date, user.id as authorId, user.username, user.avatar FROM article_comment, user "
+		+"WHERE article_comment.authorId = user.id AND article_comment.articleId = ? ORDER BY date DESC LIMIT ? OFFSET ?";
 		
 		connection.query(query, [articleId, limit, offset], function (err, rows){
 			if(err){

@@ -33,4 +33,39 @@
 		font-weight: bold;
 	}
 	
+	.comment{
+		margin-top: 10px;
+		background-color: #ffffff;
+		padding: 15px;
+		border-radius: 5px;
+
+		
+		.header{
+			img{
+				float: left;
+				width: 30px;
+			}
+			
+			.author{
+				float: left;
+				margin-top: 2px;
+				margin-left: 10px;
+			}
+			
+			.date{
+				float: right;
+				font-size: 15px;
+				color: #747474;
+				cursor: pointer;
+			}
+		}
+		
+		.content{
+			margin-top: 8px;
+			padding-top: 10px;
+			border-top: solid 1px #f8f8ff;
+			font-size: 15px;
+		}
+	}
+	
 }
