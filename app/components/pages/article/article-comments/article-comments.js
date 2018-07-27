@@ -1,6 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
+import classNames from "classnames";
 import moment from "moment";
 
 import "./article-comments.scss";
@@ -20,18 +21,24 @@ class ArticleComments extends React.Component {
 		
 		this.maxVisiblePages = 3;
 		this.commentsPerPage = 5;
-		this.offset = 0;
 		
 		this.state = {
 			comments: [],
-			total: 0,
+			totalComments: 0,
 			currentPage: 0,
+			totalPages: 0,
 			loading: false
 		};
 		
 		this.avatarsDir = Config.avatarsDir;
 		
+		this.generateComments = this.generateComments.bind(this);
 		this.generatePagination = this.generatePagination.bind(this);
+		this.goToFirstPage = this.goToFirstPage.bind(this);
+		this.goToLastPage = this.goToLastPage.bind(this);
+		this.goToNextPage = this.goToNextPage.bind(this);
+		this.goToPreviousPage = this.goToPreviousPage.bind(this);
+		this.goToPage = this.goToPage.bind(this);
 	}
 	
 	componentDidMount(){
@@ -41,14 +48,8 @@ class ArticleComments extends React.Component {
 	componentDidUpdate(prevProps, prevState) {
 		//if the article id has changed - load the new comments data
 		if((this.props.articleId !== prevProps.articleId)){
-			
-			//reset the current page
-			this.setState({
-				currentPage: 0
-			}, function (){
-				this.getComments(this.state.currentPage);
-			});
-			
+			//load the comments from the first page
+			this.goToFirstPage();
 		}
 	}
 	
@@ -68,7 +69,8 @@ class ArticleComments extends React.Component {
 		ArticleCommentHttpService.getComments(this.props.articleId, this.commentsPerPage, offset).then(function (response){
 			self.setState({
 				comments: response.data.comments,
-				total: response.data.total,
+				totalComments: response.data.total,
+				totalPages: Math.floor(response.data.total / self.commentsPerPage) + 1,
 				loading: false
 			});
 		});
@@ -83,26 +85,59 @@ class ArticleComments extends React.Component {
 		});
 	}
 	
-	//TODO: finish this
-	generatePagination(totalComments){
-		var pagesCount = Math.floor(totalComments / this.commentsPerPage) + 1;
-		
-		var pages = [];
-		
-		for(var i = 0; i < pagesCount; i++){
-			pages.push(
-				(
-					<button key={i}>{i + 1}</button>
-				)
-			);
-		}
-		
-		console.log(pagesCount);
-		
-		return pages;
+	/**
+	 * Loads the comments from the first page
+	 */
+	goToFirstPage(){
+		this.goToPage(0);
 	}
-
-	render() {
+	
+	/**
+	 * Loads the comments from the last page
+	 */
+	goToLastPage(){
+		this.goToPage(this.state.totalPages - 1);
+	}
+	
+	/**
+	 * Loads the comments from the next page
+	 */
+	goToNextPage(){
+		var nextPage = this.state.currentPage + 1;
+		
+		if(nextPage < this.state.totalPages){
+			this.goToPage(this.state.currentPage + 1);
+		}
+	}
+	
+	/**
+	 * Loads the comments from the previous page
+	 */
+	goToPreviousPage(){
+		var previousPage = this.state.currentPage - 1;
+		
+		if(previousPage >= 0){
+			this.goToPage(this.state.currentPage - 1);
+		}
+	}
+	
+	/**
+	 * Sets the current page and loads the corresponding comments
+	 * @param {Number} page
+	 */
+	goToPage(page){
+		this.setState({
+			currentPage: page
+		}, function () {
+			this.getComments(this.state.currentPage);
+		});
+	}
+	
+	/**
+	 * Generates the comments html
+	 * @returns {String}
+	 */
+	generateComments(){
 		var self = this;
 		
 		var comments = this.state.comments.map(function (comment){			
@@ -127,7 +162,51 @@ class ArticleComments extends React.Component {
 			);
 		});
 		
-		var pages = this.generatePagination(this.state.total);
+		return comments;
+	}
+	
+	/**
+	 * Generates the pagination html
+	 * @returns {String}
+	 */
+	generatePagination(){
+		var pages = [];
+		
+		for(var i = 0; i < this.state.totalPages; i++){
+			pages.push(
+				(
+					<button className={classNames("btn btn-secondary", {"active": this.state.currentPage === i})} key={i} 
+							onClick={this.goToPage.bind(null, i)}>{i + 1}</button>
+				)
+			);
+		}
+		
+		return (
+			<div className="pagination">
+				<button className="btn btn-secondary" disabled={this.state.currentPage === 0} onClick={this.goToFirstPage}>
+					First
+				</button>
+
+				<button className="btn btn-secondary" disabled={this.state.currentPage === 0} onClick={this.goToPreviousPage}>
+					Prev
+				</button>
+
+				{pages}
+
+				<button className="btn btn-secondary" disabled={this.state.currentPage === this.state.totalPages - 1} onClick={this.goToNextPage}>
+					Next
+				</button>
+
+				<button className="btn btn-secondary" disabled={this.state.currentPage === this.state.totalPages - 1} onClick={this.goToLastPage}>
+					Last
+				</button>
+			</div>
+		);
+	}
+
+	render() {		
+		var comments = this.generateComments();
+		var pagination = this.generatePagination();
 		
 		return (
 			<div className="article-comments">
@@ -149,7 +228,7 @@ class ArticleComments extends React.Component {
 					</div>
 				}
 				
-				{this.state.total === 0 && 
+				{this.state.totalComments === 0 && 
 					<div className="no-comments">
 						There are no comments yet.
 					</div>
@@ -157,25 +236,7 @@ class ArticleComments extends React.Component {
 
 				{comments}
 						
-				{this.state.total > this.commentsPerPage &&
-					<div className="pagination">
-						<button>
-							First
-						</button>
-						<button>
-							Prev
-						</button>
-						
-						{pages}
-						
-						<button>
-							Next
-						</button>
-						<button>
-							Last
-						</button>
-					</div>
-				}
+				{pagination}
 			</div>
 		);
 	};
