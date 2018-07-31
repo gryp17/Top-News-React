@@ -87,7 +87,7 @@ class ArticleComments extends React.Component {
 			self.setState({
 				comments: response.data.comments,
 				totalComments: response.data.total,
-				totalPages: Math.floor(response.data.total / self.commentsPerPage) + 1,
+				totalPages: Math.ceil(response.data.total / self.commentsPerPage),
 				loading: false
 			});
 		});
