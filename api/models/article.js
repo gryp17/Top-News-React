@@ -47,9 +47,7 @@ module.exports = {
 		var query = "SELECT article.id, authorId, title, summary, content, image, article.date, category.name as categoryName, user.username as authorName, user.avatar as authorAvatar, count(article_view.id) as views "
 		+"FROM article LEFT JOIN article_view ON article.id = article_view.articleId, category, user "
 		+"WHERE article.categoryId = category.id AND user.id = article.authorId AND article.id = ? GROUP BY article.id";
-		
-		console.log(query);
-		
+				
 		connection.query(query, id, function (err, rows) {
 			if (err) {
 				return done(err);
