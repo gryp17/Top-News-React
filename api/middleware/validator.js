@@ -5,6 +5,7 @@ var _ = require("lodash");
 var app = require("../server");
 
 var UserModel = require("../models/user");
+var ArticleModel = require("../models/article");
 
 var MIN_PASSWORD_LENGTH = 6;
 
@@ -21,7 +22,7 @@ module.exports = {
 			var config = app.get("config");
 			var data = req.body;
 			var files = req.files;
-			var asyncRules = ["unique"]; //list of async rules
+			var asyncRules = ["unique", "existing-article-id"]; //list of async rules
 			var asyncValidations = {};
 			var errors = {};
 			
@@ -60,6 +61,14 @@ module.exports = {
 					if(rule === "boolean"){
 						if(!self.isBoolean(fieldValue)){
 							errors[field] = "Invalid boolean value";
+							continue fieldLoop;
+						}
+					}
+					
+					//"integer"
+					if(rule === "integer"){
+						if(!self.isInteger(fieldValue)){
+							errors[field] = "Invalid integer value";
 							continue fieldLoop;
 						}
 					}
@@ -233,6 +242,27 @@ module.exports = {
 						});
 					}
 				}
+				
+				//"existing-article-id" rule
+				if(validation.rule === "existing-article-id"){					
+					asyncTasks.push(function (done){
+						ArticleModel.getById(validation.fieldValue, function (err, article){
+							if (err) {
+								return done(err);
+							}
+
+							if (article) {
+								done(null);
+							}else{
+								done(null, {
+									field: field,
+									error: "Invalid article id"
+								});
+							}
+						});
+					});
+				}
+				
 			});
 		});
 		
@@ -274,6 +304,14 @@ module.exports = {
 	 */
 	isBoolean: function (value){
 		return typeof value === "boolean";
+	},
+	/**
+	 * Helper function that checks if the provided field is an integer
+	 * @param {String} value
+	 * @returns {Boolean}
+	 */
+	isInteger: function (value){
+		return typeof value === "number" && (value % 1) === 0;
 	},
 	/**
 	 * Helper function that checks if the provided field is a valid email

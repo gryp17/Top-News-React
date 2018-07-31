@@ -46,7 +46,7 @@ module.exports = {
 	getById: function (id, done) {
 		var query = "SELECT article.id, authorId, title, summary, content, image, article.date, category.name as categoryName, user.username as authorName, user.avatar as authorAvatar, count(article_view.id) as views "
 		+"FROM article, category, user, article_view "
-		+"WHERE article.categoryId = category.id AND user.id = article.authorId AND article.id = article_view.articleId AND article.id = ?";
+		+"WHERE article.categoryId = category.id AND user.id = article.authorId AND article.id = article_view.articleId AND article.id = ? GROUP BY article.id";
 		
 		connection.query(query, id, function (err, rows) {
 			if (err) {

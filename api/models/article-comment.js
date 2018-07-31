@@ -50,5 +50,16 @@ module.exports = {
 			
 			done(null, rows[0].count);
 		});
+	},
+	/**
+	 * Adds a new article_comment record
+	 * @param {Number} articleId
+	 * @param {Number} authorId
+	 * @param {String} content
+	 * @param {Function} done
+	 */
+	create: function (articleId, authorId, content, done){
+		var query = "INSERT INTO article_comment (articleId, authorId, content, date) VALUES (?, ?, ?, now())";
+		connection.query(query, [articleId, authorId, content], done);
 	}
 }; 

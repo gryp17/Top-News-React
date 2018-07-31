@@ -26,11 +26,14 @@ class ArticleComments extends React.Component {
 			totalComments: 0,
 			currentPage: 0,
 			totalPages: 0,
-			loading: false
+			loading: false,
+			errors: {}
 		};
 		
 		this.avatarsDir = Config.avatarsDir;
 		
+		this.addComment = this.addComment.bind(this);
+		this.clearErrors = this.clearErrors.bind(this);
 		this.generateComments = this.generateComments.bind(this);
 		this.generatePagination = this.generatePagination.bind(this);
 		this.goToFirstPage = this.goToFirstPage.bind(this);
@@ -53,6 +56,21 @@ class ArticleComments extends React.Component {
 	}
 	
 	/**
+	 * Clears the form errors related to this input
+	 * @param {Object} e
+	 */
+	clearErrors(e) {
+		var field = e.target.name;
+
+		var errors = this.state.errors;
+		delete errors[field];
+		
+		this.setState({
+			errors: errors
+		});
+	}
+	
+	/**
 	 * Returns all article comments
 	 * @param {Number} page
 	 */
@@ -72,6 +90,26 @@ class ArticleComments extends React.Component {
 				totalPages: Math.floor(response.data.total / self.commentsPerPage) + 1,
 				loading: false
 			});
+		});
+	}
+	
+	/**
+	 * Adds new article comment
+	 */
+	addComment(){
+		var self = this;
+		
+		var textarea = $(this.refs.content);
+		
+		ArticleCommentHttpService.addComment(this.props.articleId, textarea.val()).then(function (response){
+			if (response.data.errors) {
+				self.setState({
+					errors: response.data.errors
+				});
+			}else{				
+				self.goToFirstPage();
+				textarea.val("");
+			}
 		});
 	}
 	
@@ -230,10 +268,20 @@ class ArticleComments extends React.Component {
 				}
 				
 				{this.props.userSession && 
-					<div className="input-group">
-						<textarea className="form-control" placeholder="Leave your comment"></textarea>
-						<div className="input-group-append">
-							<button className="btn btn-success">Submit</button>
+					<div className="form-group">
+						<div className="input-group">
+							<textarea ref="content" name="content" placeholder="Leave your comment" 
+								className={classNames("form-control", {"is-invalid": this.state.errors.content})} 
+								onFocus={this.clearErrors}></textarea>
+							<div className="input-group-append">
+								<button className="btn btn-success" onClick={this.addComment}>
+									Submit
+								</button>
+							</div>
+						</div>
+						
+						<div className="form-error">
+							{this.state.errors.content}
 						</div>
 					</div>
 				}
