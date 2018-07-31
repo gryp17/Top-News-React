@@ -65,7 +65,7 @@ class ArticlePage extends React.Component {
 				
 				{this.state.article && <ArticlesSlider authorId={this.state.article.authorId} />}
 
-				<ArticleComments articleId={parseInt(this.props.match.params.id)} userSession={this.props.userSession}/>
+				{this.state.article && <ArticleComments articleId={parseInt(this.props.match.params.id)} userSession={this.props.userSession}/>}
 				
 				<ScrollToTop/>
 			</div>
