@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Link} from "react-router-dom";
 
 import "./aside.scss";
 
 import Login from "./login/login";
 import SignUp from "./sign-up/sign-up";
+import UserMenu from "./user-menu/user-menu";
 import PopularArticlesWidget from "./popular-articles-widget/popular-articles-widget";
 import LatestArticlesWidget from "./latest-articles-widget/latest-articles-widget";
 import WeatherWidget from "./weather-widget/weather-widget";
@@ -25,8 +25,7 @@ class Aside extends React.Component {
 				<div className="row user-panel">
 					{this.props.userSession &&
 						<div className="col">
-							{this.props.userSession.username}
-							<button className="btn btn-link" onClick={this.props.logout}>Logout</button>
+							<UserMenu userSession={this.props.userSession} logout={this.props.logout}/>
 						</div>
 					}
 					

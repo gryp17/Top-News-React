@@ -1,0 +1,53 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
+
+.user-menu{
+	
+	.dropdown-wrapper{
+		text-align: center;
+		
+		@include media-breakpoint-down(xs) {
+			text-align: right;
+		}
+
+		.toggle-button{
+			position: relative;
+			display: inline-block;
+			cursor: pointer;
+			
+			.settings-icon{
+				margin-left: 5px;
+				width: 16px;
+				transition: ease-in-out 0.5s;
+				opacity: 0.7;
+			}
+			
+			.dropdown-menu{
+				margin-top: 8px;
+				
+				&:after{
+					content: '';
+					position: absolute;
+					right: 8px;
+					top: -11px;
+					width: 0;
+					height: 0;
+					border-left: 10px solid transparent;
+					border-right: 10px solid transparent;
+					border-bottom: 10px solid rgba(0, 0, 0, 0.15);
+					clear: both;
+				}
+			}
+			
+
+			&.opened{				
+				.dropdown-menu{
+					display: block;
+				}
+
+				.settings-icon{
+					transform: rotate(90deg);
+				}
+			}
+		}
+	}
+}
