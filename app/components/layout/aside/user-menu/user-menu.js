@@ -36,7 +36,9 @@ class UserMenu extends React.Component {
 	 * @param {Object} e
 	 */
 	handleWindowClick(e){
-		if (!$(e.target).is(".user-menu .toggle-button, .user-menu .toggle-button *")) {
+		var clickableArea = $(this.refs.userMenu).find(".toggle-button, .toggle-button *");
+				
+		if(!$(e.target).is(clickableArea)){
 			this.setState({
 				dropdownOpened: false
 			});
@@ -56,7 +58,7 @@ class UserMenu extends React.Component {
 		
 	render() {
 		return (
-			<div className="user-menu">
+			<div className="user-menu" ref="userMenu">
 				<div className="dropdown-wrapper">
 					<div onClick={this.toggleDropdown} className={classNames("toggle-button", {"opened": this.state.dropdownOpened})}>
 						<a href="javascript:void(0)">
