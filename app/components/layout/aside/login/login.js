@@ -6,10 +6,14 @@ import "./login.scss";
 
 import UserHttpService from "../../../../services/api/user";
 
+import Session from "../../../../contexts/session";
+
 class Login extends React.Component {
 	
 	static propTypes = {
-		updateSession: PropTypes.func.isRequired
+		sessionContext: PropTypes.shape({
+			updateSession: PropTypes.func.isRequired
+		})
 	};
 	
 	constructor(props){
@@ -18,7 +22,7 @@ class Login extends React.Component {
 		this.state = {
 			errors: {}
 		};
-	
+		
 		this.openModal = this.openModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 		this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -77,7 +81,7 @@ class Login extends React.Component {
 		UserHttpService.login(this.refs.username.value, this.refs.password.value, this.refs.rememberMe.checked).then(function (response) {
 			if (response.data.user) {
 				self.closeModal();
-				self.props.updateSession(response.data.user);
+				self.props.sessionContext.updateSession(response.data.user);
 			}else{				
 				self.setState({
 					errors: response.data.errors
@@ -159,4 +163,4 @@ class Login extends React.Component {
 	}
 };
 
-export default Login;
+export default Session.withConsumer(Login);

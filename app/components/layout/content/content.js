@@ -12,34 +12,8 @@ import ArticlePage from "../../pages/article/article-page";
 import UserPage from "../../pages/user/user-page";
 import SearchPage from "../../pages/search/search-page";
 
-class Content extends React.Component {
-	
-	static propTypes = {
-		userSession: PropTypes.object
-	};
-	
-	render() {
-		
-		var self = this;
-		
-		/**
-		 * An "elegant" way to pass props to a route?
-		 * @param {Object} props
-		 * @returns {Object}
-		 */
-		var ArticlePageRender = function (props){
-			return <ArticlePage {...props} userSession={self.props.userSession}/>;
-		};
-		
-		/**
-		 * The exact same "elegant" solution for passing props to a route
-		 * @param {Object} props
-		 * @returns {Object}
-		 */
-		var UserPageRender = function (props){
-			return <UserPage {...props} userSession={self.props.userSession}/>;
-		};
-		
+class Content extends React.Component {	
+	render() {		
 		return (
 			<div id="content">
 				
@@ -51,8 +25,8 @@ class Content extends React.Component {
 					<Switch>
 						<Route exact path="/" component={HomePage}/>
 						<Route exact path="/search/:section/:searchTerm?" component={SearchPage}/>
-						<Route exact path="/article/:id" render={ArticlePageRender}/>
-						<Route exact path="/user/:id" render={UserPageRender}/>
+						<Route exact path="/article/:id" component={ArticlePage}/>
+						<Route exact path="/user/:id" component={UserPage}/>
 					</Switch>
 				</div>
 				

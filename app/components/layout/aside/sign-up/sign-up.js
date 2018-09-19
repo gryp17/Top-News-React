@@ -6,10 +6,14 @@ import "./sign-up.scss";
 
 import UserHttpService from "../../../../services/api/user";
 
+import Session from "../../../../contexts/session";
+
 class SignUp extends React.Component {
 	
 	static propTypes = {
-		updateSession: PropTypes.func.isRequired
+		sessionContext: PropTypes.shape({
+			updateSession: PropTypes.func.isRequired
+		})
 	};
 	
 	constructor(props){
@@ -82,7 +86,7 @@ class SignUp extends React.Component {
 		UserHttpService.signUp(formData).then(function (response) {
 			if (response.data.user) {
 				self.closeModal();
-				self.props.updateSession(response.data.user);
+				self.props.sessionContext.updateSession(response.data.user);
 			}else{				
 				self.setState({
 					errors: response.data.errors
@@ -190,4 +194,4 @@ class SignUp extends React.Component {
 	}
 };
 
-export default SignUp;
+export default Session.withConsumer(SignUp);

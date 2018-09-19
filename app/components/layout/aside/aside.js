@@ -10,35 +10,38 @@ import PopularArticlesWidget from "./popular-articles-widget/popular-articles-wi
 import LatestArticlesWidget from "./latest-articles-widget/latest-articles-widget";
 import WeatherWidget from "./weather-widget/weather-widget";
 
+import Session from "../../../contexts/session";
+
 class Aside extends React.Component {
 	
 	static propTypes = {
-		userSession: PropTypes.object,
-		logout: PropTypes.func.isRequired,
-		updateSession: PropTypes.func.isRequired
+		sessionContext: PropTypes.shape({
+			userSession: PropTypes.object
+		})
 	};
 		
 	render() {
+		var isLoggedIn = this.props.sessionContext.userSession !== null;
+		
 		return (
 			<div id="aside">
 
 				<div className="row user-panel">
-					{this.props.userSession &&
+					{isLoggedIn &&
 						<div className="col">
-							<UserMenu userSession={this.props.userSession} logout={this.props.logout}/>
+							<UserMenu/>
 						</div>
 					}
 					
-					{!this.props.userSession && 
-						<div className="col">
-							<Login updateSession={this.props.updateSession}/>
-						</div>
-					}
-							
-					{!this.props.userSession &&
-						<div className="col">
-							<SignUp updateSession={this.props.updateSession}/>
-						</div>
+					{!isLoggedIn && 
+						<React.Fragment>
+							<div className="col">
+								<Login/>
+							</div>
+							<div className="col">
+								<SignUp/>
+							</div>
+						</React.Fragment>
 					}
 				</div>
 
@@ -59,4 +62,4 @@ class Aside extends React.Component {
 	}
 };
 
-export default Aside;
+export default Session.withConsumer(Aside);

@@ -5,11 +5,15 @@ import classNames from "classnames";
 
 import "./user-menu.scss";
 
+import Session from "../../../../contexts/session";
+
 class UserMenu extends React.Component {
 	
 	static propTypes = {
-		userSession: PropTypes.object.isRequired,
-		logout: PropTypes.func.isRequired
+		sessionContext: PropTypes.shape({
+			userSession: PropTypes.object.isRequired,
+			logout: PropTypes.func.isRequired
+		})
 	};
 	
 	constructor(props){
@@ -18,7 +22,7 @@ class UserMenu extends React.Component {
 		this.state = {
 			dropdownOpened: false
 		};
-		
+				
 		this.toggleDropdown = this.toggleDropdown.bind(this);
 		this.handleWindowClick = this.handleWindowClick.bind(this);
 	}
@@ -57,23 +61,26 @@ class UserMenu extends React.Component {
 	}
 		
 	render() {
+		
+		var user = this.props.sessionContext.userSession;
+		
 		return (
 			<div className="user-menu" ref="userMenu">
 				<div className="dropdown-wrapper">
 					<div onClick={this.toggleDropdown} className={classNames("toggle-button", {"opened": this.state.dropdownOpened})}>
 						<a href="javascript:void(0)">
-							{this.props.userSession.username}
+							{user.username}
 						</a>
 						
 						<img className="settings-icon" src="/img/icons/settings-icon.png"/>
 												
 						<div className="dropdown-menu dropdown-menu-right">
-							<Link className="dropdown-item" to={"/user/"+this.props.userSession.id}>My Profile</Link>
-							{this.props.userSession.type === "admin" && 
+							<Link className="dropdown-item" to={"/user/"+user.id}>My Profile</Link>
+							{user.type === "admin" && 
 								<Link className="dropdown-item" to="/article/new">Add Article</Link>
 							}
 							<div className="dropdown-divider"></div>
-							<a className="dropdown-item" onClick={this.props.logout}>Logout</a>
+							<a className="dropdown-item" onClick={this.props.sessionContext.logout}>Logout</a>
 						</div>
 					</div>
 				</div>
@@ -82,4 +89,4 @@ class UserMenu extends React.Component {
 	}
 };
 
-export default UserMenu;
+export default Session.withConsumer(UserMenu);

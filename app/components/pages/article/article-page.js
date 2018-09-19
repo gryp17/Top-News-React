@@ -13,10 +13,6 @@ import ArticleComments from "./article-comments/article-comments";
 
 class ArticlePage extends React.Component {
 
-	static propTypes = {
-		userSession: PropTypes.object
-	};
-
 	constructor(props) {
 		super(props);
 
@@ -65,7 +61,7 @@ class ArticlePage extends React.Component {
 				
 				{this.state.article && <ArticlesSlider authorId={this.state.article.authorId} />}
 
-				{this.state.article && <ArticleComments articleId={parseInt(this.props.match.params.id)} userSession={this.props.userSession}/>}
+				{this.state.article && <ArticleComments articleId={parseInt(this.props.match.params.id)}/>}
 				
 				<ScrollToTop/>
 			</div>

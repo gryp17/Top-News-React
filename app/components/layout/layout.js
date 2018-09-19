@@ -10,6 +10,8 @@ import Aside from "./aside/aside";
 
 import UserHttpService from "../../services/api/user";
 
+import Session from "../../contexts/session";
+
 class Layout extends React.Component {
 	
 	constructor(props){
@@ -60,23 +62,32 @@ class Layout extends React.Component {
 	}
 	
 	render() {
-				
+		
+		//data that is acessible by all components that use the session context HOC
+		var sessionData = {
+			userSession: this.state.userSession,
+			updateSession: this.updateSession,
+			logout: this.logout
+		};
+		
 		return (
 			<div id="top-news">
-				<MainMenu/>
-				
-				<div id="content-wrapper">
-					<div className="row no-gutters">
-						<div className="col-md-4 order-md-8 col-sm-push-8">
-							<Aside userSession={this.state.userSession} updateSession={this.updateSession} logout={this.logout}/>
-						</div>
-						<div className="col-md-8 order-md-4 col-sm-pull-4">
-							<Content userSession={this.state.userSession}/>
+				<Session.Context.Provider value={sessionData}>
+					<MainMenu/>
+
+					<div id="content-wrapper">
+						<div className="row no-gutters">
+							<div className="col-md-4 order-md-8 col-sm-push-8">
+								<Aside/>
+							</div>
+							<div className="col-md-8 order-md-4 col-sm-pull-4">
+								<Content/>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<Footer/>
+					<Footer/>
+				</Session.Context.Provider>
 			</div>
 		);
 	}

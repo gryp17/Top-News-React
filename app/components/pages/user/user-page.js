@@ -7,10 +7,14 @@ import UserHttpService from "../../../services/api/user";
 import LoadingIndicator from "../../common/loading-indicator/loading-indicator";
 import NotFound from "../../common/not-found/not-found";
 
+import Session from "../../../contexts/session";
+
 class UserPage extends React.Component {
 
 	static propTypes = {
-		userSession: PropTypes.object
+		sessionContext: PropTypes.shape({
+			userSession: PropTypes.object
+		})
 	};
 
 	constructor(props) {
@@ -49,10 +53,14 @@ class UserPage extends React.Component {
 				{this.state.loading && <LoadingIndicator/>}
 				{!this.state.loading && !this.state.user && <NotFound/>}
 				
+				<h3>User data:</h3>
 				{this.state.user && JSON.stringify(this.state.user)}
+						
+				<h4>Logged in user data</h4>
+				{JSON.stringify(this.props.sessionContext.userSession)}
 			</div>
 		);
 	}
 };
 
-export default UserPage;
+export default Session.withConsumer(UserPage);

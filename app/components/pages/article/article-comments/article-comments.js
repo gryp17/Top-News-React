@@ -9,11 +9,15 @@ import "./article-comments.scss";
 import Config from "../../../../config/config";
 import ArticleCommentHttpService from "../../../../services/api/article-comment";
 
+import Session from "../../../../contexts/session";
+
 class ArticleComments extends React.Component {
 	
 	static propTypes = {
 		articleId: PropTypes.number.isRequired,
-		userSession: PropTypes.object
+		sessionContext: PropTypes.shape({
+			userSession: PropTypes.object
+		})
 	};
 
 	constructor(props) {
@@ -255,19 +259,22 @@ class ArticleComments extends React.Component {
 		);
 	}
 
-	render() {				
+	render() {		
+		
+		var isLoggedIn = this.props.sessionContext.userSession !== null;
+		
 		return (
 			<div className="article-comments">
 				<hr/>
 				
-				{!this.props.userSession && 
+				{!isLoggedIn && 
 					<div className="not-logged-in">
 						<img src="/img/icons/warning-icon.png"/>
 						You need to be <span onClick={this.openLoginModal}>logged in</span> before you can comment on this article.
 					</div>
 				}
 				
-				{this.props.userSession && 
+				{isLoggedIn && 
 					<div className="form-group">
 						<div className="input-group">
 							<textarea ref="content" name="content" placeholder="Leave your comment" 
@@ -300,4 +307,4 @@ class ArticleComments extends React.Component {
 	};
 };
 
-export default ArticleComments;
+export default Session.withConsumer(ArticleComments);
