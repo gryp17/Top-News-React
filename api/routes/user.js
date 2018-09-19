@@ -40,7 +40,7 @@ router.post("/", multipart(), Validator.validate(rules.signUp), Files.uploadAvat
 	});
 });
 
-///login
+//login
 router.post("/login", Validator.validate(rules.login), function (req, res, next) {
 	UserModel.getByUsername(req.body.username, function (err, result) {
 		if (err) {
@@ -93,6 +93,23 @@ router.get("/logout", function (req, res, next) {
 		res.json({
 			data: "OK"
 		});
+	});
+});
+
+//get user data
+router.get("/:id", function (req, res, next){
+	var userId = parseInt(req.params.id);
+	
+	UserModel.getById(userId, function (err, result) {
+		if (err) {
+			return next(err);
+		}
+
+		if (result) {
+			delete result.password;
+		} 
+		
+		res.json(result);
 	});
 });
 

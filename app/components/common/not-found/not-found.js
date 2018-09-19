@@ -1,7 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-import FadeIn from "../../../common/animations/fade-in/fade-in";
+import FadeIn from "../animations/fade-in/fade-in";
 
 import "./not-found.scss";
 
@@ -10,7 +10,7 @@ var NotFound = function () {
 		<FadeIn>
 			<div className="not-found">
 				<div className="title">
-					Article not found
+					Resource not found
 				</div>
 
 				<img src="/img/icons/warning-icon.png"/>

@@ -7,7 +7,7 @@ import ArticleHttpService from "../../../services/api/article";
 import LoadingIndicator from "../../common/loading-indicator/loading-indicator";
 import ScrollToTop from "../../common/scroll-to-top/scroll-to-top";
 import Article from "./article/article";
-import NotFound from "./not-found/not-found";
+import NotFound from "../../common/not-found/not-found";
 import ArticlesSlider from "./articles-slider/articles-slider";
 import ArticleComments from "./article-comments/article-comments";
 

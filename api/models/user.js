@@ -6,6 +6,31 @@ var connection = mysql.createConnection(app.get("config").db);
 
 module.exports = {
 	/**
+	 * Returns the user that matches the specified id
+	 * @param {Number} id
+	 * @param {Function} done
+	 */
+	getById: function (id, done){
+		connection.query("SELECT * FROM user WHERE id = ?", [id], function (err, rows) {
+			if (err) {
+				return done(err);
+			}
+
+			if (!rows.length) {
+				done(null);
+			} else {
+				var user = rows[0];
+				
+				//if there is no avatar use the default one
+				if(!user.avatar){
+					user.avatar = app.get("config").uploads.avatars.defaultAvatar;
+				}
+				
+				done(null, user);
+			}
+		});
+	},
+	/**
 	 * Returns the user that matches the specified username
 	 * @param {String} username
 	 * @param {Function} done

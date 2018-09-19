@@ -24,6 +24,14 @@ export default {
 		return axios.post("/api/user", data);
 	},
 	/**
+	 * Returns the user data for the specified user id
+	 * @param {Number} id
+	 * @returns {Promise}
+	 */
+	getUserById(id){
+		return axios.get("/api/user/"+id);
+	},
+	/**
 	 * Returns the current user session
 	 * @returns {Promise}
 	 */
