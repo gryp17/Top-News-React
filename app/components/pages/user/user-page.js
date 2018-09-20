@@ -54,7 +54,13 @@ class UserPage extends React.Component {
 				{this.state.loading && <LoadingIndicator/>}
 				{!this.state.loading && !this.state.user && <NotFound/>}
 				
-				{this.state.user && <UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession}/>}
+				{this.state.user && 
+					<React.Fragment>
+						<UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession}/>
+						<div>User articles component</div>
+						<div>User activity component</div>
+					</React.Fragment>	
+				}
 			</div>
 		);
 	}

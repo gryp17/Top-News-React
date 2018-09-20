@@ -39,6 +39,8 @@ var UserDetails = function (props) {
 				</div>
 			</div>
 			
+			<hr/>
+			
 		</div>
 	);
 };
