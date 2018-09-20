@@ -3,7 +3,13 @@ import PropTypes from "prop-types";
 
 import "./user-details.scss";
 
+import Config from "../../../../config/config";
+
 var UserDetails = function (props) {
+	
+	var user = props.user;
+	var avatarsDir = Config.avatarsDir;
+	
 	return (
 		<div className="user-details">
 			<h4>
@@ -12,23 +18,30 @@ var UserDetails = function (props) {
 			
 			<hr/>
 			
-			<div>
-				Avatar: {props.user.avatar}
+			<div className="row no-gutters">
+				<div className="col-md-3">
+					<img src={avatarsDir+user.avatar}/>
+				</div>
+				<div className="col-md-9">
+					<div>
+						Username: {user.username}
+					</div>
+
+					<div>
+						Account type: {user.type}
+					</div>
+
+					<div>
+						Active: {user.active}
+					</div>
+
+					<div>
+						Registered: {user.registered}
+					</div>
+				</div>
 			</div>
 			
-			<div>
-				Account type: {props.user.type}
-			</div>
-			
-			<div>
-				Active: {props.user.active}
-			</div>
-			
-			<div>
-				Registered: {props.user.registered}
-			</div>
-			
-			{(props.currentUser && props.currentUser.id === props.user.id) && <button className="btn btn-success">Edit</button>}
+			{(props.currentUser && props.currentUser.id === user.id) && <button className="btn btn-success">Edit</button>}
 			
 		</div>
 	);
