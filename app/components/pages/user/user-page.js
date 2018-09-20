@@ -6,6 +6,7 @@ import "./user-page.scss";
 import UserHttpService from "../../../services/api/user";
 import LoadingIndicator from "../../common/loading-indicator/loading-indicator";
 import NotFound from "../../common/not-found/not-found";
+import UserDetails from "./user-details/user-details";
 
 import Session from "../../../contexts/session";
 
@@ -53,11 +54,7 @@ class UserPage extends React.Component {
 				{this.state.loading && <LoadingIndicator/>}
 				{!this.state.loading && !this.state.user && <NotFound/>}
 				
-				<h3>User data:</h3>
-				{this.state.user && JSON.stringify(this.state.user)}
-						
-				<h4>Logged in user data</h4>
-				{JSON.stringify(this.props.sessionContext.userSession)}
+				{this.state.user && <UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession}/>}
 			</div>
 		);
 	}
