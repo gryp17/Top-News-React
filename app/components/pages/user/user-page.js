@@ -4,9 +4,11 @@ import PropTypes from "prop-types";
 import "./user-page.scss";
 
 import UserHttpService from "../../../services/api/user";
+import ArticleHttpService from "../../../services/api/article";
 import LoadingIndicator from "../../common/loading-indicator/loading-indicator";
 import NotFound from "../../common/not-found/not-found";
 import UserDetails from "./user-details/user-details";
+import UserArticles from "./user-articles/user-articles";
 
 import Session from "../../../contexts/session";
 
@@ -23,27 +25,38 @@ class UserPage extends React.Component {
 
 		this.state = {
 			loading: true,
-			user: null
+			user: null,
+			articles: {
+				limit: 6,
+				offset: 0,
+				data: []
+			}
 		};
 	}
 
 	componentDidMount() {
-		this.getUser(this.props.match.params.id);
+		this.getUserData(this.props.match.params.id);
 	}
 		
 	/**
-	 * Get the user that matches the specified id
+	 * Returns the user data (profile, user articles and activity)
 	 * @param {Number} id
 	 */
-	getUser(id) {
+	getUserData(id) {
 		var self = this;
 		
 		this.setState({loading: true});
 
-		UserHttpService.getUserById(id).then(function (response) {
+		Promise.all([
+			UserHttpService.getUserById(id),
+			ArticleHttpService.getArticlesByAuthor(id, this.state.articles.limit, this.state.articles.offset)
+		]).then(function (responses){
 			self.setState({
 				loading: false,
-				user: response.data
+				user: responses[0].data,
+				articles: {
+					data: responses[1].data
+				}
 			});
 		});
 	}
@@ -57,8 +70,10 @@ class UserPage extends React.Component {
 				{this.state.user && 
 					<React.Fragment>
 						<UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession}/>
-						<div>User articles component</div>
-						<div>User activity component</div>
+						<UserArticles articles={this.state.articles.data}/>
+						
+						<h4>User Activity</h4>
+
 					</React.Fragment>	
 				}
 			</div>
