@@ -1,3 +1,16 @@
 .pagination{
-	
+	display: block;
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 10px;
+
+	button{
+		display: inline-block;
+		font-size: 13px;
+		border-radius: 5px;
+
+		+ button{
+			margin-left: 1px;
+		}
+	}
 }

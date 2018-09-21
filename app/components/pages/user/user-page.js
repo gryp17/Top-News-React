@@ -66,8 +66,10 @@ class UserPage extends React.Component {
 		var offset = page * this.state.articles.perPage;
 		
 		return ArticleHttpService.getArticlesByAuthor(this.state.userId, this.state.articles.perPage, offset).then(function (response){
+			//spread the articles object in order to update the nested attributes correctly
 			self.setState({
 				articles: {
+					...self.state.articles,
 					data: response.data.articles,
 					total: response.data.total,
 					totalPages: Math.ceil(response.data.total / self.state.articles.perPage)
@@ -85,7 +87,7 @@ class UserPage extends React.Component {
 				{this.state.user && 
 					<React.Fragment>
 						<UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession}/>
-						<UserArticles articles={this.state.articles.data}/>
+						<UserArticles {...this.state.articles}/>
 						
 						<br/>
 						<br/>

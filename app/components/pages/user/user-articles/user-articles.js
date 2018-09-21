@@ -13,7 +13,7 @@ var UserArticles = function (props) {
 	
 	var articlesDir = Config.articlesDir;
 	
-	var articles = props.articles.map((article) => {
+	var articles = props.data.map((article) => {
 		return (
 			<div className="user-article" key={article.id}>
 				<Link to={"/article/"+article.id} title={article.summary}>
@@ -34,15 +34,19 @@ var UserArticles = function (props) {
 			<h4>User Articles</h4>
 			
 			{articles}
-			
-			<Pagination/>
+						
+			<Pagination {...props}/>
 			
 		</div>
 	);
 };
 
 UserArticles.propTypes = {
-	articles: PropTypes.array.isRequired
+	data: PropTypes.array.isRequired,
+	perPage: PropTypes.number.isRequired,
+	total: PropTypes.number.isRequired,
+	currentPage: PropTypes.number.isRequired,
+	totalPages: PropTypes.number.isRequired
 };
 
 export default UserArticles;
