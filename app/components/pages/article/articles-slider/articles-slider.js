@@ -67,7 +67,7 @@ class ArticlesSlider extends React.Component {
 		
 		ArticleHttpService.getArticlesByAuthor(authorId, limit, offset).then(function (response) {
 			self.setState({
-				articles: response.data
+				articles: response.data.articles
 			}, function (){
 				self.setSliderWidth();
 			});

@@ -41,7 +41,7 @@ module.exports = {
 	 * @param {Function} done
 	 */
 	getTotalComments: function (articleId, done){
-		var query = "SELECT count(id) AS count FROM article_comment WHERE article_comment.articleId = ?";
+		var query = "SELECT COUNT(id) AS count FROM article_comment WHERE article_comment.articleId = ?";
 		
 		connection.query(query, articleId, function (err, rows){
 			if(err){

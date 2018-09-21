@@ -25,37 +25,52 @@ class UserPage extends React.Component {
 
 		this.state = {
 			loading: true,
+			userId: this.props.match.params.id,
 			user: null,
 			articles: {
-				limit: 6,
-				offset: 0,
-				data: []
+				data: [],
+				perPage: 6,
+				total: 0,
+				currentPage: 0,
+				totalPages: 0
 			}
 		};
 	}
 
 	componentDidMount() {
-		this.getUserData(this.props.match.params.id);
+		this.getUserData();
 	}
 		
 	/**
 	 * Returns the user data (profile, user articles and activity)
-	 * @param {Number} id
 	 */
-	getUserData(id) {
+	getUserData() {
 		var self = this;
 		
 		this.setState({loading: true});
 
 		Promise.all([
-			UserHttpService.getUserById(id),
-			ArticleHttpService.getArticlesByAuthor(id, this.state.articles.limit, this.state.articles.offset)
+			UserHttpService.getUserById(this.state.userId),
+			this.getArticles(this.state.articles.currentPage)
 		]).then(function (responses){
 			self.setState({
 				loading: false,
-				user: responses[0].data,
+				user: responses[0].data
+			});
+		});
+	}
+	
+	getArticles(page) {
+		var self = this;
+		
+		var offset = page * this.state.articles.perPage;
+		
+		return ArticleHttpService.getArticlesByAuthor(this.state.userId, this.state.articles.perPage, offset).then(function (response){
+			self.setState({
 				articles: {
-					data: responses[1].data
+					data: response.data.articles,
+					total: response.data.total,
+					totalPages: Math.ceil(response.data.total / self.state.articles.perPage)
 				}
 			});
 		});
@@ -71,6 +86,9 @@ class UserPage extends React.Component {
 					<React.Fragment>
 						<UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession}/>
 						<UserArticles articles={this.state.articles.data}/>
+						
+						<br/>
+						<br/>
 						
 						<h4>User Activity</h4>
 

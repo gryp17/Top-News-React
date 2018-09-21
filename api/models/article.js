@@ -75,7 +75,33 @@ module.exports = {
 	getByAuthor: function (authorId, limit, offset, done){
 		var query = "SELECT article.id, authorId, title, summary, content, image, date, category.name as categoryName, user.username as authorName FROM article, category, user WHERE article.categoryId = category.id AND user.id = article.authorId AND authorId = ? ORDER BY date DESC LIMIT ? OFFSET ?";
 		var params = [authorId, limit, offset];
-		connection.query(query, params, done);
+		connection.query(query, params, function (err, rows){
+			if(err){
+				return done(err);
+			}
+
+			if (!rows.length) {
+				done(null, []);
+			} else {		
+				done(null, rows);
+			}
+		});
+	},
+	/**
+	 * Returns the total number of articles that belong to the specified author id
+	 * @param {Number} authorId
+	 * @param {Function} done
+	 */
+	getTotalByAuthor: function (authorId, done){
+		var query = "SELECT COUNT(id) as count FROM article WHERE authorId = ?";
+		var params = [authorId];
+		connection.query(query, params, function (err, rows){
+			if(err){
+				return done(err);
+			}
+			
+			done(null, rows[0].count);
+		});
 	},
 	/**
 	 * Returns the articles with the most views in the specified period

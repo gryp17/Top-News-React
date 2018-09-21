@@ -5,6 +5,8 @@ import moment from "moment";
 
 import "./user-articles.scss";
 
+import Pagination from "../../../common/pagination/pagination";
+
 import Config from "../../../../config/config";
 
 var UserArticles = function (props) {
@@ -13,7 +15,7 @@ var UserArticles = function (props) {
 	
 	var articles = props.articles.map((article) => {
 		return (
-			<div className="user-article">
+			<div className="user-article" key={article.id}>
 				<Link to={"/article/"+article.id} title={article.summary}>
 					<img src={articlesDir+article.image}/>
 					<div className="header">{article.categoryName} | {moment(article.date).format("dddd, MMMM D, YYYY")}</div>
@@ -33,7 +35,7 @@ var UserArticles = function (props) {
 			
 			{articles}
 			
-			<div>Pagination goes here</div>
+			<Pagination/>
 			
 		</div>
 	);

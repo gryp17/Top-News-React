@@ -1,4 +1,5 @@
 var express = require("express");
+var async = require("async");
 var router = express.Router();
 
 var ArticleModel = require("../models/article");
@@ -6,13 +7,27 @@ var ArticleViewModel = require("../models/article-view");
 
 //get the latest articles from the specified author/user id
 router.get("/author/:id/:limit/:offset", function (req, res, next){	
-	ArticleModel.getByAuthor(req.params.id, parseInt(req.params.limit), parseInt(req.params.offset), function (err, results) {
+	
+	async.parallel([
+		//get the comments
+		function (done){
+			ArticleModel.getByAuthor(req.params.id, parseInt(req.params.limit), parseInt(req.params.offset), done);
+		},
+		//get the total number of comments
+		function (done){
+			ArticleModel.getTotalByAuthor((req.params.id), done);
+		}
+	], function (err, results){
 		if (err) {
 			return next(err);
 		}
-
-		res.json(results);
+		
+		res.json({
+			articles: results[0],
+			total: results[1]
+		});
 	});
+	
 });
 
 //get all articles from the specified category and/or search term
