@@ -18,7 +18,9 @@ var UserArticles = function (props) {
 			<div className="user-article" key={article.id}>
 				<Link to={"/article/"+article.id} title={article.summary}>
 					<img src={articlesDir+article.image}/>
-					<div className="header">{article.categoryName} | {moment(article.date).format("dddd, MMMM D, YYYY")}</div>
+					<div className="header">
+						{article.categoryName} | {moment(article.date).format("dddd, MMMM D, YYYY")}
+					</div>
 					<div className="title">
 						{article.title}
 					</div>
@@ -28,7 +30,6 @@ var UserArticles = function (props) {
 		);
 	});
 	
-	
 	return (
 		<div className="user-articles">
 			<h4>User Articles</h4>
@@ -36,7 +37,6 @@ var UserArticles = function (props) {
 			{articles}
 						
 			<Pagination {...props}/>
-			
 		</div>
 	);
 };
@@ -46,7 +46,8 @@ UserArticles.propTypes = {
 	perPage: PropTypes.number.isRequired,
 	total: PropTypes.number.isRequired,
 	currentPage: PropTypes.number.isRequired,
-	totalPages: PropTypes.number.isRequired
+	totalPages: PropTypes.number.isRequired,
+	goToPage: PropTypes.func.isRequired
 };
 
 export default UserArticles;

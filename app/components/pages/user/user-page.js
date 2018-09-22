@@ -35,6 +35,8 @@ class UserPage extends React.Component {
 				totalPages: 0
 			}
 		};
+
+		this.goToArticlesPage = this.goToArticlesPage.bind(this);
 	}
 
 	componentDidMount() {
@@ -60,6 +62,11 @@ class UserPage extends React.Component {
 		});
 	}
 	
+	/**
+	 * Gets the user articles
+	 * @param {Number} page
+	 * @returns {Promise}
+	 */
 	getArticles(page) {
 		var self = this;
 		
@@ -77,6 +84,21 @@ class UserPage extends React.Component {
 			});
 		});
 	}
+
+	/**
+	 * Sets the current page and loads the corresponding articles
+	 * @param {Number} page
+	 */
+	goToArticlesPage(page){
+		this.setState({
+			articles: {
+				...this.state.articles,
+				currentPage: page
+			}
+		}, function () {
+			this.getArticles(this.state.articles.currentPage);
+		});
+	}
 	
 	render() {
 		return (
@@ -87,7 +109,7 @@ class UserPage extends React.Component {
 				{this.state.user && 
 					<React.Fragment>
 						<UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession}/>
-						<UserArticles {...this.state.articles}/>
+						<UserArticles {...this.state.articles} goToPage={this.goToArticlesPage}/>
 						
 						<br/>
 						<br/>
