@@ -61,7 +61,6 @@ var Pagination = function (props) {
 
 Pagination.propTypes = {
 	perPage: PropTypes.number.isRequired,
-	total: PropTypes.number.isRequired,
 	currentPage: PropTypes.number.isRequired,
 	totalPages: PropTypes.number.isRequired,
 	goToPage: PropTypes.func.isRequired

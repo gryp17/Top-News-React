@@ -34,9 +34,15 @@ var UserArticles = function (props) {
 		<div className="user-articles">
 			<h4>User Articles</h4>
 			
+			{props.total === 0 && 
+				<div className="no-articles">
+					The user hasn't written any articles yet.
+				</div>
+			}
+
 			{articles}
 						
-			<Pagination {...props}/>
+			{props.total > 0 && <Pagination {...props}/>}
 		</div>
 	);
 };
