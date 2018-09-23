@@ -32,8 +32,7 @@ var UserArticles = function (props) {
 	
 	return (
 		<div className="user-articles">
-			<h4>User Articles</h4>
-			
+
 			{props.total === 0 && 
 				<div className="no-articles">
 					The user hasn't written any articles yet.

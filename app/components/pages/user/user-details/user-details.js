@@ -16,7 +16,7 @@ var UserDetails = function (props) {
 	return (
 		<div className="user-details">
 			<h4>
-				User Profile For <strong>{props.user.username}</strong>
+				<strong>{props.user.username}</strong>
 				{(props.currentUser && props.currentUser.id === user.id) && <button className="btn btn-success edit-btn">Edit</button>}
 			</h4>
 			
@@ -38,8 +38,6 @@ var UserDetails = function (props) {
 					</div>
 				</div>
 			</div>
-			
-			<hr/>
 			
 		</div>
 	);

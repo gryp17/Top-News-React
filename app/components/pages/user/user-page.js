@@ -29,7 +29,7 @@ class UserPage extends React.Component {
 			user: null,
 			articles: {
 				data: [],
-				perPage: 6,
+				perPage: 12,
 				total: 0,
 				currentPage: 0,
 				totalPages: 0
@@ -108,13 +108,36 @@ class UserPage extends React.Component {
 				
 				{this.state.user && 
 					<React.Fragment>
-						<UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession}/>
-						<UserArticles {...this.state.articles} goToPage={this.goToArticlesPage}/>
-						
-						<br/>
-						<br/>
-						
-						<h4>User Activity</h4>
+
+						<ul className="nav nav-tabs" role="tablist">
+							<li className="nav-item">
+								<a className="nav-link active" id="details-tab" data-toggle="tab" href="#details" role="tab" aria-controls="details" aria-selected="true">
+									User Details
+								</a>
+							</li>
+							<li className="nav-item">
+								<a className="nav-link" id="articles-tab" data-toggle="tab" href="#articles" role="tab" aria-controls="articles" aria-selected="false">
+									User Articles
+								</a>
+							</li>
+							<li className="nav-item">
+								<a className="nav-link" id="activity-tab" data-toggle="tab" href="#activity" role="tab" aria-controls="activity" aria-selected="false">
+									User Activity
+								</a>
+							</li>
+						</ul>
+
+						<div className="tab-content">
+							<div className="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+								<UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession}/>
+							</div>
+							<div className="tab-pane fade" id="articles" role="tabpanel" aria-labelledby="articles-tab">
+								<UserArticles {...this.state.articles} goToPage={this.goToArticlesPage}/>
+							</div>
+							<div className="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+								user activity goes here
+							</div>
+						</div>
 
 					</React.Fragment>	
 				}
