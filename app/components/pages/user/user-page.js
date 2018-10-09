@@ -5,10 +5,12 @@ import "./user-page.scss";
 
 import UserHttpService from "../../../services/api/user";
 import ArticleHttpService from "../../../services/api/article";
+import ArticleCommentsHttpService from "../../../services/api/article-comment";
 import LoadingIndicator from "../../common/loading-indicator/loading-indicator";
 import NotFound from "../../common/not-found/not-found";
 import UserDetails from "./user-details/user-details";
 import UserArticles from "./user-articles/user-articles";
+import UserActivity from "./user-activity/user-activity";
 
 import Session from "../../../contexts/session";
 
@@ -33,10 +35,18 @@ class UserPage extends React.Component {
 				total: 0,
 				currentPage: 0,
 				totalPages: 0
+			},
+			comments: {
+				data: [],
+				perPage: 8,
+				total: 0,
+				currentPage: 0,
+				totalPages: 0
 			}
 		};
 
 		this.goToArticlesPage = this.goToArticlesPage.bind(this);
+		this.goToCommentsPage = this.goToCommentsPage.bind(this);
 	}
 
 	componentDidMount() {
@@ -53,7 +63,8 @@ class UserPage extends React.Component {
 
 		Promise.all([
 			UserHttpService.getUserById(this.state.userId),
-			this.getArticles(this.state.articles.currentPage)
+			this.getArticles(this.state.articles.currentPage),
+			this.getComments(this.state.comments.currentPage)
 		]).then(function (responses){
 			self.setState({
 				loading: false,
@@ -86,6 +97,29 @@ class UserPage extends React.Component {
 	}
 
 	/**
+	 * Gets the user comments
+	 * @param {Number} page 
+	 * @returns {Promise}
+	 */
+	getComments(page) {
+		var self = this;
+		
+		var offset = page * this.state.comments.perPage;
+		
+		return ArticleCommentsHttpService.getCommentsByAuthor(this.state.userId, this.state.comments.perPage, offset).then(function (response){
+			//spread the comments object in order to update the nested attributes correctly
+			self.setState({
+				comments: {
+					...self.state.comments,
+					data: response.data.comments,
+					total: response.data.total,
+					totalPages: Math.ceil(response.data.total / self.state.comments.perPage)
+				}
+			});
+		});
+	}
+
+	/**
 	 * Sets the current page and loads the corresponding articles
 	 * @param {Number} page
 	 */
@@ -97,6 +131,21 @@ class UserPage extends React.Component {
 			}
 		}, function () {
 			this.getArticles(this.state.articles.currentPage);
+		});
+	}
+
+	/**
+	 * Sets the current page and loads the corresponding comments
+	 * @param {Number} page
+	 */
+	goToCommentsPage(page){
+		this.setState({
+			comments: {
+				...this.state.comments,
+				currentPage: page
+			}
+		}, function () {
+			this.getComments(this.state.comments.currentPage);
 		});
 	}
 	
@@ -135,7 +184,7 @@ class UserPage extends React.Component {
 								<UserArticles {...this.state.articles} goToPage={this.goToArticlesPage}/>
 							</div>
 							<div className="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
-								user activity goes here
+								<UserActivity {...this.state.comments} goToPage={this.goToCommentsPage}/>
 							</div>
 						</div>
 

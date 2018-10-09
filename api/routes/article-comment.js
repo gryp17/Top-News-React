@@ -54,4 +54,27 @@ router.get("/article/:id/:limit/:offset", function (req, res, next){
 	
 });
 
+//get the latest article comments from the specified author
+router.get("/author/:id/:limit/:offset", function (req, res, next){
+	async.parallel([
+		//get the comments
+		function (done){
+			ArticleCommentModel.getCommentsByAuthor(req.params.id, parseInt(req.params.limit), parseInt(req.params.offset), done);
+		},
+		//get the total number of comments
+		function (done){
+			ArticleCommentModel.getTotalCommentsByAuthor(req.params.id, done);
+		}
+	], function (err, results){
+		if(err){
+			return next(err);
+		}
+		
+		res.json({
+			comments: results[0],
+			total: results[1]
+		});
+	});
+});
+
 module.exports = router;

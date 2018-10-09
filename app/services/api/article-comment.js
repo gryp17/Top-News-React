@@ -12,6 +12,16 @@ export default {
 		return axios.get("/api/article-comment/article/" + articleId + "/" + limit + "/" + offset);
 	},
 	/**
+	 * Returns all article comments by the specified author id
+	 * @param {Number} authorId 
+	 * @param {Number} limit 
+	 * @param {Number} offset 
+	 * @returns {Promise}
+	 */
+	getCommentsByAuthor(authorId, limit, offset) {
+		return axios.get("/api/article-comment/author/" + authorId + "/" + limit + "/" + offset);
+	},
+	/**
 	 * Adds new article comment
 	 * @param {Number} articleId
 	 * @param {String} content
