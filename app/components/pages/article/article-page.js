@@ -24,16 +24,9 @@ class ArticlePage extends React.Component {
 
 	componentDidMount() {
 		this.getArticle(this.props.match.params.id);
+		$(window).scrollTop(0);
 	}
-		
-	componentDidUpdate(prevProps, prevState) {
-		//if the id parameter has changed - load the new article data
-		if((this.props.match.params.id !== prevProps.match.params.id)){
-			$(window).scrollTop(0);
-			this.getArticle(this.props.match.params.id);
-		}
-	}
-
+	
 	/**
 	 * Get the article that matches the specified id
 	 * @param {Number} id

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Switch, Route, NavLink} from "react-router-dom";
+import {Switch, Route, withRouter} from "react-router-dom";
 
 import "./content.scss";
 
@@ -23,12 +23,14 @@ class Content extends React.Component {
 				
 				<div className="page-wrapper">
 					<Switch>
+						{/* 
+							Explicitly set the "key" attribute in order to force the component to be reloaded when the route changes.
+							Use the "withRouter" HOC in order to have access to the location object
+						*/}
 						<Route exact path="/" component={HomePage}/>
-						<Route exact path="/search/:section/:searchTerm?" component={SearchPage}/>
-						<Route exact path="/article/:id" component={ArticlePage}/>
-
-						{/* force the component to be reloaded when the route changes */}
-						<Route exact path="/user/:id" component={(props) => <UserPage {...props} />}/>
+						<Route exact path="/search/:section/:searchTerm?" component={SearchPage} key={location.pathname}/>
+						<Route exact path="/article/:id" component={ArticlePage} key={location.pathname}/>
+						<Route exact path="/user/:id" component={UserPage} key={location.pathname}/>
 					</Switch>
 				</div>
 				
@@ -37,4 +39,4 @@ class Content extends React.Component {
 	}
 };
 
-export default Content;
+export default withRouter(Content);

@@ -37,6 +37,10 @@ class SearchPage extends React.Component {
 		$(window).off("scroll");
 	}
 	
+	/*
+
+	This has been fixed using the "key" attribute on the /search route
+
 	static getDerivedStateFromProps(nextProps, prevState){
 		var updatedState = null;
 
@@ -70,6 +74,7 @@ class SearchPage extends React.Component {
 			this.getArticles();
 		}
 	}
+	*/
 	
 	/**
 	 * Gets all articles that match the state parameters (section, searchTerm, limit, offset...)
