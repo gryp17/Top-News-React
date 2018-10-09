@@ -26,7 +26,9 @@ class Content extends React.Component {
 						<Route exact path="/" component={HomePage}/>
 						<Route exact path="/search/:section/:searchTerm?" component={SearchPage}/>
 						<Route exact path="/article/:id" component={ArticlePage}/>
-						<Route exact path="/user/:id" component={UserPage}/>
+
+						{/* force the component to be reloaded when the route changes */}
+						<Route exact path="/user/:id" component={(props) => <UserPage {...props} />}/>
 					</Switch>
 				</div>
 				
