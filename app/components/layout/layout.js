@@ -18,7 +18,8 @@ class Layout extends React.Component {
 		super(props);
 		
 		this.state = {
-			userSession: null
+			userSession: null,
+			loading: false
 		};
 		
 		this.updateSession = this.updateSession.bind(this);
@@ -35,10 +36,15 @@ class Layout extends React.Component {
 	getSession(){
 		var self = this;
 
+		this.setState({
+			loading: true
+		});
+
 		UserHttpService.getSession().then(function (response) {
-			if (response.data.user) {
-				self.setState({userSession: response.data.user});
-			}
+			self.setState({
+				loading: false,
+				userSession: response.data.user || null
+			})
 		});	
 	}
 	
@@ -65,6 +71,7 @@ class Layout extends React.Component {
 		
 		//data that is acessible by all components that use the session context HOC
 		var sessionData = {
+			loading: this.state.loading,
 			userSession: this.state.userSession,
 			updateSession: this.updateSession,
 			logout: this.logout

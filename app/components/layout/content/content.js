@@ -8,6 +8,7 @@ import CurrencyExchangeBar from "./currency-exchange-bar/currency-exchange-bar";
 import SearchBar from "./search-bar/search-bar";
 
 import HomePage from "../../pages/home/home-page";
+import AddArticlePage from "../../pages/add-article/add-article-page";
 import ArticlePage from "../../pages/article/article-page";
 import UserPage from "../../pages/user/user-page";
 import SearchPage from "../../pages/search/search-page";
@@ -29,6 +30,7 @@ class Content extends React.Component {
 						*/}
 						<Route exact path="/" component={HomePage}/>
 						<Route exact path="/search/:section/:searchTerm?" component={SearchPage} key={location.pathname}/>
+						<Route exact path="/article/new" component={AddArticlePage}/>
 						<Route exact path="/article/:id" component={ArticlePage} key={location.pathname}/>
 						<Route exact path="/user/:id" component={UserPage} key={location.pathname}/>
 					</Switch>

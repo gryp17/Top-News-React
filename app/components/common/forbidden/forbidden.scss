@@ -1,0 +1,15 @@
+@import "../../../css/_variables.scss";
+
+.forbidden{
+	margin-top: 35px;
+	text-align: center;
+	
+	.title{
+		color: $red;
+		font-size: 25px;
+	}
+	
+	img{
+		width: 180px;
+	}
+}

@@ -21,19 +21,20 @@ class Aside extends React.Component {
 	};
 		
 	render() {
+		var loading = this.props.sessionContext.loading;
 		var isLoggedIn = this.props.sessionContext.userSession !== null;
 		
 		return (
 			<div id="aside">
 
 				<div className="row user-panel">
-					{isLoggedIn &&
+					{!loading && isLoggedIn &&
 						<div className="col">
 							<UserMenu/>
 						</div>
 					}
 					
-					{!isLoggedIn && 
+					{!loading && !isLoggedIn && 
 						<React.Fragment>
 							<div className="col">
 								<Login/>
