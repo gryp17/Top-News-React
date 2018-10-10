@@ -5,21 +5,16 @@
 	
 	h4{
 		text-align: center;
-
-		.edit-btn{
-			float: right;
-			
-			@include media-breakpoint-down(xs) {
-				float: none;
-				display: block;
-				margin-top: 5px;
-				width: 100%;
-			}
-		}
 	}
 
-	.avatar-wrapper{
+	.details-avatar-wrapper{
 		text-align: center;
+
+		img{
+			width: 130px;
+			height: 130px;
+			border-radius: 100%;
+		}
 	}
 	
 	.info-wrapper{

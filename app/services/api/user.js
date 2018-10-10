@@ -24,6 +24,14 @@ export default {
 		return axios.post("/api/user", data);
 	},
 	/**
+	 * Updates the user profile
+	 * @param {Object} data
+	 * @returns {Promise}
+	 */
+	update(data) {
+		return axios.put("/api/user", data);
+	},
+	/**
 	 * Returns the user data for the specified user id
 	 * @param {Number} id
 	 * @returns {Promise}

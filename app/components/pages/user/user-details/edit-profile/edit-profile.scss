@@ -1,5 +1,23 @@
-#sign-up{
-		
+@import "~bootstrap/scss/bootstrap-grid.scss";
+
+#edit-profile{
+    float: right;
+    margin-top: -5px;
+    text-align: left;
+    font-size: 16px;
+
+    @include media-breakpoint-down(xs) {
+        float: none;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .edit-btn{
+		display: block;
+        margin: auto;
+        width: 100%;
+	}
+    	
 	.modal{
 		.modal-dialog{
 			margin-left: auto;
@@ -9,7 +27,6 @@
 			.modal-body{
 				
 				.avatar-wrapper{
-
 					.avatar-preview{
 						display: block;
 						margin: auto;
@@ -38,14 +55,13 @@
 
 					.avatar{
 						display: none;
-					}
-
-				}
-
-				.sign-up-btn{
-					display: block;
-					margin: auto;
-				}
+                    }
+                }
+                                  
+                .update-profile-btn{
+                    display: block;
+                    margin: auto;
+                }
 			}
 		}
 	}

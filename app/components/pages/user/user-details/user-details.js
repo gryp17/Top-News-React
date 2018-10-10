@@ -4,6 +4,8 @@ import moment from "moment";
 
 import "./user-details.scss";
 
+import EditProfile from "./edit-profile/edit-profile";
+
 import Config from "../../../../config/config";
 
 var UserDetails = function (props) {
@@ -12,18 +14,17 @@ var UserDetails = function (props) {
 	var avatarsDir = Config.avatarsDir;
 	var registered = moment(user.registered);
 	
-	
 	return (
 		<div className="user-details">
 			<h4>
 				<strong>{props.user.username}</strong>
-				{(props.currentUser && props.currentUser.id === user.id) && <button className="btn btn-success edit-btn">Edit</button>}
+				{(props.currentUser && props.currentUser.id === user.id) && <EditProfile {...props}/>}
 			</h4>
-			
+
 			<hr/>
 			
 			<div className="row no-gutters">
-				<div className="col-md-5 avatar-wrapper">
+				<div className="col-md-5 details-avatar-wrapper">
 					<img src={avatarsDir+user.avatar}/>
 				</div>
 				<div className="col-md-7 info-wrapper">
@@ -44,6 +45,7 @@ var UserDetails = function (props) {
 };
 
 UserDetails.propTypes = {
+	updateUserDetails: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	currentUser: PropTypes.object
 };

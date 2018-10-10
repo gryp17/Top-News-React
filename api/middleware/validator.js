@@ -1,4 +1,5 @@
 var path = require("path");
+var md5 = require("md5");
 var async = require("async");
 var _ = require("lodash");
 
@@ -22,7 +23,7 @@ module.exports = {
 			var config = app.get("config");
 			var data = req.body;
 			var files = req.files;
-			var asyncRules = ["unique", "existing-article-id"]; //list of async rules
+			var asyncRules = ["unique", "existing-article-id", "current-password"]; //list of async rules
 			var asyncValidations = {};
 			var errors = {};
 			
@@ -163,7 +164,7 @@ module.exports = {
 			}
 					
 			//run all async tasks (if there are any)
-			async.parallel(self.generateAsyncTasks(asyncValidations), function (err, validationErrors){
+			async.parallel(self.generateAsyncTasks(asyncValidations, req), function (err, validationErrors){
 				if(err){
 					return next(err);
 				}
@@ -190,9 +191,10 @@ module.exports = {
 	/**
 	 * Generates the async validation tasks
 	 * @param {Object} asyncValidations
+	 * @param {Object} req
 	 * @returns {Array}
 	 */
-	generateAsyncTasks: function (asyncValidations) {
+	generateAsyncTasks: function (asyncValidations, req) {
 		var asyncTasks = [];
 		
 		_.forOwn(asyncValidations, function (validations, field) {
@@ -244,7 +246,7 @@ module.exports = {
 				}
 				
 				//"existing-article-id" rule
-				if(validation.rule === "existing-article-id"){					
+				if(validation.rule === "existing-article-id"){
 					asyncTasks.push(function (done){
 						ArticleModel.getById(validation.fieldValue, function (err, article){
 							if (err) {
@@ -257,6 +259,26 @@ module.exports = {
 								done(null, {
 									field: field,
 									error: "Invalid article id"
+								});
+							}
+						});
+					});
+				}
+
+				//"current-password" rule
+				if(validation.rule === "current-password"){
+					asyncTasks.push(function (done){
+						UserModel.getByUsername(req.session.user.username, function (err, user) {
+							if(err){
+								return done(err);
+							}
+
+							if(md5(validation.fieldValue) === user.password){
+								done(null);
+							}else{
+								done(null, {
+									field: field,
+									error: "Wrong password"
 								});
 							}
 						});

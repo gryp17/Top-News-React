@@ -47,12 +47,13 @@ class UserPage extends React.Component {
 
 		this.goToArticlesPage = this.goToArticlesPage.bind(this);
 		this.goToCommentsPage = this.goToCommentsPage.bind(this);
+		this.updateUserDetails = this.updateUserDetails.bind(this);
 	}
 
 	componentDidMount() {
 		this.getUserData();
 	}
-		
+
 	/**
 	 * Returns the user data (profile, user articles and activity)
 	 */
@@ -148,6 +149,20 @@ class UserPage extends React.Component {
 			this.getComments(this.state.comments.currentPage);
 		});
 	}
+
+	/**
+	 * Callback function that is called from the "edit-profile" component in order to update the global session context and the "user-details" tab
+	 * @param {Object} user 
+	 */
+	updateUserDetails(user){
+		//update the session context
+		this.props.sessionContext.updateSession(user);
+
+		//update the local state
+		this.setState({
+			user: user
+		});
+	}
 	
 	render() {
 		return (
@@ -178,7 +193,7 @@ class UserPage extends React.Component {
 
 						<div className="tab-content">
 							<div className="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
-								<UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession}/>
+								<UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession} updateUserDetails={this.updateUserDetails}/>
 							</div>
 							<div className="tab-pane fade" id="articles" role="tabpanel" aria-labelledby="articles-tab">
 								<UserArticles {...this.state.articles} goToPage={this.goToArticlesPage}/>

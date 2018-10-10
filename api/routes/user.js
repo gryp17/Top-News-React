@@ -15,6 +15,12 @@ var rules = {
 		repeatPassword: ["required", "matches(password)"],
 		avatar: ["optional", "valid-avatar"]
 	},
+	update: {
+		currentPassword: ["optional", "current-password"],
+		password: ["optional", "strong-password", "max-40"],
+		repeatPassword: ["matches(password)"],
+		avatar: ["optional", "valid-avatar"]
+	},
 	login: {
 		username: "required",
 		password: "required",
@@ -38,6 +44,46 @@ router.post("/", multipart(), Validator.validate(rules.signUp), Files.uploadAvat
 		req.session.user = userInstance;
 		res.json({user: userInstance});
 	});
+});
+
+//update user
+router.put("/", multipart(), Validator.validate(rules.update), Files.uploadAvatar, function (req, res, next){
+	var data = req.body;
+	var files = req.files;
+
+	if(data.password && !data.currentPassword){
+		return res.json({
+			errors: {
+				currentPassword: "This field is required"
+			}
+		});
+	}
+
+	var updatedData = {};
+
+	if (data.password) {
+		updatedData.password = data.password.trim();
+	}
+
+	if (files.avatar.uploadedTo) {
+		updatedData.avatar = files.avatar.uploadedTo
+	}
+
+	//check if there is anything to update
+	if(Object.keys(updatedData).length === 0){
+		res.json({user: req.session.user});
+	}else{
+		UserModel.update(req.session.user.id, updatedData, function (err, userInstance) {
+			if (err) {
+				return next(err);
+			}
+	
+			delete userInstance.password;
+			req.session.user = userInstance;
+			res.json({user: userInstance});
+		});
+	}
+
 });
 
 //login

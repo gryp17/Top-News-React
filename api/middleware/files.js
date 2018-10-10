@@ -46,7 +46,8 @@ module.exports = {
 
 		//add the "rename/move" task
 		asyncTasks.push(function (done) {
-			var avatar = md5(req.body.username) + new Date().getTime() + "." + extension;
+			var username = req.body.username ? req.body.username : req.session.user.username;
+			var avatar = md5(username) + new Date().getTime() + "." + extension;
 			var destination = config.uploads.avatars.directory + avatar;
 
 			//move the temporal file to the real avatars directory

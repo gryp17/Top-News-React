@@ -173,7 +173,7 @@ class SignUp extends React.Component {
 												</div>
 											</div>
 											<div className="col">
-												<img ref="preview" className="avatar-preview"/>
+												<img ref="preview" className="avatar-preview" onClick={this.openFileBrowser}/>
 											</div>
 										</div>
 									</div>

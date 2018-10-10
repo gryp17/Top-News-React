@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var md5 = require("md5");
+var _ = require("lodash");
 var app = require("../server");
 
 var connection = mysql.createConnection(app.get("config").db);
@@ -106,6 +107,46 @@ module.exports = {
 				done(null, userInstance);
 			});
 			
+		});
+	},
+	/**
+	 * Updates an existing user record
+	 * @param {Number} id
+	 * @param {Object} data
+	 * @param {Function} done
+	 */
+	update: function (id, data, done){
+		var self = this;
+		var fields = [];
+		var params = [];
+
+		_.forOwn(data, function (value, key){
+			fields.push(key+" = ?");
+
+			if(key === "password"){
+				value = md5(value);
+			}
+
+			params.push(value);
+		});
+
+		fields = fields.join(", ");
+
+		params.push(id);
+
+		connection.query("UPDATE user SET "+fields+" WHERE id = ?", params, function (err){
+			if (err) {
+				return done(err);
+			}
+
+			//return the updated record
+			self.getById(id, function (err, userInstance){
+				if (err) {
+					return done(err);
+				}
+				
+				done(null, userInstance);
+			});
 		});
 	}
 }; 
