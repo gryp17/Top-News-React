@@ -8,6 +8,7 @@ import "./add-article-page.scss";
 import Session from "../../../contexts/session";
 
 import Forbidden from "../../common/forbidden/forbidden";
+import ContentEditor from "./content-editor/content-editor";
 import ArticleHttpService from "../../../services/api/article";
 
 class AddArticlePage extends React.Component {
@@ -26,9 +27,12 @@ class AddArticlePage extends React.Component {
 				categoryId: 1,
 				title: "",
 				summary: "",
-				content: ""
+				content: "some default content <strong>test</strong>"
 			},
-			errors: {},
+			errors: {
+				summary: "some error",
+				content: "test error"
+			},
 			loading: false
 		};
 
@@ -41,9 +45,15 @@ class AddArticlePage extends React.Component {
 		}
 
 		this.handleChange = this.handleChange.bind(this);
+		this.updateContent = this.updateContent.bind(this);
+		this.clearErrors = this.clearErrors.bind(this);
 		this.saveArticle = this.saveArticle.bind(this);
 	}
 
+	/**
+	 * Generates the section dropdown options
+	 * @returns {Array}
+	 */
 	generateSections(){
 		var options = [];
 
@@ -54,12 +64,41 @@ class AddArticlePage extends React.Component {
 		return options;
 	}
 
+	/**
+	 * Handles all form changes and applies them in the state
+	 * @param {Object} e 
+	 */
 	handleChange(e){
 		var article = {...this.state.article};
 		article[e.target.name] = e.target.value;
 
 		this.setState({
 			article: article
+		});
+	}
+
+	/**
+	 * Updates the article content
+	 * @param {String} content 
+	 */
+	updateContent(content){
+		this.setState({
+			article: {...this.state.article, content: content}
+		});
+	}
+
+	/**
+	 * Clears the form errors related to this input
+	 * @param {Object} e
+	 */
+	clearErrors(e) {
+		var field = e.target.name;
+
+		var errors = this.state.errors;
+		delete errors[field];
+		
+		this.setState({
+			errors: errors
 		});
 	}
 
@@ -121,17 +160,16 @@ class AddArticlePage extends React.Component {
 
 						<div className="form-group">
 							<label>Content</label>
-							<textarea name="content" value={this.state.article.content} onChange={this.handleChange}
-								rows="20"
-								className={classNames("form-control summary", {"is-invalid": this.state.errors.content})}
-								placeholder="Content"
-								onFocus={this.clearErrors}></textarea>
+
+							<ContentEditor content={this.state.article.content} isInvalid={!!this.state.errors.content} 
+								onUpdate={this.updateContent} 
+								onFocus={this.clearErrors}/>
 
 							<div className="form-error">
 								{this.state.errors.content}
 							</div>
 						</div>
-
+						
 
 						<button type="button" className="btn btn-success submit-btn" onClick={this.saveArticle}>
 							Submit
