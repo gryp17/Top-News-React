@@ -9,7 +9,7 @@ import ArticleHttpService from "../../../services/api/article";
 
 class AddArticlePage extends React.Component {
 
-    static propTypes = {
+	static propTypes = {
 		sessionContext: PropTypes.shape({
 			userSession: PropTypes.object
 		})
@@ -42,15 +42,15 @@ class AddArticlePage extends React.Component {
 	
 	render() {
 
-        var sessionContext = this.props.sessionContext;
-        var isAdmin = (sessionContext.userSession && sessionContext.userSession.type === "admin");
+		var sessionContext = this.props.sessionContext;
+		var isAdmin = (sessionContext.userSession && sessionContext.userSession.type === "admin");
 
 		return (
 			<div id="add-article-page">
 
 				{!isAdmin && <Forbidden/>}
 				
-                {isAdmin && <ArticleForm article={this.state.article} errors={this.state.errors} formMode="create" submitForm={this.addArticle}/>}
+				{isAdmin && <ArticleForm article={this.state.article} errors={this.state.errors} formMode="create" submitForm={this.addArticle}/>}
 
 			</div>
 		);

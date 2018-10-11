@@ -9,7 +9,7 @@ import ContentEditor from "./content-editor/content-editor";
 
 class ArticleForm extends React.Component {
 
-    static propTypes = {
+	static propTypes = {
 		article: PropTypes.object.isRequired,
 		errors: PropTypes.object.isRequired,
 		formMode: PropTypes.string.isRequired,
@@ -94,68 +94,67 @@ class ArticleForm extends React.Component {
 	render() {
 
 		return (
-            <div className="article-form">
+			<div className="article-form">
 
-                <form ref="addArticleForm">
+				<form ref="addArticleForm">
 
-                    <h4>{this.formMode} Article</h4>
+					<h4>{this.formMode} Article</h4>
 
-                    <hr />
+					<hr />
 
-                    <div className="form-group">
-                        <label>Section</label>
-                        <select name="categoryId" value={this.state.article.categoryId} onChange={this.handleChange}
-                            className="form-control">
+					<div className="form-group">
+						<label>Section</label>
+						<select name="categoryId" value={this.state.article.categoryId} onChange={this.handleChange}
+							className="form-control">
 
-                            {this.generateSections()}
+							{this.generateSections()}
 
-                        </select>
-                    </div>
+						</select>
+					</div>
 
-                    <div className="form-group">
-                        <label>Title</label>
-                        <textarea name="title" value={this.state.article.title} onChange={this.handleChange}
-                            className={classNames("form-control title", { "is-invalid": this.state.errors.title })}
-                            placeholder="Title"
-                            onFocus={this.clearErrors}></textarea>
+					<div className="form-group">
+						<label>Title</label>
+						<textarea name="title" value={this.state.article.title} onChange={this.handleChange}
+							className={classNames("form-control title", { "is-invalid": this.state.errors.title })}
+							placeholder="Title"
+							onFocus={this.clearErrors}></textarea>
 
-                        <div className="form-error">
-                            {this.state.errors.title}
-                        </div>
-                    </div>
+						<div className="form-error">
+							{this.state.errors.title}
+						</div>
+					</div>
 
-                    <div className="form-group">
-                        <label>Summary</label>
-                        <textarea name="summary" value={this.state.article.summary} onChange={this.handleChange}
-                            rows="3"
-                            className={classNames("form-control summary", { "is-invalid": this.state.errors.summary })}
-                            placeholder="Summary"
-                            onFocus={this.clearErrors}></textarea>
+					<div className="form-group">
+						<label>Summary</label>
+						<textarea name="summary" value={this.state.article.summary} onChange={this.handleChange}
+							rows="3"
+							className={classNames("form-control summary", { "is-invalid": this.state.errors.summary })}
+							placeholder="Summary"
+							onFocus={this.clearErrors}></textarea>
 
-                        <div className="form-error">
-                            {this.state.errors.summary}
-                        </div>
-                    </div>
+						<div className="form-error">
+							{this.state.errors.summary}
+						</div>
+					</div>
 
-                    <div className="form-group">
-                        <label>Content</label>
+					<div className="form-group">
+						<label>Content</label>
 
-                        <ContentEditor content={this.state.article.content} isInvalid={!!this.state.errors.content}
-                            onUpdate={this.updateContent}
-                            onFocus={this.clearErrors} />
+						<ContentEditor content={this.state.article.content} isInvalid={!!this.state.errors.content}
+							onUpdate={this.updateContent}
+							onFocus={this.clearErrors} />
 
-                        <div className="form-error">
-                            {this.state.errors.content}
-                        </div>
-                    </div>
+						<div className="form-error">
+							{this.state.errors.content}
+						</div>
+					</div>
 
-                    <button type="button" className="btn btn-success submit-btn" onClick={this.props.submitForm.bind(null, this.state.article)}>
-                        Save
+					<button type="button" className="btn btn-success submit-btn" onClick={this.props.submitForm.bind(null, this.state.article)}>
+						Save
 					</button>
 
-                </form>
-
-            </div>
+				</form>
+			</div>
 		);
 	}
 };
