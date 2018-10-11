@@ -2,44 +2,44 @@
 
 .content-editor{
 
-    &.is-invalid{
-        .toolbar-container{
-            border-bottom-color: $red;
-        }
+	&.is-invalid{
+		.toolbar-container{
+			border-bottom-color: $red;
+		}
 
-        .ql-container{
-            border-color: $red;
-        }
-    }
+		.ql-container{
+			border-color: $red;
+		}
+	}
 
-    .toolbar-container{
-        background-color: #ffffff;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        
-        .ql-picker{
-            height: auto;
-        }
-    }
+	.toolbar-container{
+		background-color: #ffffff;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		
+		.ql-picker{
+			height: auto;
+		}
+	}
 
-    .ql-container{
-        background-color: #ffffff;
-        font-size: 16px;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
+	.ql-container{
+		background-color: #ffffff;
+		font-size: 16px;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
 
-        .ql-editor{
-            min-height: 500px;
-    
-            &.ql-blank{
-    
-                &::before{
-                    font-size: 17px;
-                    font-style: normal;
-                    color: #6c757d;
-                }
-    
-            }
-        }
-    }
+		.ql-editor{
+			min-height: 500px;
+	
+			&.ql-blank{
+	
+				&::before{
+					font-size: 17px;
+					font-style: normal;
+					color: #6c757d;
+				}
+	
+			}
+		}
+	}
 }
