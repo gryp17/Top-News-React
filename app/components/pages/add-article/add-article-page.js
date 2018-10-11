@@ -42,7 +42,7 @@ class AddArticlePage extends React.Component {
 			3: "World",
 			4: "Technology",
 			5: "Sports"
-		}
+		};
 
 		this.handleChange = this.handleChange.bind(this);
 		this.updateContent = this.updateContent.bind(this);
