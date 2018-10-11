@@ -1,5 +1,5 @@
 import React from "react";
-import {Switch, Route, NavLink} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 
 import "./layout.scss";
 
@@ -19,7 +19,7 @@ class Layout extends React.Component {
 		
 		this.state = {
 			userSession: null,
-			loading: false
+			loading: true
 		};
 		
 		this.updateSession = this.updateSession.bind(this);
@@ -35,10 +35,6 @@ class Layout extends React.Component {
 	 */
 	getSession(){
 		var self = this;
-
-		this.setState({
-			loading: true
-		});
 
 		UserHttpService.getSession().then(function (response) {
 			self.setState({
@@ -63,7 +59,12 @@ class Layout extends React.Component {
 		var self = this;
 		
 		UserHttpService.logout().then(function () {
-			self.setState({userSession: null});
+			self.setState({
+				userSession: null
+			}, function (){
+				//redirect to the home page
+				this.props.history.push("/");
+			});
 		});	
 	}
 	
@@ -71,7 +72,6 @@ class Layout extends React.Component {
 		
 		//data that is acessible by all components that use the session context HOC
 		var sessionData = {
-			loading: this.state.loading,
 			userSession: this.state.userSession,
 			updateSession: this.updateSession,
 			logout: this.logout
@@ -79,25 +79,27 @@ class Layout extends React.Component {
 		
 		return (
 			<div id="top-news">
-				<Session.Context.Provider value={sessionData}>
-					<MainMenu/>
+				{!this.state.loading && 
+					<Session.Context.Provider value={sessionData}>
+						<MainMenu/>
 
-					<div id="content-wrapper">
-						<div className="row no-gutters">
-							<div className="col-md-4 order-md-8 col-sm-push-8">
-								<Aside/>
-							</div>
-							<div className="col-md-8 order-md-4 col-sm-pull-4">
-								<Content/>
+						<div id="content-wrapper">
+							<div className="row no-gutters">
+								<div className="col-md-4 order-md-8 col-sm-push-8">
+									<Aside/>
+								</div>
+								<div className="col-md-8 order-md-4 col-sm-pull-4">
+									<Content/>
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<Footer/>
-				</Session.Context.Provider>
+						<Footer/>
+					</Session.Context.Provider>
+				}
 			</div>
 		);
 	}
 };
 
-export default Layout;
+export default withRouter(Layout);

@@ -5,7 +5,6 @@ import "./add-article-page.scss";
 
 import Session from "../../../contexts/session";
 
-import LoadingIndicator from "../../common/loading-indicator/loading-indicator";
 import Forbidden from "../../common/forbidden/forbidden";
 import ArticleHttpService from "../../../services/api/article";
 
@@ -13,7 +12,6 @@ class AddArticlePage extends React.Component {
 
     static propTypes = {
 		sessionContext: PropTypes.shape({
-            loading: PropTypes.bool.isRequired,
 			userSession: PropTypes.object
 		})
 	};
@@ -34,10 +32,8 @@ class AddArticlePage extends React.Component {
 		return (
 			<div id="add-article-page">
 
-                {sessionContext.loading && <LoadingIndicator/>}
-
-                {!sessionContext.loading && !isAdmin && <Forbidden/>}
-                {!sessionContext.loading && isAdmin && <div>add article page</div>}
+                {!isAdmin && <Forbidden/>}
+                {isAdmin && <div>add article page</div>}
 
 			</div>
 		);
