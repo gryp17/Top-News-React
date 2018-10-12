@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {withRouter} from "react-router-dom";
 
 import Session from "../../../contexts/session";
 
@@ -23,21 +24,29 @@ class AddArticlePage extends React.Component {
 				categoryId: 1,
 				title: "",
 				summary: "",
-				content: "some default content <strong>test</strong>"
+				content: ""
 			},
-			errors: {
-				summary: "some error",
-				content: "test error"
-			},
+			errors: {},
 			loading: false
 		};
 
 		this.addArticle = this.addArticle.bind(this);
 	}
 
+	/**
+	 * Adds new article
+	 * @param {Object} article 
+	 */
 	addArticle(article){
-		console.log("adding new article");
-		console.log(article);
+		ArticleHttpService.create(article).then((response) => {
+			if (response.data.article) {
+				this.props.history.push("/article/"+response.data.article.id);
+			}else{				
+				this.setState({
+					errors: response.data.errors
+				});
+			}
+		});
 	}
 	
 	render() {
@@ -57,4 +66,4 @@ class AddArticlePage extends React.Component {
 	}
 };
 
-export default Session.withConsumer(AddArticlePage);
+export default Session.withConsumer(withRouter(AddArticlePage));

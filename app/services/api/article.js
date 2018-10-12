@@ -35,6 +35,7 @@ export default {
 	 * @param {String} category
 	 * @param {String} searchTerm
 	 * @param {Number} limit
+	 * @returns {Promise}
 	 */
 	getAutocompleteSuggestions(category, searchTerm, limit){
 		return axios.get("/api/article/autocomplete/" + category + "/" + encodeURIComponent(searchTerm) + "/" + limit);
@@ -47,6 +48,23 @@ export default {
 	 */
 	getMostPopular(period, limit){
 		return axios.get("/api/article/popular/" + period + "/" + limit);
+	},
+	/**
+	 * Creates a new article
+	 * @param {Object} data 
+	 * @returns {Promise}
+	 */
+	create(data){
+		return axios.post("/api/article", data);
+	},
+	/**
+	 * Updates an existing article
+	 * @param {Number} id 
+	 * @param {Object} data 
+	 * @returns {Promise}
+	 */
+	update(id, data){
+		return axios.put("/api/article/"+id, data);
 	}
 }
 

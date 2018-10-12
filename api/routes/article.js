@@ -1,9 +1,22 @@
 var express = require("express");
 var async = require("async");
 var router = express.Router();
+var multipart = require("connect-multiparty");
 
+var Validator = require("../middleware/validator");
+var Files = require("../middleware/files");
 var ArticleModel = require("../models/article");
 var ArticleViewModel = require("../models/article-view");
+
+var rules = {
+	create: {
+		categoryId: ["in(1, 2, 3, 4, 5)"], //category id's
+		title: ["required", "min-3", "max-200"],
+		summary: ["required", "min-3", "max-500"],
+		content: ["required", "min-50", "max-10000"],
+		image: ["required", "valid-article-image"]
+	}
+};
 
 //get the latest articles from the specified author/user id
 router.get("/author/:id/:limit/:offset", function (req, res, next){	
@@ -102,6 +115,22 @@ router.get("/:id", function (req, res, next) {
 		}
 		
 		res.json(result);
+	});
+});
+
+//create new article record
+router.post("/", multipart(), Validator.validate(rules.create), Files.uploadArticleImage, function (req, res, next){
+	var data = req.body;
+
+	//create the new article
+	ArticleModel.create(data.categoryId, data.title, data.summary, data.content, req.files.image.uploadedTo, req.session.user.id, function (err, articleInstance) {
+		if (err) {
+			return next(err);
+		}
+
+		res.json({
+			article: articleInstance
+		});
 	});
 });
 

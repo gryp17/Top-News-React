@@ -26,9 +26,9 @@ class ArticleForm extends React.Component {
 
 		this.sections = {
 			1: "Politics",
-			2: "Economy",
-			3: "World",
-			4: "Technology",
+			2: "World",
+			3: "Technology",
+			4: "Economy",
 			5: "Sports"
 		};
 
@@ -36,7 +36,19 @@ class ArticleForm extends React.Component {
 
 		this.handleChange = this.handleChange.bind(this);
 		this.updateContent = this.updateContent.bind(this);
+		this.openFileBrowser = this.openFileBrowser.bind(this);
+		this.showPreview = this.showPreview.bind(this);
 		this.clearErrors = this.clearErrors.bind(this);
+		this.submit = this.submit.bind(this);
+	}
+
+	componentDidUpdate(prevProps, prevState){
+		//when the errors prop changes - update the state to reflect the changes
+		if(!_.isEqual(this.props.errors, this.state.errors)){
+			this.setState({
+				errors: this.props.errors
+			});
+		}
 	}
 
 	/**
@@ -77,6 +89,21 @@ class ArticleForm extends React.Component {
 	}
 
 	/**
+	 * Opens the file browser
+	 */
+	openFileBrowser(){
+		$(this.refs.image).click();
+	}
+	
+	/**
+	 * Generates a preview of the selected image
+	 * @param {Object} e
+	 */
+	showPreview(e){
+		$(this.refs.preview).attr("src", URL.createObjectURL(e.target.files[0]));
+	}
+
+	/**
 	 * Clears the form errors related to this input
 	 * @param {Object} e
 	 */
@@ -90,13 +117,30 @@ class ArticleForm extends React.Component {
 			errors: errors
 		});
 	}
+
+	/**
+	 * Submits the form by building the formData object and calling the submitForm prop function
+	 */
+	submit(){
+		var formData = new FormData();
+
+		//build the form data object using the state
+		_.forOwn(this.state.article, function (value, key){
+			formData.append(key, value);
+		});
+		
+		//append the article image
+		formData.append("image", this.refs.image.files[0] || "");
+
+		this.props.submitForm(formData);
+	}
 	
 	render() {
 
 		return (
 			<div className="article-form">
 
-				<form ref="addArticleForm">
+				<form>
 
 					<h4>{this.formMode} Article</h4>
 
@@ -105,17 +149,41 @@ class ArticleForm extends React.Component {
 					<div className="form-group">
 						<label>Section</label>
 						<select name="categoryId" value={this.state.article.categoryId} onChange={this.handleChange}
-							className="form-control">
-
+							className={classNames("form-control", {"is-invalid": this.state.errors.categoryId })}
+							onFocus={this.clearErrors}>
 							{this.generateSections()}
-
 						</select>
+
+						<div className="form-error">
+							{this.state.errors.categoryId}
+						</div>
+					</div>
+
+					<div className="form-group">
+						<div className="article-image-wrapper">
+							<label>Image</label>
+
+							<img ref="preview" className="image-preview" onClick={this.openFileBrowser} src="/img/placeholder.png"/>
+
+							<button type="button" className="btn btn-secondary browse-btn" onClick={this.openFileBrowser}>
+								<img src="/img/icons/upload-icon.png" />
+								Choose a file
+							</button>
+
+							<input ref="image" type="file" className="article-image" name="image"
+								onChange={this.showPreview}
+								onClick={this.clearErrors} />
+
+							<div className="form-error">
+								{this.state.errors.image}
+							</div>
+						</div>
 					</div>
 
 					<div className="form-group">
 						<label>Title</label>
 						<textarea name="title" value={this.state.article.title} onChange={this.handleChange}
-							className={classNames("form-control title", { "is-invalid": this.state.errors.title })}
+							className={classNames("form-control title", {"is-invalid": this.state.errors.title })}
 							placeholder="Title"
 							onFocus={this.clearErrors}></textarea>
 
@@ -128,7 +196,7 @@ class ArticleForm extends React.Component {
 						<label>Summary</label>
 						<textarea name="summary" value={this.state.article.summary} onChange={this.handleChange}
 							rows="3"
-							className={classNames("form-control summary", { "is-invalid": this.state.errors.summary })}
+							className={classNames("form-control summary", {"is-invalid": this.state.errors.summary })}
 							placeholder="Summary"
 							onFocus={this.clearErrors}></textarea>
 
@@ -149,7 +217,7 @@ class ArticleForm extends React.Component {
 						</div>
 					</div>
 
-					<button type="button" className="btn btn-success submit-btn" onClick={this.props.submitForm.bind(null, this.state.article)}>
+					<button type="button" className="btn btn-success submit-btn" onClick={this.submit}>
 						Save
 					</button>
 

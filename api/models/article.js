@@ -123,5 +123,33 @@ module.exports = {
 		+"RIGHT OUTER JOIN article ON article.id = article_view.articleId "
 		+"GROUP BY article.id ORDER BY views DESC, article.date DESC LIMIT ?";		
 		connection.query(query, limit, done);
+	},
+	/**
+	 * Inserts new article record
+	 * @param {Number} categoryId 
+	 * @param {String} title 
+	 * @param {String} summary 
+	 * @param {String} content 
+	 * @param {String} image 
+	 * @param {Number} authorId 
+	 * @param {Function} done 
+	 */
+	create: function (categoryId, title, summary, content, image, authorId, done){
+		connection.query("INSERT INTO article (categoryId, title, summary, content, image, authorId, date) VALUES (?, ?, ?, ?, ?, ?, now())",
+				[categoryId, title, summary, content, image, authorId], (err, result) => {
+			if (err) {
+				return done(err);
+			}
+
+			//return the inserted record
+			this.getById(result.insertId, function (err, articleInstance){
+				if (err) {
+					return done(err);
+				}
+				
+				done(null, articleInstance);
+			});
+			
+		});
 	}
 }; 

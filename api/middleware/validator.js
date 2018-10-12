@@ -109,6 +109,26 @@ module.exports = {
 							continue fieldLoop;
 						}
 					}
+
+					//"valid-article-image" rule
+					if(rule === "valid-article-image"){
+						var file = files[field];
+						var extension = path.extname(file.originalFilename).replace(".", "").toLowerCase();
+						var maxSize = config.uploads.articles.maxSize;
+						var validExtensions = config.uploads.articles.validExtensions;
+
+						//max file size
+						if (file.size > maxSize) {
+							errors[field] = "The image is bigger than "+(maxSize / 1000000)+"MB";
+							continue fieldLoop;
+						}
+
+						//valid extensions
+						if (validExtensions.indexOf(extension) === -1) {
+							errors[field] = "Invalid file. (Valid extensions: "+validExtensions.join(", ")+")";
+							continue fieldLoop;
+						}
+					}
 					
 					//min-\d+ rule
 					//examples: min-5, min-10, min-50
@@ -145,7 +165,25 @@ module.exports = {
 							continue fieldLoop;
 						}
 					}
-										
+
+					//in() rule
+					//exmaple: in(1, 2, 3)
+					var matches = rule.match(/in\((.+?)\)/);
+					if(matches && matches[1]){
+						var values = matches[1];
+						values = values.split(/\s*,\s*/);
+
+						var index = _.findIndex(values, function (value) {
+							//no, the types don't need to match
+							return fieldValue == value;
+						});
+
+						if(index === -1){
+							errors[field] = "Invalid value. (Accepted values: "+values.join(", ")+")";
+							continue fieldLoop;
+						}
+					}
+
 					//async rules
 					//since those rules are async we add them to a queue that is executed only if all sync validations for this field have passed
 					if(asyncRules.indexOf(rule) !== -1){
