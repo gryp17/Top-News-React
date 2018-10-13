@@ -1,4 +1,5 @@
 var express = require("express");
+var fs = require("fs");
 var async = require("async");
 var router = express.Router();
 var multipart = require("connect-multiparty");
@@ -132,6 +133,58 @@ router.post("/", multipart(), Validator.validate(rules.create), Files.uploadArti
 			article: articleInstance
 		});
 	});
+});
+
+//delete article
+router.delete("/:id", function (req, res, next){
+    var config = req.app.get("config");
+    
+    var articleId = parseInt(req.params.id);
+
+    ArticleModel.getById(articleId, function (err, article){
+        if (err) {
+			return next(err);
+        }
+
+        //unexisting article
+        if(!article){
+            return res.json({
+                errors: {
+                    article: "Invalid article id"
+                }
+            });
+        }
+
+        //article that doesn't belong to the current user
+        if(article.authorId !== req.session.user.id){
+            return res.json({
+                errors: {
+                    article: "Permissions denied"
+                }
+            });
+        }
+
+        ArticleModel.delete(articleId, function (err){
+            if (err) {
+                return next(err);
+            }
+            
+            var image = config.uploads.articles.directory + article.image;
+			//remove all GET parameters from the path (if any)
+			image = image.replace(/\?.+/, "");
+
+			//delete the article image
+			fs.unlink(image, function (err) {
+				if (err) {
+					return next(err)
+				}
+
+				res.json({
+                    status: true
+                });
+			});
+        });
+    });
 });
 
 module.exports = router;

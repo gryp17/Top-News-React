@@ -65,6 +65,13 @@ export default {
 	 */
 	update(id, data){
 		return axios.put("/api/article/"+id, data);
-	}
+    },
+    /**
+     * Deletes an existing article
+     * @param {Number} id 
+     */
+    delete(id){
+        return axios.delete("/api/article/"+id);
+    }
 }
 

@@ -151,5 +151,13 @@ module.exports = {
 			});
 			
 		});
-	}
+    },
+    /**
+     * Deletes the specified article id
+     * @param {Number} id 
+     * @param {Function} done 
+     */
+    delete: function (id, done){
+        connection.query("DELETE FROM article WHERE id = ?", [id], done);
+    }
 }; 

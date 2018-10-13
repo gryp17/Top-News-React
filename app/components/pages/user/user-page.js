@@ -48,6 +48,7 @@ class UserPage extends React.Component {
 		this.goToArticlesPage = this.goToArticlesPage.bind(this);
 		this.goToCommentsPage = this.goToCommentsPage.bind(this);
 		this.updateUserDetails = this.updateUserDetails.bind(this);
+		this.deleteArticle = this.deleteArticle.bind(this);
 	}
 
 	componentDidMount() {
@@ -136,6 +137,20 @@ class UserPage extends React.Component {
 	}
 
 	/**
+	 * Deletes the specified article id
+	 * @param {Number} id 
+	 */
+	deleteArticle(id){
+		ArticleHttpService.delete(id).then((response) => {
+			if(response.data && response.data.status){
+				this.goToArticlesPage(0);
+			}else{
+				console.log("Failed to delete the article...", response.data);
+			}
+		});
+	}
+
+	/**
 	 * Sets the current page and loads the corresponding comments
 	 * @param {Number} page
 	 */
@@ -193,13 +208,20 @@ class UserPage extends React.Component {
 
 						<div className="tab-content">
 							<div className="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
-								<UserDetails user={this.state.user} currentUser={this.props.sessionContext.userSession} updateUserDetails={this.updateUserDetails}/>
+								<UserDetails user={this.state.user} 
+									currentUser={this.props.sessionContext.userSession} 
+									updateUserDetails={this.updateUserDetails}/>
 							</div>
 							<div className="tab-pane fade" id="articles" role="tabpanel" aria-labelledby="articles-tab">
-								<UserArticles {...this.state.articles} goToPage={this.goToArticlesPage}/>
+								<UserArticles {...this.state.articles} 
+									goToPage={this.goToArticlesPage} 
+									deleteArticle={this.deleteArticle}
+									user={this.state.user} 
+									currentUser={this.props.sessionContext.userSession}/>
 							</div>
 							<div className="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
-								<UserActivity {...this.state.comments} goToPage={this.goToCommentsPage}/>
+								<UserActivity {...this.state.comments} 
+									goToPage={this.goToCommentsPage}/>
 							</div>
 						</div>
 

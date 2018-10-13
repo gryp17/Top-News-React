@@ -33,8 +33,8 @@ create table article_view(
 	articleId int,
 	userId int,
 	date datetime,
-	constraint fk_article_view foreign key(articleId) references article (id),
-	constraint fk_article_view_user foreign key(userId) references user (id)
+	constraint fk_article_view foreign key(articleId) references article (id) ON DELETE CASCADE,
+	constraint fk_article_view_user foreign key(userId) references user (id) ON DELETE CASCADE
 );
 
 create table article_comment(
@@ -43,8 +43,8 @@ create table article_comment(
     articleId int,
     content varchar(500),
     date datetime,
-    constraint fk_article_comment_author foreign key(authorId) references user (id),
-    constraint fk_commect_article foreign key(articleId) references article (id)
+    constraint fk_article_comment_author foreign key(authorId) references user (id) ON DELETE CASCADE,
+    constraint fk_commect_article foreign key(articleId) references article (id) ON DELETE CASCADE
 );
 
 

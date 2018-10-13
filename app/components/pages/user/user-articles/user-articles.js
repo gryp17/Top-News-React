@@ -5,13 +5,15 @@ import moment from "moment";
 
 import "./user-articles.scss";
 
+import ArticleActions from "../../../common/article-actions/article-actions";
 import Pagination from "../../../common/pagination/pagination";
 
 import Config from "../../../../config/config";
 
 var UserArticles = function (props) {
 	
-	var articlesDir = Config.articlesDir;
+    var articlesDir = Config.articlesDir;
+    var showActions = props.currentUser && props.currentUser.id === props.user.id;
 	
 	var articles = props.data.map((article) => {
 		return (
@@ -26,6 +28,8 @@ var UserArticles = function (props) {
 					</div>
 					<div className="clearfix"></div>
 				</Link>
+
+				{showActions && <ArticleActions article={article} delete={props.deleteArticle}/>}
 			</div>
 		);
 	});
@@ -39,8 +43,8 @@ var UserArticles = function (props) {
 				</div>
 			}
 
-			{articles}
-						
+        	{articles}
+		
 			{props.total > 0 && <Pagination {...props}/>}
 		</div>
 	);
@@ -52,7 +56,10 @@ UserArticles.propTypes = {
 	total: PropTypes.number.isRequired,
 	currentPage: PropTypes.number.isRequired,
 	totalPages: PropTypes.number.isRequired,
-	goToPage: PropTypes.func.isRequired
+	goToPage: PropTypes.func.isRequired,
+	deleteArticle: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+	currentUser: PropTypes.object
 };
 
 export default UserArticles;
