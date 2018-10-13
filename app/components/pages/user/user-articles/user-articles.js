@@ -12,8 +12,8 @@ import Config from "../../../../config/config";
 
 var UserArticles = function (props) {
 	
-    var articlesDir = Config.articlesDir;
-    var showActions = props.currentUser && props.currentUser.id === props.user.id;
+	var articlesDir = Config.articlesDir;
+	var showActions = props.currentUser && props.currentUser.id === props.user.id;
 	
 	var articles = props.data.map((article) => {
 		return (
@@ -43,7 +43,7 @@ var UserArticles = function (props) {
 				</div>
 			}
 
-        	{articles}
+			{articles}
 		
 			{props.total > 0 && <Pagination {...props}/>}
 		</div>
@@ -58,7 +58,7 @@ UserArticles.propTypes = {
 	totalPages: PropTypes.number.isRequired,
 	goToPage: PropTypes.func.isRequired,
 	deleteArticle: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired,
+	user: PropTypes.object.isRequired,
 	currentUser: PropTypes.object
 };
 

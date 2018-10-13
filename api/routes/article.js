@@ -137,39 +137,39 @@ router.post("/", multipart(), Validator.validate(rules.create), Files.uploadArti
 
 //delete article
 router.delete("/:id", function (req, res, next){
-    var config = req.app.get("config");
-    
-    var articleId = parseInt(req.params.id);
+	var config = req.app.get("config");
+	
+	var articleId = parseInt(req.params.id);
 
-    ArticleModel.getById(articleId, function (err, article){
-        if (err) {
+	ArticleModel.getById(articleId, function (err, article){
+		if (err) {
 			return next(err);
-        }
+		}
 
-        //unexisting article
-        if(!article){
-            return res.json({
-                errors: {
-                    article: "Invalid article id"
-                }
-            });
-        }
+		//unexisting article
+		if(!article){
+			return res.json({
+				errors: {
+					article: "Invalid article id"
+				}
+			});
+		}
 
-        //article that doesn't belong to the current user
-        if(article.authorId !== req.session.user.id){
-            return res.json({
-                errors: {
-                    article: "Permissions denied"
-                }
-            });
-        }
+		//article that doesn't belong to the current user
+		if(article.authorId !== req.session.user.id){
+			return res.json({
+				errors: {
+					article: "Permissions denied"
+				}
+			});
+		}
 
-        ArticleModel.delete(articleId, function (err){
-            if (err) {
-                return next(err);
-            }
-            
-            var image = config.uploads.articles.directory + article.image;
+		ArticleModel.delete(articleId, function (err){
+			if (err) {
+				return next(err);
+			}
+			
+			var image = config.uploads.articles.directory + article.image;
 			//remove all GET parameters from the path (if any)
 			image = image.replace(/\?.+/, "");
 
@@ -180,11 +180,11 @@ router.delete("/:id", function (req, res, next){
 				}
 
 				res.json({
-                    status: true
-                });
+					status: true
+				});
 			});
-        });
-    });
+		});
+	});
 });
 
 module.exports = router;

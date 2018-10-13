@@ -1,13 +1,13 @@
 @import "../../../css/variables";
 
 .article-actions{
-    .dropdown{
-        .dropdown-item{
-            cursor: pointer;
-    
-            &.delete{
-                color: $red;
-            }
-        }
-    }
+	.dropdown{
+		.dropdown-item{
+			cursor: pointer;
+	
+			&.delete{
+				color: $red;
+			}
+		}
+	}
 }

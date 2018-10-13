@@ -11,17 +11,17 @@
 		font-weight: bold;
 	}
 	
-    .user-article{
-        position: relative;
+	.user-article{
+		position: relative;
 		margin: 10px 0px;
 		padding-right: 5px;
 		box-shadow: 3px 3px 7px 0px #7a797a;
-        
-        .article-actions{
-            position: absolute;
-            top: 5px;
-            right: 5px;
-        }
+		
+		.article-actions{
+			position: absolute;
+			top: 5px;
+			right: 5px;
+		}
 
 		img{
 			float: left;

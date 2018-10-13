@@ -6,7 +6,7 @@ import "./confirmation-dialog.scss";
 class ConfirmationDialog extends React.Component {
 	
 	static propTypes = {
-        message: PropTypes.string.isRequired,
+		message: PropTypes.string.isRequired,
 		confirm: PropTypes.func.isRequired
 	};
 	
@@ -14,9 +14,9 @@ class ConfirmationDialog extends React.Component {
 		super(props);
 		
 		this.openModal = this.openModal.bind(this);
-    }
-    
-    componentDidMount(){
+	}
+	
+	componentDidMount(){
 
 		//on modal close - call the confirm callback
 		$(this.refs.modal).on("hidden.bs.modal", () => {
@@ -24,7 +24,7 @@ class ConfirmationDialog extends React.Component {
 		});
 
 		//open the modal as soon as this component is mounted
-        this.openModal();
+		this.openModal();
 	}
 	
 	componentWillUnmount(){
@@ -51,14 +51,14 @@ class ConfirmationDialog extends React.Component {
 							<div className="modal-body">
 								{this.props.message}
 							</div>
-                            <div className="modal-footer">
+							<div className="modal-footer">
 								<button className="btn btn-success" data-dismiss="modal" onClick={this.props.confirm.bind(null, true)}>
 									Confirm
 								</button>
 								<button className="btn btn-danger" data-dismiss="modal">
 									Cancel
 								</button>
-                            </div>
+							</div>
 						</div>
 					</div>
 				</div>
